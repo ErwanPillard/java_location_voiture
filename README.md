@@ -191,7 +191,6 @@ Particuler --|> Client
 Client --> TypeClient : has a
 Client --> NouveauClient : is a
 Client --> ClientAdherant : is a
-@enduml
 
 
 ```
