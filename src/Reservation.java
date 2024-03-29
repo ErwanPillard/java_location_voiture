@@ -8,14 +8,16 @@ public class Reservation {
     private LocalDate dateDebut;
     private int numeroReservation;
     // private Client client;
+    private boolean etat;
 
-    public Reservation(Voiture voiture, float tarif, LocalDate dateFin, LocalDate dateDebut, int numeroReservation, Facture facture ) {
+    public Reservation(Voiture voiture, float tarif, LocalDate dateFin, LocalDate dateDebut, int numeroReservation, Facture facture ,boolean etat) {
         this.voiture = voiture;
         this.tarif = tarif;
         this.dateFin = dateFin;
         this.dateDebut = dateDebut;
         this.numeroReservation = numeroReservation;
         this.facture = facture;
+        this.etat=etat;
     }
 
     public Voiture getVoiture() {
@@ -64,5 +66,13 @@ public class Reservation {
 
     public void setFacture(Facture facture) {
         this.facture = facture;
+    }
+
+    public boolean isEtat() {
+        return etat;
+    }
+
+    public void setEtat(boolean etat) {
+        this.etat = etat;
     }
 }
