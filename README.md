@@ -131,7 +131,7 @@ class Modele{
 }
 
 class Categorie{
-    <<Enumeration>>
+    <<enumeration>>
     Berline
     SUV
     Familiale
@@ -163,7 +163,8 @@ class User{
     - motDePasse : String
 }
 
-abstract class TypeClient{
+class TypeClient{
+    <<abstract>>
 }
 
 class Client{
