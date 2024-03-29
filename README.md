@@ -8,10 +8,10 @@ title: Diagramme de Classes
 ---
 classDiagram
 
-    Reservation --> Voiture
-    Reservation --> Facture
-    Reservation --> Client
-    Voiture --> Modele
+    Reservation "0..1" --> "1" Voiture
+    Reservation "1" --> "1" Facture
+    Reservation "0..*" -- "1" Client
+    Voiture "0..*" --> "1" Modele
     Modele -- Categorie
     Client --|> User
     Employe --|> User
