@@ -93,7 +93,8 @@ class Client{
     - typeAdhesion: int ou enum
     - tauxRemise: int
 
-}@startuml
+}
+
 class Reservation{
     - numReservation : int
     - datesDebutResa : LocalDate
