@@ -43,7 +43,7 @@ classDiagram
     }
     
     class Categorie{
-        <<enumeration>>
+        <<Enumeration>>
         Berline
         SUV
         Familiale
@@ -74,21 +74,11 @@ classDiagram
         - motDePasse : String
     }
     
-    class TypeClient{
-        <<abstract>>
-    }
-    
     class Client{
         - age : int 
         - numeroAdhesion: double
         - tauxRemise: int
-        - typeAdhesion: TypeClient
-    }
-    
-    class NouveauClient{
-    }
-    
-    class ClientAdherant{
+        - adhesion: boolean
     }
     
     Reservation "0..1" --> "1" Voiture
@@ -100,9 +90,8 @@ classDiagram
     Employe --|> User
     Entreprise --|> Client
     Particuler --|> Client
-    Client --> TypeClient : has a
-    Client --> NouveauClient : is a
-    Client --> ClientAdherant : is a
+
+
 
 
 ```
