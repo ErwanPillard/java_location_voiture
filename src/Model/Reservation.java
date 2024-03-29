@@ -1,6 +1,8 @@
 package Model;
 
 import java.time.LocalDateTime;
+import java.time.Duration;
+import java.time.format.DateTimeFormatter;
 
 public class Reservation {
     private Voiture voiture;
@@ -12,15 +14,26 @@ public class Reservation {
     private Client client;
     private boolean etat;
 
-    public Reservation(Voiture voiture, Client client,float tarif, LocalDateTime dateFin, LocalDateTime dateDebut, int numeroReservation, Facture facture ,boolean etat) {
+    public Reservation(Voiture voiture, Client client, LocalDateTime dateFin, LocalDateTime dateDebut, int numeroReservation,boolean etat) {
         this.voiture = voiture;
         this.tarif = tarif;
         this.dateFin = dateFin;
         this.dateDebut = dateDebut;
         this.numeroReservation = numeroReservation;
-        this.facture = facture;
         this.etat=etat;
         this.client = client;
+    }
+
+
+    public float calculTarif(){
+        // Calcul de la durée de location en jours
+        long joursLoues = Duration.between(dateDebut, dateFin).toDays();
+
+        // Calcul du coût total de la location
+        float coutTotal = tarif * joursLoues;
+
+        return coutTotal;
+
     }
 
     public float getTarif() {

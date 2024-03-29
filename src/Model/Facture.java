@@ -1,14 +1,15 @@
 package Model;
 
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
 
 public class Facture {
     private int numFacture;
-    private LocalDate date;
+    private LocalDateTime date;
     private float montant;
     private boolean etat; //true si facture paye
 
-    public Facture(int numFacture, LocalDate date, float montant, boolean etat) {
+    public Facture(int numFacture, LocalDateTime date, float montant, boolean etat) {
         this.numFacture = numFacture;
         this.date = date;
         this.montant = montant;
@@ -23,11 +24,11 @@ public class Facture {
         this.numFacture = numFacture;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

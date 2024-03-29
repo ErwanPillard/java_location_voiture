@@ -4,15 +4,14 @@ public class User {
     private String nom;
     private String prenom;
     private String email;
-    private String motsDePasse;
-    private int id;
+    private String motDePasse;
 
-    public User(String nom, String prenom, String email, String motsDePasse, int id) {
+
+    public User(String nom, String prenom, String email, String motDePasse) {
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
-        this.motsDePasse = motsDePasse;
-        this.id = id;
+        this.motDePasse = motDePasse;
     }
 
     public String getNom() {
@@ -39,19 +38,11 @@ public class User {
         this.email = email;
     }
 
-    public String getMotsDePasse() {
-        return motsDePasse;
+    public String getMotDePasse() {
+        return motDePasse;
     }
 
-    public void setMotsDePasse(String motsDePasse) {
-        this.motsDePasse = motsDePasse;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public void setMotDePasse(String motDePasse) {
+        this.motDePasse = motDePasse;
     }
 }
