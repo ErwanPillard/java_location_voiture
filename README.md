@@ -7,40 +7,6 @@
 title: Diagramme de Classes
 ---
 classDiagram
-    
-    class Categorie{
-        <<Enumeration>>
-        Berline
-        SUV
-        Familiale
-        Utilitaire
-        Citadine
-    }
-    
-    class Facture{
-        - numeroFacture: int
-        - date : LocalDate
-        - montant : float
-        - etat: boolean
-    }
-    
-    class Entreprise{
-        - numSiret: int
-    }
-    
-    class Particuler{
-        - birthDate: LocalDate
-        - Id : int 
-    }
-    
-    class User{
-        - id: int
-        - nom: String
-        - prenom: String
-        - email : String
-        - motDePasse : String
-    }
-    
     class Reservation{
         - numReservation : int
         - datesDebutResa : LocalDate
@@ -102,7 +68,6 @@ classDiagram
     }
     
     class User{
-        - id: int
         - nom: String
         - prenom: String
         - email : String
