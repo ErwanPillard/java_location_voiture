@@ -375,7 +375,7 @@ public class SyntaxRegressionTest extends BaseTestCase {
             this.stmt.executeUpdate("ALTER IGNORE TABLE testExchangePartition1 EXCHANGE PARTITION p1 WITH TABLE testExchangePartition2");
         }
 
-        // Using Client PreparedStatement, with validation.
+        // Using Model.Client PreparedStatement, with validation.
         if (versionMeetsMinimum(5, 7, 5)) {
             this.pstmt = this.conn
                     .prepareStatement("ALTER TABLE testExchangePartition1 EXCHANGE PARTITION p1 WITH TABLE testExchangePartition2 WITH VALIDATION");
@@ -387,7 +387,7 @@ public class SyntaxRegressionTest extends BaseTestCase {
         assertEquals(ClientPreparedStatement.class, this.pstmt.getClass());
         this.pstmt.executeUpdate();
 
-        // Using Client PreparedStatement, without validation.
+        // Using Model.Client PreparedStatement, without validation.
         if (versionMeetsMinimum(5, 7, 5)) {
             this.pstmt = this.conn
                     .prepareStatement("ALTER TABLE testExchangePartition1 EXCHANGE PARTITION p1 WITH TABLE testExchangePartition2 WITHOUT VALIDATION");

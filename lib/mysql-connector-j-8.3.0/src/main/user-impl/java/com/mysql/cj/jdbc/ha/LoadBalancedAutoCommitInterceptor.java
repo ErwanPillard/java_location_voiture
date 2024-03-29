@@ -125,7 +125,7 @@ public class LoadBalancedAutoCommitInterceptor implements QueryInterceptor {
                 try {
                     this.proxy.pickNewConnection();
                 } catch (SQLException e) {
-                    // eat this exception, the auto-commit statement completed, but we could not rebalance for some reason.  User may get exception when using
+                    // eat this exception, the auto-commit statement completed, but we could not rebalance for some reason.  Model.User may get exception when using
                     // connection next.
                 }
             }

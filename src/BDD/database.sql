@@ -1,4 +1,4 @@
--- Création de la table User
+-- Création de la table Model.User
 CREATE TABLE User
 (
     id         INT AUTO_INCREMENT NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE User
     PRIMARY KEY (id)
 ) ENGINE=InnoDB;
 
--- Création de la table Employe qui hérite de User
+-- Création de la table Model.Employe qui hérite de Model.User
 CREATE TABLE Employee
 (
     id       INT          NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE Employee
     CONSTRAINT fk_employe_user FOREIGN KEY (id) REFERENCES User (id)
 ) ENGINE=InnoDB;
 
--- Création de la table Client qui hérite de User
+-- Création de la table Model.Client qui hérite de Model.User
 CREATE TABLE Client
 (
     id  INT NOT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE Client
     CONSTRAINT fk_client_user FOREIGN KEY (id) REFERENCES User (id)
 ) ENGINE=InnoDB;
 
--- Création de la table Entreprise qui hérite de Client
+-- Création de la table Entreprise qui hérite de Model.Client
 CREATE TABLE Entreprise
 (
     id          INT AUTO_INCREMENT NOT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE Entreprise
     CONSTRAINT fk_entreprise_user FOREIGN KEY (id) REFERENCES User (id)
 ) ENGINE=InnoDB;
 
--- Création de la table Particulier qui hérite de Client
+-- Création de la table Particulier qui hérite de Model.Client
 CREATE TABLE Particulier
 (
     id           INT          NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE Particulier
     CONSTRAINT fk_particulier_user FOREIGN KEY (id) REFERENCES User (id)
 ) ENGINE=InnoDB;
 
--- Création de la table Categorie
+-- Création de la table Model.Categorie
 CREATE TABLE Categorie
 (
     id  INT AUTO_INCREMENT NOT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE Categorie
     PRIMARY KEY (id)
 ) ENGINE=InnoDB;
 
--- Création de la table Modele de voiture
+-- Création de la table Model.Modele de voiture
 CREATE TABLE Modele
 (
     id               INT AUTO_INCREMENT NOT NULL,
@@ -71,7 +71,7 @@ CREATE TABLE Modele
     PRIMARY KEY (id)
 ) ENGINE=InnoDB;
 
--- Création de la table Voiture
+-- Création de la table Model.Voiture
 CREATE TABLE Voiture
 (
     immatriculation       VARCHAR(255) NOT NULL,
@@ -80,10 +80,10 @@ CREATE TABLE Voiture
     couleur               VARCHAR(255) NOT NULL,
     modele_id             INT          NOT NULL,
     PRIMARY KEY (immatriculation),
-    CONSTRAINT fk_voiture_modele FOREIGN KEY (modele_id) REFERENCES Modele (id) -- Référence correcte à la clé primaire de Modele
+    CONSTRAINT fk_voiture_modele FOREIGN KEY (modele_id) REFERENCES Modele (id) -- Référence correcte à la clé primaire de Model.Modele
 ) ENGINE=InnoDB;
 
--- Création de la table Facture
+-- Création de la table Model.Facture
 CREATE TABLE Facture
 (
     numeroFacture INT AUTO_INCREMENT NOT NULL,
@@ -93,7 +93,7 @@ CREATE TABLE Facture
     PRIMARY KEY (numeroFacture)
 ) ENGINE=InnoDB;
 
--- Création de la table Reservation
+-- Création de la table Model.Reservation
 CREATE TABLE Reservation
 (
     numReservation       INT AUTO_INCREMENT NOT NULL,

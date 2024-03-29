@@ -3250,7 +3250,7 @@ public class StatementRegressionTest extends BaseTestCase {
     }
 
     /**
-     * Tests fix for BUG#25025 - Client-side prepared statement parser gets confused by in-line (slash-star) comments and therefore can't rewrite batched
+     * Tests fix for BUG#25025 - Model.Client-side prepared statement parser gets confused by in-line (slash-star) comments and therefore can't rewrite batched
      * statements or reliably detect type of statements when they're used.
      *
      * @throws Exception

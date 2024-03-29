@@ -66,7 +66,7 @@ public class NativeServerSession implements ServerSession {
     public static final int CLIENT_PROTOCOL_41 = 0x00000200; // for > 4.1.1
     public static final int CLIENT_INTERACTIVE = 0x00000400;
     public static final int CLIENT_SSL = 0x00000800;
-    public static final int CLIENT_TRANSACTIONS = 0x00002000; // Client knows about transactions
+    public static final int CLIENT_TRANSACTIONS = 0x00002000; // Model.Client knows about transactions
     public static final int CLIENT_RESERVED = 0x00004000; // for 4.1.0 only
     public static final int CLIENT_SECURE_CONNECTION = 0x00008000;
     public static final int CLIENT_MULTI_STATEMENTS = 0x00010000; // Enable/disable multiquery support

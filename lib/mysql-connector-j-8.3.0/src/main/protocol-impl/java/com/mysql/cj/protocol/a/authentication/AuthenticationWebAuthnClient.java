@@ -158,7 +158,7 @@ public class AuthenticationWebAuthnClient implements AuthenticationPlugin<Native
                 this.challenge = fromServer.readBytes(StringSelfDataType.STRING_LENENC);
                 this.relyingPartyId = fromServer.readString(StringSelfDataType.STRING_LENENC, "UTF-8");
 
-                // Compute the Client Data Hash.
+                // Compute the Model.Client Data Hash.
                 Encoder b64Encoder = Base64.getUrlEncoder().withoutPadding();
                 String b64EncodedChallenge = b64Encoder.encodeToString(this.challenge);
                 this.clientDataJson = String.format(CLIENT_DATA_JSON, b64EncodedChallenge, this.relyingPartyId);

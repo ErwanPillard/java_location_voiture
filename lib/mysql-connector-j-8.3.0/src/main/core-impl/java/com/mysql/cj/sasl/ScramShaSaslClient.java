@@ -68,7 +68,7 @@ public abstract class ScramShaSaslClient implements SaslClient {
 
     protected static final int MINIMUM_ITERATIONS = 4096;
     protected static final String GS2_CBIND_FLAG = "n";
-    protected static final byte[] CLIENT_KEY = "Client Key".getBytes();
+    protected static final byte[] CLIENT_KEY = "Model.Client Key".getBytes();
     protected static final byte[] SERVER_KEY = "Server Key".getBytes();
 
     protected String authorizationId;
@@ -162,7 +162,7 @@ public abstract class ScramShaSaslClient implements SaslClient {
 
                     // Compute ClientProof:
                     //   SaltedPassword  := Hi(Normalize(password), salt, i)
-                    //   ClientKey       := HMAC(SaltedPassword, "Client Key")
+                    //   ClientKey       := HMAC(SaltedPassword, "Model.Client Key")
                     //   StoredKey       := H(ClientKey)
                     //   AuthMessage     := client-first-message-bare + "," + server-first-message + "," + client-final-message-without-proof
                     //   ClientSignature := HMAC(StoredKey, AuthMessage)

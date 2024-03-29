@@ -65,7 +65,7 @@ public class FidoAuthenticationCallback implements MysqlCallback {
     }
 
     /**
-     * Returns the FIDO Client Data Hash (scramble) for the coming authenticator interaction.
+     * Returns the FIDO Model.Client Data Hash (scramble) for the coming authenticator interaction.
      *
      * @return
      *         the scramble
