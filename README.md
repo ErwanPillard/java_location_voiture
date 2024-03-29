@@ -43,7 +43,7 @@ classDiagram
     }
     
     class Categorie{
-        <<Enumeration>>
+        <<enumeration>>
         Berline
         SUV
         Familiale
@@ -76,9 +76,17 @@ classDiagram
     
     class Client{
         - age : int 
+        - telephone : String
         - numeroAdhesion: double
-        - tauxRemise: int
-        - adhesion: boolean
+        - adhesion: Boolean
+        - typeAdhesion : TypeAdhesion
+    }
+    
+    class TypeAdhesion{
+        <<enumeration>>
+        BRONZE
+        ARGENT
+        OR
     }
     
     Reservation "0..1" --> "1" Voiture
@@ -86,6 +94,7 @@ classDiagram
     Reservation "0..*" -- "1" Client
     Voiture "0..*" --> "1" Modele
     Modele -- Categorie
+    TypeAdhesion -- Client
     Client --|> User
     Employe --|> User
     Entreprise --|> Client
