@@ -8,37 +8,37 @@ title: Diagramme de Classes
 ---
 classDiagram
 
-    Reservation "0..1" --> "1" Voiture
-    Reservation "1" --> "1" Facture
-    Reservation "0..*" -- "1" Client
-    Voiture "0..*" --> "1" Modele
-    Modele -- Categorie
-    Client --|> User
-    Employe --|> User
-    Entreprise --|> Client
-    Particuler --|> Client
+    Model.Reservation "0..1" --> "1" Model.Voiture
+    Model.Reservation "1" --> "1" Model.Facture
+    Model.Reservation "0..*" -- "1" Model.Client
+    Model.Voiture "0..*" --> "1" Model.Modele
+    Model.Modele -- Model.Categorie
+    Model.Client --|> Model.User
+    Model.Employe --|> Model.User
+    Entreprise --|> Model.Client
+    Particuler --|> Model.Client
 
-    class Reservation{
+    class Model.Reservation{
         - numReservation : int
         - datesDebutResa : LocalDate
         - datesfinResa : LocalDate
         - tarif : float
         - etat : String
         
-        +Reservation(voiture : Voiture, client : Client, numReservation : int, dateDebutResa : LocalDate, dateFinResa : LocalDate, tarif : float, etat : String)
+        +Model.Reservation(voiture : Model.Voiture, client : Model.Client, numReservation : int, dateDebutResa : LocalDate, dateFinResa : LocalDate, tarif : float, etat : String)
     }
 
-    class Voiture{
+    class Model.Voiture{
         - immatriculation : String
         - dateMiseCirculation : LocalDate
         - nbKilometre: double
         - couleur: String
 
-        +Voiture(immatriculation : String, dateMiseCiculation : LocalDate, nbKilometre : double, couleur : String, modele : Modele)
+        +Model.Voiture(immatriculation : String, dateMiseCiculation : LocalDate, nbKilometre : double, couleur : String, modele : Model.Modele)
 
     }
 
-    class Modele{
+    class Model.Modele{
         - id: int
         - nom: String
         - boiteVitesse : String
@@ -48,13 +48,13 @@ classDiagram
         - caracteristiques: String
         - prixJournalier : int
         - noteSatisfaction : int 
-        - categorie : Categorie
+        - categorie : Model.Categorie
         - attelage : boolean
 
-        + Modele()
+        + Model.Modele()
     }
 
-class Categorie{
+class Model.Categorie{
     <<Enumeration>>
     Berline
     SUV
@@ -63,7 +63,7 @@ class Categorie{
     Citadine
 }
 
-class Facture{
+class Model.Facture{
     - numeroFacture: int
     - date : LocalDate
     - montant : float
@@ -79,7 +79,7 @@ class Particuler{
     - Id : int 
 }
 
-class User{
+class Model.User{
     - id: int
     - nom: String
     - prenom: String
@@ -87,7 +87,7 @@ class User{
     - motDePasse : String
 }
 
-class Client{
+class Model.Client{
     - age : int 
     - numeroAdhesion: double
     - typeAdhesion: int ou enum

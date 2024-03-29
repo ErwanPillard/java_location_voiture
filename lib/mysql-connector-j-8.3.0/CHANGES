@@ -1666,7 +1666,7 @@ Version 6.0.6
 
   - Fix for Bug#13958793, ClassCastException in ConnectionImpl.buildCollationMapping() with 4.1 server.
 
-  - Fix for Bug#36478, Client prepared statement bugged if word 'limit' included in the query.
+  - Fix for Bug#36478, Model.Client prepared statement bugged if word 'limit' included in the query.
 
 04-02-12 - Version 5.1.19
   - Fix for Bug#64621, setMaxRows was not correctly processed during CS PS metadata
@@ -3003,7 +3003,7 @@ nn-nn-07 - Version 5.0.9
 
 05-15-07 - Version 5.0.6
 
-	- Fixed BUG#25545 - Client options not sent correctly when using SSL,
+	- Fixed BUG#25545 - Model.Client options not sent correctly when using SSL,
 	  leading to stored procedures not being able to return results. Thanks
 	  to Don Cohen for the bug report, testcase and patch.
 
@@ -3203,7 +3203,7 @@ nn-nn-07 - Version 5.0.9
 	  sometimes leading to NullPointerExceptions when intropsecting them via
 	  ResultSetMetaData.
 
-	- Fixed BUG#25025 - Client-side prepared statement parser gets confused by
+	- Fixed BUG#25025 - Model.Client-side prepared statement parser gets confused by
 	  in-line (/* ... */) comments and therefore can't rewrite batched statements
 	  or reliably detect type of statements when they're used.
 

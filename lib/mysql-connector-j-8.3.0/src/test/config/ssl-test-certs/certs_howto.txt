@@ -59,7 +59,7 @@ $ rm server-csr.pem
 $ openssl verify -CAfile ca-cert.pem server-cert.pem
 
 
-3. Client key and certificate
+3. Model.Client key and certificate
 =============================
 
 (Generate the client key)
@@ -73,7 +73,7 @@ $ openssl req -new -key client-key.pem -out client-csr.pem
   Locality Name (eg, city) []:Redwood Shores
   Organization Name (eg, company) []:Oracle
   Organizational Unit Name (eg, section) []:MySQL
-  Common Name (e.g. server FQDN or YOUR name) []:MySQL Connector/J Client
+  Common Name (e.g. server FQDN or YOUR name) []:MySQL Connector/J Model.Client
   Email Address []:mysql@oracle.com
   (...)
   A challenge password []:
@@ -100,7 +100,7 @@ $ keytool -importcert -alias mysqlcacert -file ca-cert.pem -keystore ca-truststo
 $ keytool -list -keystore ca-truststore -storepass password
 
 
-5. Client key and certificate keystore
+5. Model.Client key and certificate keystore
 ======================================
 
 (Convert client key to pkcs12 format)

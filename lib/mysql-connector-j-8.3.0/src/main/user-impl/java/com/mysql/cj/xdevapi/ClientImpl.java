@@ -105,7 +105,7 @@ public class ClientImpl implements Client, ProtocolEventListener {
         JsonValue pooling = clientPropsDoc.remove("pooling");
         if (pooling != null) {
             if (!DbDoc.class.isAssignableFrom(pooling.getClass())) {
-                throw new XDevAPIError(String.format("Client option 'pooling' does not support value '%s'.", pooling.toFormattedString()));
+                throw new XDevAPIError(String.format("Model.Client option 'pooling' does not support value '%s'.", pooling.toFormattedString()));
             }
             DbDoc poolingDoc = (DbDoc) pooling;
             JsonValue jsonVal;
@@ -115,15 +115,15 @@ public class ClientImpl implements Client, ProtocolEventListener {
                 if (JsonLiteral.class.isAssignableFrom(jsonVal.getClass())) {
                     JsonLiteral pe = (JsonLiteral) jsonVal;
                     if (pe != JsonLiteral.FALSE && pe != JsonLiteral.TRUE) {
-                        throw new XDevAPIError(String.format("Client option '%s' does not support value '%s'.", ClientProperty.POOLING_ENABLED.getKeyName(),
+                        throw new XDevAPIError(String.format("Model.Client option '%s' does not support value '%s'.", ClientProperty.POOLING_ENABLED.getKeyName(),
                                 jsonVal.toFormattedString()));
                     }
                     props.setProperty(ClientProperty.POOLING_ENABLED.getKeyName(), pe.value);
                 } else if (JsonString.class.isAssignableFrom(jsonVal.getClass())) {
-                    throw new XDevAPIError(String.format("Client option '%s' does not support value '%s'.", ClientProperty.POOLING_ENABLED.getKeyName(),
+                    throw new XDevAPIError(String.format("Model.Client option '%s' does not support value '%s'.", ClientProperty.POOLING_ENABLED.getKeyName(),
                             ((JsonString) jsonVal).getString()));
                 } else {
-                    throw new XDevAPIError(String.format("Client option '%s' does not support value '%s'.", ClientProperty.POOLING_ENABLED.getKeyName(),
+                    throw new XDevAPIError(String.format("Model.Client option '%s' does not support value '%s'.", ClientProperty.POOLING_ENABLED.getKeyName(),
                             jsonVal.toFormattedString()));
                 }
             }
@@ -132,10 +132,10 @@ public class ClientImpl implements Client, ProtocolEventListener {
                 if (JsonNumber.class.isAssignableFrom(jsonVal.getClass())) {
                     props.setProperty(ClientProperty.POOLING_MAX_SIZE.getKeyName(), ((JsonNumber) jsonVal).toString());
                 } else if (JsonString.class.isAssignableFrom(jsonVal.getClass())) {
-                    throw new XDevAPIError(String.format("Client option '%s' does not support value '%s'.", ClientProperty.POOLING_MAX_SIZE.getKeyName(),
+                    throw new XDevAPIError(String.format("Model.Client option '%s' does not support value '%s'.", ClientProperty.POOLING_MAX_SIZE.getKeyName(),
                             ((JsonString) jsonVal).getString()));
                 } else {
-                    throw new XDevAPIError(String.format("Client option '%s' does not support value '%s'.", ClientProperty.POOLING_MAX_SIZE.getKeyName(),
+                    throw new XDevAPIError(String.format("Model.Client option '%s' does not support value '%s'.", ClientProperty.POOLING_MAX_SIZE.getKeyName(),
                             jsonVal.toFormattedString()));
                 }
             }
@@ -144,10 +144,10 @@ public class ClientImpl implements Client, ProtocolEventListener {
                 if (JsonNumber.class.isAssignableFrom(jsonVal.getClass())) {
                     props.setProperty(ClientProperty.POOLING_MAX_IDLE_TIME.getKeyName(), ((JsonNumber) jsonVal).toString());
                 } else if (JsonString.class.isAssignableFrom(jsonVal.getClass())) {
-                    throw new XDevAPIError(String.format("Client option '%s' does not support value '%s'.", ClientProperty.POOLING_MAX_IDLE_TIME.getKeyName(),
+                    throw new XDevAPIError(String.format("Model.Client option '%s' does not support value '%s'.", ClientProperty.POOLING_MAX_IDLE_TIME.getKeyName(),
                             ((JsonString) jsonVal).getString()));
                 } else {
-                    throw new XDevAPIError(String.format("Client option '%s' does not support value '%s'.", ClientProperty.POOLING_MAX_IDLE_TIME.getKeyName(),
+                    throw new XDevAPIError(String.format("Model.Client option '%s' does not support value '%s'.", ClientProperty.POOLING_MAX_IDLE_TIME.getKeyName(),
                             jsonVal.toFormattedString()));
                 }
             }
@@ -156,22 +156,22 @@ public class ClientImpl implements Client, ProtocolEventListener {
                 if (JsonNumber.class.isAssignableFrom(jsonVal.getClass())) {
                     props.setProperty(ClientProperty.POOLING_QUEUE_TIMEOUT.getKeyName(), ((JsonNumber) jsonVal).toString());
                 } else if (JsonString.class.isAssignableFrom(jsonVal.getClass())) {
-                    throw new XDevAPIError(String.format("Client option '%s' does not support value '%s'.", ClientProperty.POOLING_QUEUE_TIMEOUT.getKeyName(),
+                    throw new XDevAPIError(String.format("Model.Client option '%s' does not support value '%s'.", ClientProperty.POOLING_QUEUE_TIMEOUT.getKeyName(),
                             ((JsonString) jsonVal).getString()));
                 } else {
-                    throw new XDevAPIError(String.format("Client option '%s' does not support value '%s'.", ClientProperty.POOLING_QUEUE_TIMEOUT.getKeyName(),
+                    throw new XDevAPIError(String.format("Model.Client option '%s' does not support value '%s'.", ClientProperty.POOLING_QUEUE_TIMEOUT.getKeyName(),
                             jsonVal.toFormattedString()));
                 }
             }
             if (poolingDoc.size() > 0) {
                 String key = poolingDoc.keySet().stream().findFirst().get();
-                throw new XDevAPIError(String.format("Client option 'pooling.%s' is not recognized as valid.", key));
+                throw new XDevAPIError(String.format("Model.Client option 'pooling.%s' is not recognized as valid.", key));
             }
         }
 
         if (!clientPropsDoc.isEmpty()) {
             String key = clientPropsDoc.keySet().stream().findFirst().get();
-            throw new XDevAPIError(String.format("Client option '%s' is not recognized as valid.", key));
+            throw new XDevAPIError(String.format("Model.Client option '%s' is not recognized as valid.", key));
         }
 
         return props;
@@ -186,7 +186,7 @@ public class ClientImpl implements Client, ProtocolEventListener {
             try {
                 this.poolingEnabled = BooleanPropertyDefinition.booleanFrom(propKey, propValue, null);
             } catch (CJException e) {
-                throw new XDevAPIError(String.format("Client option '%s' does not support value '%s'.", propKey, propValue), e);
+                throw new XDevAPIError(String.format("Model.Client option '%s' does not support value '%s'.", propKey, propValue), e);
             }
         }
 
@@ -196,10 +196,10 @@ public class ClientImpl implements Client, ProtocolEventListener {
             try {
                 this.maxSize = IntegerPropertyDefinition.integerFrom(propKey, propValue, 1, null);
             } catch (WrongArgumentException e) {
-                throw new XDevAPIError(String.format("Client option '%s' does not support value '%s'.", propKey, propValue), e);
+                throw new XDevAPIError(String.format("Model.Client option '%s' does not support value '%s'.", propKey, propValue), e);
             }
             if (this.maxSize <= 0) {
-                throw new XDevAPIError(String.format("Client option '%s' does not support value '%s'.", propKey, propValue));
+                throw new XDevAPIError(String.format("Model.Client option '%s' does not support value '%s'.", propKey, propValue));
             }
         }
 
@@ -209,10 +209,10 @@ public class ClientImpl implements Client, ProtocolEventListener {
             try {
                 this.maxIdleTime = IntegerPropertyDefinition.integerFrom(propKey, propValue, 1, null);
             } catch (WrongArgumentException e) {
-                throw new XDevAPIError(String.format("Client option '%s' does not support value '%s'.", propKey, propValue), e);
+                throw new XDevAPIError(String.format("Model.Client option '%s' does not support value '%s'.", propKey, propValue), e);
             }
             if (this.maxIdleTime < 0) {
-                throw new XDevAPIError(String.format("Client option '%s' does not support value '%s'.", propKey, propValue));
+                throw new XDevAPIError(String.format("Model.Client option '%s' does not support value '%s'.", propKey, propValue));
             }
         }
 
@@ -222,17 +222,17 @@ public class ClientImpl implements Client, ProtocolEventListener {
             try {
                 this.queueTimeout = IntegerPropertyDefinition.integerFrom(propKey, propValue, 1, null);
             } catch (WrongArgumentException e) {
-                throw new XDevAPIError(String.format("Client option '%s' does not support value '%s'.", propKey, propValue), e);
+                throw new XDevAPIError(String.format("Model.Client option '%s' does not support value '%s'.", propKey, propValue), e);
             }
             if (this.queueTimeout < 0) {
-                throw new XDevAPIError(String.format("Client option '%s' does not support value '%s'.", propKey, propValue));
+                throw new XDevAPIError(String.format("Model.Client option '%s' does not support value '%s'.", propKey, propValue));
             }
         }
 
         List<String> clientPropsAsString = Stream.of(ClientProperty.values()).map(ClientProperty::getKeyName).collect(Collectors.toList());
         propKey = (String) clientProps.keySet().stream().filter(k -> !clientPropsAsString.contains(k)).findFirst().orElse(null);
         if (propKey != null) {
-            throw new XDevAPIError(String.format("Client option '%s' is not recognized as valid.", propKey));
+            throw new XDevAPIError(String.format("Model.Client option '%s' is not recognized as valid.", propKey));
         }
     }
 
@@ -259,7 +259,7 @@ public class ClientImpl implements Client, ProtocolEventListener {
 
     private Session getNonPooledSession() {
         if (this.isClosed) {
-            throw new XDevAPIError("Client is closed.");
+            throw new XDevAPIError("Model.Client is closed.");
         }
 
         this.clientShutdownLock.readLock().lock();
@@ -287,7 +287,7 @@ public class ClientImpl implements Client, ProtocolEventListener {
         long startTime = System.currentTimeMillis();
         while (protocol == null) {
             if (this.isClosed) {
-                throw new XDevAPIError("Client is closed.");
+                throw new XDevAPIError("Model.Client is closed.");
             }
 
             if (this.queueTimeout != 0 && System.currentTimeMillis() > startTime + this.queueTimeout) {
@@ -335,7 +335,7 @@ public class ClientImpl implements Client, ProtocolEventListener {
         this.clientShutdownLock.readLock().lock();
         try {
             if (this.isClosed) {
-                throw new XDevAPIError("Client is closed.");
+                throw new XDevAPIError("Model.Client is closed.");
             }
             this.activeProtocols.add(new WeakReference<>(protocol));
         } finally {
@@ -418,7 +418,7 @@ public class ClientImpl implements Client, ProtocolEventListener {
         }
         if (protocol == this.poisonProtocolMarker) {
             this.idleProtocols.add(this.poisonProtocolMarker);
-            throw new XDevAPIError("Session can not be obtained. Client instance is closing.");
+            throw new XDevAPIError("Session can not be obtained. Model.Client instance is closing.");
         }
         if (!protocol.isOpen()) { // If not open, ignore ant try next.
             this.availableProtocols.release();

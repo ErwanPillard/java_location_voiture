@@ -1,3 +1,5 @@
+package Model;
+
 public enum BoiteVitesse {
     AUTOMATIC("automatique"),
     MANUEL("manuel");

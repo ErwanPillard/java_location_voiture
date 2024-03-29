@@ -137,7 +137,7 @@ public class AuthenticationLdapSaslClientPlugin implements AuthenticationPlugin<
     public void init(Protocol<NativePacketPayload> prot) {
         this.protocol = prot;
 
-        // Register our own SCRAM-SHA SASL Client provider.
+        // Register our own SCRAM-SHA SASL Model.Client provider.
         Security.addProvider(new ScramShaSaslProvider());
     }
 

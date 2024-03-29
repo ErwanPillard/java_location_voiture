@@ -607,79 +607,79 @@ public class SessionTest extends DevApiBaseTestCase {
          */
         // pooling.enabled
         props.clear();
-        assertThrows(XDevAPIError.class, "Client option 'pooling\\.enabled' does not support value 'sure'\\.", () -> {
+        assertThrows(XDevAPIError.class, "Model.Client option 'pooling\\.enabled' does not support value 'sure'\\.", () -> {
             props.setProperty(ClientProperty.POOLING_ENABLED.getKeyName(), "sure");
             cf.getClient(url, props);
             return null;
         });
-        assertThrows(XDevAPIError.class, "Client option 'pooling\\.enabled' does not support value 'sure'\\.", () -> {
+        assertThrows(XDevAPIError.class, "Model.Client option 'pooling\\.enabled' does not support value 'sure'\\.", () -> {
             cf.getClient(url, "{\"pooling\": {\"enabled\": \"sure\"}}");
             return null;
         });
         // pooling.maxSize
         props.clear();
-        assertThrows(XDevAPIError.class, "Client option 'pooling\\.maxSize' does not support value '0'\\.", () -> {
+        assertThrows(XDevAPIError.class, "Model.Client option 'pooling\\.maxSize' does not support value '0'\\.", () -> {
             props.setProperty(ClientProperty.POOLING_MAX_SIZE.getKeyName(), "0");
             cf.getClient(url, props);
             return null;
         });
-        assertThrows(XDevAPIError.class, "Client option 'pooling\\.maxSize' does not support value '0'\\.", () -> {
+        assertThrows(XDevAPIError.class, "Model.Client option 'pooling\\.maxSize' does not support value '0'\\.", () -> {
             cf.getClient(url, "{\"pooling\": {\"maxSize\": 0}}");
             return null;
         });
-        assertThrows(XDevAPIError.class, "Client option 'pooling\\.maxSize' does not support value 'one'\\.", () -> {
+        assertThrows(XDevAPIError.class, "Model.Client option 'pooling\\.maxSize' does not support value 'one'\\.", () -> {
             cf.getClient(url, "{\"pooling\": {\"maxSize\": \"one\"}}");
             return null;
         });
         // pooling.maxIdleTime
         props.clear();
-        assertThrows(XDevAPIError.class, "Client option 'pooling\\.maxIdleTime' does not support value '-1'\\.", () -> {
+        assertThrows(XDevAPIError.class, "Model.Client option 'pooling\\.maxIdleTime' does not support value '-1'\\.", () -> {
             props.setProperty(ClientProperty.POOLING_MAX_IDLE_TIME.getKeyName(), "-1");
             cf.getClient(url, props);
             return null;
         });
-        assertThrows(XDevAPIError.class, "Client option 'pooling\\.maxIdleTime' does not support value '-1'\\.", () -> {
+        assertThrows(XDevAPIError.class, "Model.Client option 'pooling\\.maxIdleTime' does not support value '-1'\\.", () -> {
             cf.getClient(url, "{\"pooling\": {\"maxIdleTime\": -1}}");
             return null;
         });
-        assertThrows(XDevAPIError.class, "Client option 'pooling\\.maxIdleTime' does not support value 'one'\\.", () -> {
+        assertThrows(XDevAPIError.class, "Model.Client option 'pooling\\.maxIdleTime' does not support value 'one'\\.", () -> {
             cf.getClient(url, "{\"pooling\": {\"maxIdleTime\": \"one\"}}");
             return null;
         });
         // pooling.queueTimeout
         props.clear();
-        assertThrows(XDevAPIError.class, "Client option 'pooling\\.queueTimeout' does not support value '-1'\\.", () -> {
+        assertThrows(XDevAPIError.class, "Model.Client option 'pooling\\.queueTimeout' does not support value '-1'\\.", () -> {
             props.setProperty(ClientProperty.POOLING_QUEUE_TIMEOUT.getKeyName(), "-1");
             cf.getClient(url, props);
             return null;
         });
-        assertThrows(XDevAPIError.class, "Client option 'pooling\\.queueTimeout' does not support value '-1'\\.", () -> {
+        assertThrows(XDevAPIError.class, "Model.Client option 'pooling\\.queueTimeout' does not support value '-1'\\.", () -> {
             cf.getClient(url, "{\"pooling\": {\"queueTimeout\": -1}}");
             return null;
         });
-        assertThrows(XDevAPIError.class, "Client option 'pooling\\.queueTimeout' does not support value 'one'\\.", () -> {
+        assertThrows(XDevAPIError.class, "Model.Client option 'pooling\\.queueTimeout' does not support value 'one'\\.", () -> {
             cf.getClient(url, "{\"pooling\": {\"queueTimeout\": \"one\"}}");
             return null;
         });
         // Unknown pooling option.
         props.clear();
-        assertThrows(XDevAPIError.class, "Client option 'pooling\\.foo' is not recognized as valid\\.", () -> {
+        assertThrows(XDevAPIError.class, "Model.Client option 'pooling\\.foo' is not recognized as valid\\.", () -> {
             props.setProperty("pooling.foo", "bar");
             cf.getClient(url, props);
             return null;
         });
-        assertThrows(XDevAPIError.class, "Client option 'pooling\\.foo' is not recognized as valid\\.", () -> {
+        assertThrows(XDevAPIError.class, "Model.Client option 'pooling\\.foo' is not recognized as valid\\.", () -> {
             cf.getClient(url, "{\"pooling\": {\"foo\": \"bar\"}}");
             return null;
         });
         // Unknown clientProps option.
         props.clear();
-        assertThrows(XDevAPIError.class, "Client option 'foo' is not recognized as valid\\.", () -> {
+        assertThrows(XDevAPIError.class, "Model.Client option 'foo' is not recognized as valid\\.", () -> {
             props.setProperty("foo", "bar");
             cf.getClient(url, props);
             return null;
         });
-        assertThrows(XDevAPIError.class, "Client option 'foo' is not recognized as valid\\.", () -> {
+        assertThrows(XDevAPIError.class, "Model.Client option 'foo' is not recognized as valid\\.", () -> {
             cf.getClient(url, "{\"foo\": {\"bar\": \"baz\"}}");
             return null;
         });
@@ -694,7 +694,7 @@ public class SessionTest extends DevApiBaseTestCase {
         testPooledSessions_checkClientProperties(cf.getClient(this.baseUrl, (String) null), 25, 0, 0);
 
         /*
-         * UT9/2: Verify that when all pooling properties passed via Properties object the Client is configured according to their values.
+         * UT9/2: Verify that when all pooling properties passed via Properties object the Model.Client is configured according to their values.
          */
         props.setProperty(ClientProperty.POOLING_ENABLED.getKeyName(), "true");
         props.setProperty(ClientProperty.POOLING_MAX_SIZE.getKeyName(), "5");
@@ -704,13 +704,13 @@ public class SessionTest extends DevApiBaseTestCase {
 
         /*
          * UT9/3: Verify that when all pooling properties passed via json string ({"pooling" : {"enabled" : true, "maxSize" : 8, "maxIdleTime" : 9,
-         * "queueTimeout" : 10} }) the Client is configured according to their values.
+         * "queueTimeout" : 10} }) the Model.Client is configured according to their values.
          */
         testPooledSessions_checkClientProperties(
                 cf.getClient(this.baseUrl, "{\"pooling\" : {\"enabled\" : true, \"maxSize\" : 8, \"maxIdleTime\" : 9, \"queueTimeout\" : 10} }"), 8, 9, 10);
 
         /*
-         * UT3/2: Start a client with pooling enabled, call Client.getSession() twice and verify that the objects returned are different and the internal
+         * UT3/2: Start a client with pooling enabled, call Model.Client.getSession() twice and verify that the objects returned are different and the internal
          * connection instances are different too.
          */
         Client cli0 = cf.getClient(this.baseUrl, "{\"pooling\": {\"enabled\": true}}");
@@ -724,7 +724,7 @@ public class SessionTest extends DevApiBaseTestCase {
         cli0.close();
 
         /*
-         * UT3/3: Start a client with pooling enabled, call Client.getSession() twice, closing the first session before getting the second one, and verify that
+         * UT3/3: Start a client with pooling enabled, call Model.Client.getSession() twice, closing the first session before getting the second one, and verify that
          * the objects returned are different and that the internal connection instances are the same.
          */
         cli0 = cf.getClient(this.baseUrl, "{\"pooling\": {\"enabled\": true}}");
@@ -737,7 +737,7 @@ public class SessionTest extends DevApiBaseTestCase {
         cli0.close();
 
         /*
-         * UT3/4: Start a client with pooling disabled, call Client.getSession() twice and verify that the objects returned are different and the internal
+         * UT3/4: Start a client with pooling disabled, call Model.Client.getSession() twice and verify that the objects returned are different and the internal
          * connection instances are different too.
          */
         cli0 = cf.getClient(this.baseUrl, "{\"pooling\": {\"enabled\": false}}");
@@ -748,7 +748,7 @@ public class SessionTest extends DevApiBaseTestCase {
         cli0.close();
 
         /*
-         * UT3/5: Start a client with pooling disabled, call Client.getSession() twice, closing the first session before getting the second one, and verify that
+         * UT3/5: Start a client with pooling disabled, call Model.Client.getSession() twice, closing the first session before getting the second one, and verify that
          * the objects returned are different and that the internal connection instances are different too.
          */
         cli0 = cf.getClient(this.baseUrl, "{\"pooling\": {\"enabled\": false}}");
@@ -760,7 +760,7 @@ public class SessionTest extends DevApiBaseTestCase {
         cli0.close();
 
         /*
-         * UT5/1: Having a full pool and queueTimeout = 0, verify that a new Client.getSession() waits until a Session is released.
+         * UT5/1: Having a full pool and queueTimeout = 0, verify that a new Model.Client.getSession() waits until a Session is released.
          * UT6/1: Verify that that a client object can not open/create more sessions that the specified in the maxSize option.
          */
         props.setProperty(ClientProperty.POOLING_MAX_SIZE.getKeyName(), "3");
@@ -774,7 +774,7 @@ public class SessionTest extends DevApiBaseTestCase {
         cli1.close();
 
         /*
-         * UT12/1: Having a pool with a single connection, close the Session, get another Session with Client.getSession(). Verify that the received Session
+         * UT12/1: Having a pool with a single connection, close the Session, get another Session with Model.Client.getSession(). Verify that the received Session
          * object is new and uses the same internal connection (MysqlxSession) instance.
          */
         cli0 = cf.getClient(this.baseUrl, "{\"pooling\": {\"enabled\": true, \"maxSize\" : 1}}");
@@ -788,7 +788,7 @@ public class SessionTest extends DevApiBaseTestCase {
 
         /*
          * UT12/2: Having a pool with a number of connections greater than 1 and lower than maxPoolSize, close on Session, get another Session with
-         * Client.getSession(). Verify that the received Session object is new and uses the same internal connection (MysqlxSession) instance.
+         * Model.Client.getSession(). Verify that the received Session object is new and uses the same internal connection (MysqlxSession) instance.
          */
         cli0 = cf.getClient(this.baseUrl, "{\"pooling\": {\"enabled\": true, \"maxSize\" : 3}}");
         s0 = cli0.getSession();
@@ -800,7 +800,7 @@ public class SessionTest extends DevApiBaseTestCase {
         cli0.close();
 
         /*
-         * UT12/3: Having a full pool with all sessions in active state, close one Session, get another Session with Client.getSession(). Verify that the
+         * UT12/3: Having a full pool with all sessions in active state, close one Session, get another Session with Model.Client.getSession(). Verify that the
          * received Session object is new and uses the same internal connection (MysqlxSession) instance.
          */
         cli0 = cf.getClient(this.baseUrl, "{\"pooling\": {\"enabled\": true, \"maxSize\" : 3}}");
@@ -815,7 +815,7 @@ public class SessionTest extends DevApiBaseTestCase {
         cli0.close();
 
         /*
-         * UT11/2: Having a pool with a single idle connection and maxIdleTime = n, verify that after n milliseconds a Client.getSession() call will remove all
+         * UT11/2: Having a pool with a single idle connection and maxIdleTime = n, verify that after n milliseconds a Model.Client.getSession() call will remove all
          * expired sessions from pool and return a new Session object that uses a new MysqlxSession instance.
          */
         cli0 = cf.getClient(this.baseUrl, "{\"pooling\": {\"enabled\": true, \"maxSize\" : 3, \"maxIdleTime\" : 1000}}");
@@ -831,7 +831,7 @@ public class SessionTest extends DevApiBaseTestCase {
         assertTrue(((BlockingQueue<PooledXProtocol>) fIdleSessions.get(cli0)).isEmpty());
 
         /*
-         * UT4/1: Verify that all idle and active sessions are closed after Client.close() call.
+         * UT4/1: Verify that all idle and active sessions are closed after Model.Client.close() call.
          */
         cli0 = cf.getClient(this.baseUrl, "{\"pooling\": {\"enabled\": true, \"maxSize\" : 3}}");
         s0 = cli0.getSession();
@@ -854,18 +854,18 @@ public class SessionTest extends DevApiBaseTestCase {
         });
 
         /*
-         * UT4/2: Verify that after Client was closed the Client.getSession() throws an XDevAPIError with the message "Client is closed."
+         * UT4/2: Verify that after Model.Client was closed the Model.Client.getSession() throws an XDevAPIError with the message "Model.Client is closed."
          */
         Client cli2 = cf.getClient(this.baseUrl, "{\"pooling\": {\"enabled\": true}}");
         cli2.close();
-        assertThrows(XDevAPIError.class, "Client is closed.", () -> {
+        assertThrows(XDevAPIError.class, "Model.Client is closed.", () -> {
             cli2.getSession();
             return null;
         });
 
         /*
          * UT11/1: Having a pool with a single active and maxIdleTime = 0, verify that if closing the session then after any long inactivity time a new Session
-         * object returned by Client.getSession() uses the same internal MysqlxSession object.
+         * object returned by Model.Client.getSession() uses the same internal MysqlxSession object.
          */
         props.setProperty(ClientProperty.POOLING_MAX_SIZE.getKeyName(), "2");
         props.setProperty(ClientProperty.POOLING_MAX_IDLE_TIME.getKeyName(), "0");
@@ -883,7 +883,7 @@ public class SessionTest extends DevApiBaseTestCase {
         cli3.close();
 
         /*
-         * UT5/1: Having a full pool and queueTimeout = 0, verify that a new Client.getSession() waits until a Session is released.
+         * UT5/1: Having a full pool and queueTimeout = 0, verify that a new Model.Client.getSession() waits until a Session is released.
          */
         props.setProperty(ClientProperty.POOLING_MAX_SIZE.getKeyName(), "2");
         props.setProperty(ClientProperty.POOLING_MAX_IDLE_TIME.getKeyName(), "1000");
@@ -2070,7 +2070,7 @@ public class SessionTest extends DevApiBaseTestCase {
         //            int port2 = getTestSslPort();
         //
         //            final ClientFactory cf = new ClientFactory();
-        //            Client cli0 = cf.getClient(url, "{\"pooling\": {\"enabled\": true}}");
+        //            Model.Client cli0 = cf.getClient(url, "{\"pooling\": {\"enabled\": true}}");
         //
         //            InjectedSocketFactory.downHost(getTestSslHost() + ":" + getTestSslPort());
         //            Session s1_1 = cli0.getSession();

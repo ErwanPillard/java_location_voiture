@@ -72,7 +72,7 @@ public class WebAuthnAuthenticationCallback implements MysqlCallback {
     }
 
     /**
-     * Returns the FIDO Client Data Hash (an SHA-256 hash computed from the Client Data JSON) for the upcoming authenticator interaction.
+     * Returns the FIDO Model.Client Data Hash (an SHA-256 hash computed from the Model.Client Data JSON) for the upcoming authenticator interaction.
      *
      * @return
      *         the client data hash

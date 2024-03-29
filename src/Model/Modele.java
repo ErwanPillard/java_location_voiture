@@ -1,3 +1,4 @@
+package Model;
 
 public class Modele {
     private int id;

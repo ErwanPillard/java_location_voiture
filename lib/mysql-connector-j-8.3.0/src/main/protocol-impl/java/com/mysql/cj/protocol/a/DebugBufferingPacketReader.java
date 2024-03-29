@@ -112,7 +112,7 @@ public class DebugBufferingPacketReader implements MessageReader<NativePacketHea
         packetDump.append("Server ");
         packetDump.append(reuse.isPresent() ? "(re-used) " : "(new) ");
         packetDump.append(buf.toString());
-        packetDump.append(" --------------------> Client\n");
+        packetDump.append(" --------------------> Model.Client\n");
         packetDump.append("\nPacket payload:\n\n");
         packetDump.append(this.lastHeaderPayload);
         packetDump.append(PacketPayloadImpl);
@@ -142,7 +142,7 @@ public class DebugBufferingPacketReader implements MessageReader<NativePacketHea
         packetDump.append("Server ");
         packetDump.append(reuse.isPresent() ? "(re-used) " : "(new) ");
         packetDump.append(buf.toString());
-        packetDump.append(" --------------------> Client\n");
+        packetDump.append(" --------------------> Model.Client\n");
         packetDump.append("\nPacket payload:\n\n");
         packetDump.append(this.lastHeaderPayload);
         packetDump.append(PacketPayloadImpl);

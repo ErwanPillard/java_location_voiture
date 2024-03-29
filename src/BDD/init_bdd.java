@@ -23,7 +23,7 @@ public class init_bdd {
         // Établit la connexion avec la base de données
         try (Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD)) {
 
-            // Insère des données dans la table 'User'
+            // Insère des données dans la table 'Model.User'
             try (PreparedStatement stmt = connection.prepareStatement("INSERT INTO User (nom, prenom, email, motDePasse, telephone) VALUES (?, ?, ?, ?, ?)")) {
                 stmt.setString(1, "Doe");
                 stmt.setString(2, "John");

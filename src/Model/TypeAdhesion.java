@@ -1,3 +1,4 @@
+package Model;
 
 public enum TypeAdhesion {
     NOUVEAUCLIENT(0,6, 0),

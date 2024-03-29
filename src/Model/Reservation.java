@@ -1,3 +1,5 @@
+package Model;
+
 import java.time.LocalDate;
 
 public class Reservation {
@@ -7,7 +9,7 @@ public class Reservation {
     private LocalDate dateFin;
     private LocalDate dateDebut;
     private int numeroReservation;
-    // private Client client;
+    // private Model.Client client;
     private boolean etat;
 
     public Reservation(Voiture voiture, float tarif, LocalDate dateFin, LocalDate dateDebut, int numeroReservation, Facture facture ,boolean etat) {

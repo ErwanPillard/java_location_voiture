@@ -1,4 +1,4 @@
-import java.util.SplittableRandom;
+package Model;
 
 public class Client {
     private int age;
