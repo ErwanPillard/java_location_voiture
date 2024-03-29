@@ -14,8 +14,4 @@ public class Facture {
         this.montant = montant;
         this.etat = etat;
     }
-
-
-
-
 }
