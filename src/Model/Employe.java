@@ -1,10 +1,10 @@
 package Model;
 
-public class Employe extends User{
+public class Employe{
+
     private String fonction;
 
     public Employe(String nom, String prenom, String email, String motsDePasse, int id, String fonction) {
-        super(nom, prenom, email, motsDePasse, id);
         this.fonction = fonction;
     }
     public String getFonction() {

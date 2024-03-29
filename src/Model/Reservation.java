@@ -1,18 +1,18 @@
 package Model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Reservation {
     private Voiture voiture;
     private Facture facture;
     private float tarif;
-    private LocalDate dateFin;
-    private LocalDate dateDebut;
+    private LocalDateTime dateFin;
+    private LocalDateTime dateDebut;
     private int numeroReservation;
-    // private Model.Client client;
+    private Client client;
     private boolean etat;
 
-    public Reservation(Voiture voiture, float tarif, LocalDate dateFin, LocalDate dateDebut, int numeroReservation, Facture facture ,boolean etat) {
+    public Reservation(Voiture voiture, Client client,float tarif, LocalDateTime dateFin, LocalDateTime dateDebut, int numeroReservation, Facture facture ,boolean etat) {
         this.voiture = voiture;
         this.tarif = tarif;
         this.dateFin = dateFin;
@@ -20,14 +20,7 @@ public class Reservation {
         this.numeroReservation = numeroReservation;
         this.facture = facture;
         this.etat=etat;
-    }
-
-    public Voiture getVoiture() {
-        return voiture;
-    }
-
-    public void setVoiture(Voiture voiture) {
-        this.voiture = voiture;
+        this.client = client;
     }
 
     public float getTarif() {
@@ -38,19 +31,19 @@ public class Reservation {
         this.tarif = tarif;
     }
 
-    public LocalDate getDateFin() {
+    public LocalDateTime getDateFin() {
         return dateFin;
     }
 
-    public void setDateFin(LocalDate dateFin) {
+    public void setDateFin(LocalDateTime dateFin) {
         this.dateFin = dateFin;
     }
 
-    public LocalDate getDateDebut() {
+    public LocalDateTime getDateDebut() {
         return dateDebut;
     }
 
-    public void setDateDebut(LocalDate dateDebut) {
+    public void setDateDebut(LocalDateTime dateDebut) {
         this.dateDebut = dateDebut;
     }
 
@@ -60,14 +53,6 @@ public class Reservation {
 
     public void setNumeroReservation(int numeroReservation) {
         this.numeroReservation = numeroReservation;
-    }
-
-    public Facture getFacture() {
-        return facture;
-    }
-
-    public void setFacture(Facture facture) {
-        this.facture = facture;
     }
 
     public boolean isEtat() {

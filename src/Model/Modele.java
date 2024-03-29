@@ -7,13 +7,13 @@ public class Modele {
     private int nbPorte;
     private float tailleCoffre;
     private String caracteristiques;
-    private int prixJournalier;
+    private float prixJournalier;
     private boolean attelage;
     private float noteSatisfaction;
     private BoiteVitesse boiteVitesse;
     private Categorie categorie;
 
-    public Modele(int id, String nom, int nbPlace, int nbPorte, float tailleCoffre, String caracteristiques, int prixJournalier, boolean attelage, float noteSatisfaction, BoiteVitesse boiteVitesse, Categorie categorie) {
+    public Modele(int id, String nom, int nbPlace, int nbPorte, float tailleCoffre, String caracteristiques, float prixJournalier, boolean attelage, float noteSatisfaction, BoiteVitesse boiteVitesse, Categorie categorie) {
         this.id = id;
         this.nom = nom;
         this.nbPlace = nbPlace;
@@ -75,11 +75,11 @@ public class Modele {
         this.caracteristiques = caracteristiques;
     }
 
-    public int getPrixJournalier() {
+    public float getPrixJournalier() {
         return prixJournalier;
     }
 
-    public void setPrixJournalier(int prixJournalier) {
+    public void setPrixJournalier(float prixJournalier) {
         this.prixJournalier = prixJournalier;
     }
 
