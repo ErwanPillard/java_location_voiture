@@ -99,6 +99,8 @@ classDiagram
     Employe --|> User
     Entreprise --|> Client
     Particuler --|> Client
+    
+    TEST BRANCH
 
 
 
