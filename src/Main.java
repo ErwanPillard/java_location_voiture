@@ -32,8 +32,8 @@ public class Main {
 
 
  */
-        ClientController clientController = new ClientController();
-        ClientView clientView = new ClientView(clientController);
+        //ClientController clientController = new ClientController();
+        //ClientView clientView = new ClientView(clientController);
 
     }
 }
