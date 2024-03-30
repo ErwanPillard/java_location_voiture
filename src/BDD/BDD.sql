@@ -11,7 +11,7 @@ CREATE TABLE User
 ) ENGINE=InnoDB;
 
 -- Création de la table Model.Employe qui hérite de Model.User
-CREATE TABLE Employee
+CREATE TABLE Employe
 (
     id       INT          NOT NULL,
     fonction VARCHAR(255) NOT NULL,
@@ -47,14 +47,6 @@ CREATE TABLE Particulier
     CONSTRAINT fk_particulier_user FOREIGN KEY (id) REFERENCES User (id)
 ) ENGINE=InnoDB;
 
--- Création de la table Model.Categorie
-CREATE TABLE Categorie
-(
-    id  INT AUTO_INCREMENT NOT NULL,
-    nom VARCHAR(255) NOT NULL,
-    PRIMARY KEY (id)
-) ENGINE=InnoDB;
-
 -- Création de la table Model.Modele de voiture
 CREATE TABLE Modele
 (
@@ -74,7 +66,7 @@ CREATE TABLE Modele
 -- Création de la table Model.Voiture
 CREATE TABLE Voiture
 (
-    immatriculation       VARCHAR(255) NOT NULL,
+    immatriculation       VARCHAR(255) NOT NULL UNIQUE,
     dateMiseEnCirculation DATE         NOT NULL,
     nbKilometre           DOUBLE       NOT NULL,
     couleur               VARCHAR(255) NOT NULL,
