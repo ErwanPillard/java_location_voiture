@@ -1,13 +1,10 @@
 package Dao;
 
 import Model.Client;
+import Model.Particulier;
 import Model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 
 public class ClientDAOImpl implements ClientDAO{
@@ -16,17 +13,19 @@ public class ClientDAOImpl implements ClientDAO{
     public ClientDAOImpl(Connection connection){this.connection = connection;}
 
     @Override
-    public void add(Client client) throws SQLException {
+    public void add(Particulier particulier) throws SQLException {
         String queryUser = "INSERT INTO User (nom, prenom, email, motDePasse) VALUES (?, ?, ?, ?)";
         String queryClient = "INSERT INTO Client (id, age, telephone) VALUES (?, ?, ?)";
+        String queryParticulier = "INSERT INTO Particulier (id, numeroPermis, birthDate) VALUES (?, ?, ?)";
 
         try (PreparedStatement userStatement = connection.prepareStatement(queryUser, Statement.RETURN_GENERATED_KEYS);
-             PreparedStatement clientStatement = connection.prepareStatement(queryClient)) {
+             PreparedStatement clientStatement = connection.prepareStatement(queryClient);
+             PreparedStatement particulierStatement = connection.prepareStatement(queryParticulier)) {
             // Insertion des données dans la table User
-            userStatement.setString(1, client.getNom());
-            userStatement.setString(2, client.getPrenom());
-            userStatement.setString(3, client.getEmail());
-            userStatement.setString(4, client.getMotDePasse());
+            userStatement.setString(1, particulier.getNom());
+            userStatement.setString(2, particulier.getPrenom());
+            userStatement.setString(3, particulier.getEmail());
+            userStatement.setString(4, particulier.getMotDePasse());
             userStatement.executeUpdate();
 
             // Récupération de l'ID généré pour l'utilisateur inséré
@@ -40,9 +39,16 @@ public class ClientDAOImpl implements ClientDAO{
 
             // Insertion des données dans la table Client
             clientStatement.setInt(1, userId);
-            clientStatement.setInt(2, client.getAge());
-            clientStatement.setString(3, client.getTelephone());
+            clientStatement.setInt(2, particulier.getAge());
+            clientStatement.setString(3, particulier.getTelephone());
             clientStatement.executeUpdate();
+
+            particulierStatement.setInt(1, userId);
+            particulierStatement.setString(2, particulier.getNumeroPermis());
+
+            particulierStatement.setDate(3, Date.valueOf(particulier.getBirthDate().toLocalDate())); //.toLocalDate()
+            particulierStatement.executeUpdate();
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
