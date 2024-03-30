@@ -45,7 +45,8 @@ public class ClientDAOImpl implements ClientDAO{
 
             particulierStatement.setInt(1, userId);
             particulierStatement.setString(2, particulier.getNumeroPermis());
-            particulierStatement.setString(3, String.valueOf(particulier.getBirthDate())); //.toLocalDate()
+
+            particulierStatement.setDate(3, Date.valueOf(particulier.getBirthDate().toLocalDate())); //.toLocalDate()
             particulierStatement.executeUpdate();
 
         } catch (SQLException throwables) {

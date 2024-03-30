@@ -1,6 +1,7 @@
 package View;
 
 import Controller.ClientController;
+import Model.Particulier;
 
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
@@ -22,8 +23,8 @@ public class ClientView {
     private JTextField ageField;
     private JTextField telephoneField;
     private JTextField numeroPermisField;
-    private JTextField birthDateField;
-    private JComboBox<String> clientTypeComboBox;
+    private JFormattedTextField birthDateField;
+
 
     public ClientView(ClientController clientController) {
         JFrame jFrame = new JFrame();
@@ -73,47 +74,25 @@ public class ClientView {
         telephonePanel.add(telephoneField, BorderLayout.CENTER);
         mainPanel.add(telephonePanel);
 
-        // Champ déroulant pour sélectionner le type de client
-        JPanel clientTypePanel = new JPanel(new BorderLayout());
-        clientTypePanel.add(new JLabel("Type de client: "), BorderLayout.WEST);
-        String[] clientTypes = {"Entreprise", "Particulier"};
-        clientTypeComboBox = new JComboBox<>(clientTypes);
-        clientTypePanel.add(clientTypeComboBox, BorderLayout.CENTER);
-        mainPanel.add(clientTypePanel);
+        JPanel birthDatePanel = new JPanel(new BorderLayout());
+        birthDatePanel.add(new JLabel("Date de naissance (dd/mm/YYYY): "), BorderLayout.WEST);
 
-        // Champs associés
-        JPanel detailsPanel = new JPanel(new BorderLayout());
-        JLabel detailsLabel = new JLabel();
-        JTextField detailsTextField = new JTextField(20);
-        detailsPanel.add(detailsLabel, BorderLayout.WEST);
-        detailsPanel.add(detailsTextField, BorderLayout.CENTER);
-        mainPanel.add(detailsPanel);
+        try {
+            MaskFormatter formatter = new MaskFormatter("##/##/####"); // Définir le format de la saisie
+            birthDateField = new JFormattedTextField(formatter);
+            birthDateField.setColumns(10); // Définir la largeur du champ
+            birthDatePanel.add(birthDateField, BorderLayout.CENTER);
+            mainPanel.add(birthDatePanel);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        // Sélectionner "Entreprise" par défaut
-        clientTypeComboBox.setSelectedItem("Entreprise");
-        detailsLabel.setText("Numéro SIRET: ");
-        detailsTextField.setText("");
-        detailsTextField.setEnabled(true);
+        JPanel nuermoPermisPanel = new JPanel(new BorderLayout());
+        nuermoPermisPanel.add(new JLabel("Numéro De Permis: "), BorderLayout.WEST);
+        numeroPermisField = new JTextField(20);
+        nuermoPermisPanel.add(numeroPermisField, BorderLayout.CENTER);
+        mainPanel.add(telephonePanel);
 
-
-        // Ajouter un écouteur pour détecter les changements dans le champ déroulant
-        clientTypeComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JComboBox<String> comboBox = (JComboBox<String>) e.getSource();
-                String selectedType = (String) comboBox.getSelectedItem();
-
-                if (selectedType.equals("Entreprise")) {
-                    detailsLabel.setText("Numéro SIRET: ");
-                    detailsTextField.setText("");
-                    detailsTextField.setEnabled(true);
-                } else if (selectedType.equals("Particulier")) {
-                    detailsLabel.setText("Date de naissance (dd/mm/YYYY): ");
-                    detailsTextField.setText("");
-                    detailsTextField.setEnabled(true);
-                }
-            }
-        });
 
         // Bien faire le setSize à la fin
         jFrame.setSize(400, 400);
@@ -143,12 +122,7 @@ public class ClientView {
                 } else if (!isValidEmail(email)) { // Vérification de l'email
                     JOptionPane.showMessageDialog(jFrame, "Veuillez entrer une adresse email valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 } else {
-
-                    JComboBox<String> comboBox = (JComboBox<String>) e.getSource();
-                    String selectedType = (String) comboBox.getSelectedItem();
-                    System.out.println(selectedType);
-
-                    //clientController.addClient(nom, prenom, email, mdp, age, telephone, birthDate, numeroPermis, selectedType);
+                    clientController.addClient(nom, prenom, email, mdp, age, telephone, birthDate, numeroPermis, "Particulier");
                     // Effacer les champs après soumission réussie (si nécessaire)
                     /*nomField.setText("");
                     prenomField.setText("");

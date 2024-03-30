@@ -21,6 +21,7 @@ public class ClientController {
             } else if (type.equals("Particulier")) {
                 Particulier particulier = new Particulier(nom, prenom, email, motDePasse, age, telephone, numeroPermis, birthDate);
                 ClientDAO clientDAO = new ClientDAOImpl(connection);
+                clientDAO.add(particulier);
             }
 
             /*Client client = new Client(nom, prenom, email, motDePasse, age, telephone);
