@@ -1,0 +1,1 @@
+Pour réinitialiser AUTO INCREMENTATION : ALTER TABLE User AUTO_INCREMENT = 1;
