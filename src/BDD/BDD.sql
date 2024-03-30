@@ -31,7 +31,7 @@ CREATE TABLE Client
 -- Création de la table Entreprise qui hérite de Model.Client
 CREATE TABLE Entreprise
 (
-    id          INT AUTO_INCREMENT NOT NULL,
+    id          INT NOT NULL,
     numeroSiret VARCHAR(255) NOT NULL UNIQUE,
     PRIMARY KEY (id),
     CONSTRAINT fk_entreprise_user FOREIGN KEY (id) REFERENCES Client (id)
