@@ -7,7 +7,13 @@ import java.sql.SQLException;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
-/*
+        //init_bdd_graphique_SWING init_bdd_graphique = new init_bdd_graphique_SWING();
+        //init_bdd_graphique.setVisible(true);
+
+        ClientController clientController = new ClientController();
+        ClientView clientView = new ClientView(clientController);
+
+        /*
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
         try (Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD)){
@@ -32,7 +38,5 @@ public class Main {
 
 
  */
-        ClientController clientController = new ClientController();
-        ClientView clientView = new ClientView(clientController);
     }
 }
