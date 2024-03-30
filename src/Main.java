@@ -1,7 +1,6 @@
 import Controller.ClientController;
 
 import View.ClientView;
-import View.init_bdd_graphique_SWING;
 
 import java.sql.SQLException;
 

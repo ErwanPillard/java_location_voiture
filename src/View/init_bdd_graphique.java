@@ -6,7 +6,7 @@ import java.sql.*;
 
 import BDD.init_bdd;
 
-public class init_bdd_graphique_SWING extends JFrame {
+public class init_bdd_graphique extends JFrame {
     private JButton btnNettoyer;
     private JButton btnAjouterUsers;
     private JButton btnAjouterEmployes;
@@ -18,7 +18,7 @@ public class init_bdd_graphique_SWING extends JFrame {
 
     private Connection connection;
 
-    public init_bdd_graphique_SWING() {
+    public init_bdd_graphique() {
         super("Test BDD avec GUI");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(400, 250);
@@ -126,6 +126,6 @@ public class init_bdd_graphique_SWING extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new init_bdd_graphique_SWING().setVisible(true));
+        SwingUtilities.invokeLater(() -> new init_bdd_graphique().setVisible(true));
     }
 }
