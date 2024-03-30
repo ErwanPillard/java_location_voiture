@@ -2,35 +2,46 @@ package View;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.sql.*;
 
 import BDD.init_bdd;
 
-public class MaFenetre extends JFrame {
+public class init_bdd_graphique extends JFrame {
     private JButton btnNettoyer;
     private JButton btnAjouterUsers;
     private JButton btnAjouterEmployes;
     private JButton btnAjouterClients;
+    private JButton btnAjouterParticulier;
+    private JButton btnAjouterEntreprise;
+    private JButton btnAjouterVoiture;
+    private JButton btnAjouterModele;
 
     private Connection connection;
 
-    public MaFenetre() {
+    public init_bdd_graphique() {
         super("Test BDD avec GUI");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(500, 400);
+        setSize(400, 250);
         setLocationRelativeTo(null);
         setLayout(new FlowLayout());
 
-        btnNettoyer = new JButton("Nettoyer la BDD");
-        btnAjouterUsers = new JButton("Ajouter Utilisateurs");
-        btnAjouterEmployes = new JButton("Ajouter Employés");
-        btnAjouterClients = new JButton("Ajouter Clients");
+        btnNettoyer = new JButton("Nettoyer la BDD (optionnel)");
+        btnAjouterUsers = new JButton("1. Ajouter Utilisateurs");
+        btnAjouterEmployes = new JButton("2. Ajouter Employés");
+        btnAjouterClients = new JButton("3. Ajouter Clients");
+        btnAjouterParticulier = new JButton("4. Ajouter Particuliers");
+        btnAjouterEntreprise = new JButton("5. Ajouter Entreprise");
+        btnAjouterModele = new JButton("6. Ajouter Modele");
+        btnAjouterVoiture = new JButton("7. Ajouter Voiture");
 
         add(btnNettoyer);
         add(btnAjouterUsers);
         add(btnAjouterEmployes);
         add(btnAjouterClients);
+        add(btnAjouterParticulier);
+        add(btnAjouterEntreprise);
+        add(btnAjouterModele);
+        add(btnAjouterVoiture);
 
         try {
             setupDatabaseConnection();
@@ -80,9 +91,41 @@ public class MaFenetre extends JFrame {
                 JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout des clients", "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         });
+        btnAjouterParticulier.addActionListener(e -> {
+            try {
+                init_bdd.insertParticuliers(connection);
+                JOptionPane.showMessageDialog(this, "Particulier ajoutés", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            } catch (SQLException throwables) {
+                JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout des particulier", "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        btnAjouterEntreprise.addActionListener(e -> {
+            try {
+                init_bdd.insertEntreprises(connection);
+                JOptionPane.showMessageDialog(this, "Entreprise ajoutés", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            } catch (SQLException throwables) {
+                JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout des Entreprise", "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        btnAjouterVoiture.addActionListener(e -> {
+            try {
+                init_bdd.insertVoitures(connection);
+                JOptionPane.showMessageDialog(this, "Voiture ajoutés", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            } catch (SQLException throwables) {
+                JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout des voitures", "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        btnAjouterModele.addActionListener(e -> {
+            try {
+                init_bdd.insertModeles(connection);
+                JOptionPane.showMessageDialog(this, "Modele ajoutés", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            } catch (SQLException throwables) {
+                JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout des modeles", "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+        });
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new MaFenetre().setVisible(true));
+        SwingUtilities.invokeLater(() -> new init_bdd_graphique().setVisible(true));
     }
 }
