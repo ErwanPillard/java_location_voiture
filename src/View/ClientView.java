@@ -3,11 +3,16 @@ package View;
 import Controller.ClientController;
 
 import javax.swing.*;
+import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 
 public class ClientView {
     private JTextField nomField;
@@ -16,6 +21,9 @@ public class ClientView {
     private JPasswordField mdpField;
     private JTextField ageField;
     private JTextField telephoneField;
+    private JTextField numeroPermisField;
+    private JTextField birthDateField;
+    private JComboBox<String> clientTypeComboBox;
 
     public ClientView(ClientController clientController) {
         JFrame jFrame = new JFrame();
@@ -65,12 +73,54 @@ public class ClientView {
         telephonePanel.add(telephoneField, BorderLayout.CENTER);
         mainPanel.add(telephonePanel);
 
-        JButton userSetButton = new JButton("Valider");
-        jFrame.add(userSetButton, BorderLayout.SOUTH);
+        // Champ déroulant pour sélectionner le type de client
+        JPanel clientTypePanel = new JPanel(new BorderLayout());
+        clientTypePanel.add(new JLabel("Type de client: "), BorderLayout.WEST);
+        String[] clientTypes = {"Entreprise", "Particulier"};
+        clientTypeComboBox = new JComboBox<>(clientTypes);
+        clientTypePanel.add(clientTypeComboBox, BorderLayout.CENTER);
+        mainPanel.add(clientTypePanel);
+
+        // Champs associés
+        JPanel detailsPanel = new JPanel(new BorderLayout());
+        JLabel detailsLabel = new JLabel();
+        JTextField detailsTextField = new JTextField(20);
+        detailsPanel.add(detailsLabel, BorderLayout.WEST);
+        detailsPanel.add(detailsTextField, BorderLayout.CENTER);
+        mainPanel.add(detailsPanel);
+
+        // Sélectionner "Entreprise" par défaut
+        clientTypeComboBox.setSelectedItem("Entreprise");
+        detailsLabel.setText("Numéro SIRET: ");
+        detailsTextField.setText("");
+        detailsTextField.setEnabled(true);
+
+
+        // Ajouter un écouteur pour détecter les changements dans le champ déroulant
+        clientTypeComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JComboBox<String> comboBox = (JComboBox<String>) e.getSource();
+                String selectedType = (String) comboBox.getSelectedItem();
+
+                if (selectedType.equals("Entreprise")) {
+                    detailsLabel.setText("Numéro SIRET: ");
+                    detailsTextField.setText("");
+                    detailsTextField.setEnabled(true);
+                } else if (selectedType.equals("Particulier")) {
+                    detailsLabel.setText("Date de naissance (dd/mm/YYYY): ");
+                    detailsTextField.setText("");
+                    detailsTextField.setEnabled(true);
+                }
+            }
+        });
 
         // Bien faire le setSize à la fin
         jFrame.setSize(400, 400);
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JButton userSetButton = new JButton("Valider");
+        jFrame.add(userSetButton, BorderLayout.SOUTH);
 
         userSetButton.addActionListener(new ActionListener() {
             @Override
@@ -81,14 +131,24 @@ public class ClientView {
                 String mdp = String.valueOf(mdpField.getPassword());
                 int age = Integer.parseInt(ageField.getText());
                 String telephone = telephoneField.getText();
+                String numeroPermis = numeroPermisField.getText();
+
+                String dateString = birthDateField.getText();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDateTime birthDate = LocalDateTime.parse(dateString, formatter);
 
                 // Vérifier que les champs requis ne sont pas vides
-                if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || mdp.isEmpty()|| telephone.isEmpty() || String.valueOf(age).isEmpty()) {
+                if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || mdp.isEmpty()|| telephone.isEmpty() || String.valueOf(age).isEmpty() || dateString.isEmpty() || numeroPermis.isEmpty()) {
                     JOptionPane.showMessageDialog(jFrame, "Veuillez remplir tous les champs.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 } else if (!isValidEmail(email)) { // Vérification de l'email
                     JOptionPane.showMessageDialog(jFrame, "Veuillez entrer une adresse email valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 } else {
-                    clientController.addClient(nom, prenom, email, mdp, age, telephone);
+
+                    JComboBox<String> comboBox = (JComboBox<String>) e.getSource();
+                    String selectedType = (String) comboBox.getSelectedItem();
+                    System.out.println(selectedType);
+
+                    //clientController.addClient(nom, prenom, email, mdp, age, telephone, birthDate, numeroPermis, selectedType);
                     // Effacer les champs après soumission réussie (si nécessaire)
                     /*nomField.setText("");
                     prenomField.setText("");
@@ -101,6 +161,7 @@ public class ClientView {
             }
         });
     }
+
     // Méthode pour vérifier le format de l'email
     private boolean isValidEmail(String email) {
         String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
@@ -109,4 +170,3 @@ public class ClientView {
         return matcher.matches();
     }
 }
-
