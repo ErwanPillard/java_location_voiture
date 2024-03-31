@@ -134,4 +134,9 @@ public class ClientView {
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
     }
+
+    public static void main(String[] args) {
+        ClientController clientController = new ClientController();
+        ClientView clientView = new ClientView(clientController);
+    }
 }

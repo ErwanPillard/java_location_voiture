@@ -2,6 +2,9 @@ package View;
 
 import javax.swing.*;
 import java.awt.*;
+import javax.imageio.ImageIO;
+import java.io.IOException;
+import java.net.URL;
 
 public class HomePage extends JFrame {
     public HomePage() {
@@ -30,17 +33,28 @@ public class HomePage extends JFrame {
         btnLogin.setContentAreaFilled(false);
         btnLogin.setFocusPainted(false);
         btnLogin.setOpaque(false);
-        // Ajouter l'écouteur pour l'action de connexion
+        try {
+            // Chargement de l'image avec ImageIO pour une meilleure gestion des erreurs
+            Image img = ImageIO.read(getClass().getResource("/Pictures/AccountPicture.png"));
+            ImageIcon icon = new ImageIcon(img);
+            btnLogin.setIcon(new ImageIcon(icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH))); // Redimensionne si nécessaire
+        } catch (IOException e) {
+            e.printStackTrace(); // Affiche l'erreur dans la console si l'image ne peut pas être chargée
+            JOptionPane.showMessageDialog(this, "L'image ne peut pas être chargée : " + e.getMessage());
+        }
+
         btnLogin.addActionListener(e -> {
             // Code pour afficher la fenêtre ou le dialogue de connexion
             JOptionPane.showMessageDialog(this, "Fenêtre de connexion à implémenter");
         });
-        // Ajouter le bouton au panel de recherche ou créer un panel dédié pour le bouton
-        JPanel topRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        topRightPanel.setOpaque(false); // Rend le panel transparent
-        topRightPanel.add(btnLogin); // Ajoute le bouton au panel
-        // Positionne le panel contenant le bouton de connexion en haut à droite du conteneur principal
-        mainPanel.add(topRightPanel, BorderLayout.NORTH);
+
+// Panel pour contenir le bouton de connexion et le positionner à droite
+        JPanel loginPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        loginPanel.setOpaque(false); // Rend le panel transparent
+        loginPanel.add(btnLogin);
+
+// Ajoute le panel de connexion à droite du northPanel
+        northPanel.add(loginPanel, BorderLayout.EAST);
 
         // Barre de recherche
         JPanel searchPanel = createSearchPanel();
@@ -50,7 +64,7 @@ public class HomePage extends JFrame {
         northPanel.add(searchPanel); // Ajoute la barre de recherche au northPanel
 
         // Ajoute le northPanel contenant le titre et la barre de recherche en haut du mainPanel
-        //mainPanel.add(northPanel, BorderLayout.NORTH);
+        mainPanel.add(northPanel, BorderLayout.NORTH);
 
         // Contenu du panel de défilement pour les offres
         JPanel scrollableContentPanel = createScrollableContentPanel();
