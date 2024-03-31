@@ -5,16 +5,52 @@ import java.awt.*;
 
 public class HomePage extends JFrame {
     public HomePage() {
-        super("Location de Voitures - Page d'Accueil");
+        super("Carece - Page d'Accueil");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         // Conteneur principal
         JPanel mainPanel = new JPanel(new BorderLayout());
 
+        // Panel pour le titre et la barre de recherche
+        JPanel northPanel = new JPanel();
+        northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS));
+
+        // Titre de l'application
+        JLabel appTitle = new JLabel("CARECE", SwingConstants.CENTER);
+        appTitle.setFont(new Font("Arial", Font.BOLD, 40)); // Taille de police ajustée
+        appTitle.setForeground(new Color(0, 128, 0)); // Couleur du texte en vert
+        appTitle.setAlignmentX(Component.CENTER_ALIGNMENT); // Centre le titre dans le northPanel
+
+        ImageIcon loginIcon = new ImageIcon(getClass().getResource("/Pictures/AccountPicture.png"));
+
+        // Créer un bouton avec cette icône
+        JButton btnLogin = new JButton(loginIcon);
+        btnLogin.setBorderPainted(false);
+        btnLogin.setContentAreaFilled(false);
+        btnLogin.setFocusPainted(false);
+        btnLogin.setOpaque(false);
+        // Ajouter l'écouteur pour l'action de connexion
+        btnLogin.addActionListener(e -> {
+            // Code pour afficher la fenêtre ou le dialogue de connexion
+            JOptionPane.showMessageDialog(this, "Fenêtre de connexion à implémenter");
+        });
+        // Ajouter le bouton au panel de recherche ou créer un panel dédié pour le bouton
+        JPanel topRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        topRightPanel.setOpaque(false); // Rend le panel transparent
+        topRightPanel.add(btnLogin); // Ajoute le bouton au panel
+        // Positionne le panel contenant le bouton de connexion en haut à droite du conteneur principal
+        mainPanel.add(topRightPanel, BorderLayout.NORTH);
+
         // Barre de recherche
         JPanel searchPanel = createSearchPanel();
-        mainPanel.add(searchPanel, BorderLayout.NORTH);
+
+        // Liste du nordPanel
+        northPanel.add(appTitle); // Ajoute le titre au northPanel
+        northPanel.add(searchPanel); // Ajoute la barre de recherche au northPanel
+
+        // Ajoute le northPanel contenant le titre et la barre de recherche en haut du mainPanel
+        //mainPanel.add(northPanel, BorderLayout.NORTH);
 
         // Contenu du panel de défilement pour les offres
         JPanel scrollableContentPanel = createScrollableContentPanel();
@@ -28,6 +64,7 @@ public class HomePage extends JFrame {
         setContentPane(mainPanel);
         setVisible(true);
     }
+
 
     private JPanel createSearchPanel() {
         // Panel de recherche
@@ -43,15 +80,9 @@ public class HomePage extends JFrame {
         JButton btnSearch = new JButton("Rechercher");
 
         // Personnalisation des composants
-        tfLocation.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.GRAY, 1),
-                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-        tfPickUpDate.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.GRAY, 1),
-                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-        tfDropOffDate.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.GRAY, 1),
-                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        tfLocation.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY, 1), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        tfPickUpDate.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY, 1), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        tfDropOffDate.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY, 1), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         btnSearch.setBackground(new Color(0xFF5733)); // Couleur rouge/orange
         btnSearch.setForeground(Color.WHITE);
         btnSearch.setFocusPainted(false);
