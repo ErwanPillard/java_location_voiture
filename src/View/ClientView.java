@@ -121,7 +121,6 @@ public class ClientView {
                     mdpField.setText("");
                     ageField.setText("");
                     telephoneField.setText("");*/
-
                 }
             }
         });
