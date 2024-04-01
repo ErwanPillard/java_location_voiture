@@ -1,6 +1,6 @@
 package View;
 
-import Controller.ClientController;
+import Controller.ClientFormController;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class ClientView {
+public class ClientFormView {
     private JTextField nomField;
     private JTextField prenomField;
     private JTextField emailField;
@@ -22,7 +22,7 @@ public class ClientView {
     private JTextField birthDateField;
 
 
-    public ClientView(ClientController clientController) {
+    public ClientFormView(ClientFormController clientFormController) {
         JFrame jFrame = new JFrame();
         jFrame.setVisible(true);
 
@@ -84,7 +84,7 @@ public class ClientView {
 
 
         // Bien faire le setSize à la fin
-        jFrame.setSize(400, 400);
+        jFrame.setSize(500, 500);
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JButton userSetButton = new JButton("Valider");
@@ -113,7 +113,7 @@ public class ClientView {
                     JOptionPane.showMessageDialog(jFrame, "Veuillez entrer une adresse email valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }*/ else {
                     //System.out.println(birthDate);
-                    clientController.addClient(nom, prenom, email, mdp, age, telephone, birthDate, numeroPermis, "Particulier");
+                    clientFormController.addClient(nom, prenom, email, mdp, age, telephone, birthDate, numeroPermis, "Particulier");
                     // Effacer les champs après soumission réussie (si nécessaire)
                     /*nomField.setText("");
                     prenomField.setText("");
@@ -135,7 +135,7 @@ public class ClientView {
     }
 
     public static void main(String[] args) {
-        ClientController clientController = new ClientController();
-        ClientView clientView = new ClientView(clientController);
+        ClientFormController clientFormController = new ClientFormController();
+        ClientFormView clientFormView = new ClientFormView(clientFormController);
     }
 }

@@ -8,7 +8,7 @@ public class addModele extends JFrame {
         setTitle(title);
         setSize(400, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);k
+        setLocationRelativeTo(null);
 
         // Création de la zone de texte
         JTextArea zoneDeTexte = new JTextArea();

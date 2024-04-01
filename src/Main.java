@@ -1,7 +1,3 @@
-import Controller.ClientController;
-
-import View.ClientView;
-
 import java.sql.SQLException;
 
 
@@ -32,8 +28,6 @@ public class Main {
         } catch (SQLException throwables){
             throwables.printStackTrace();
         }
-
-
  */
     }
 }
