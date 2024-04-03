@@ -19,16 +19,18 @@ public class HomePage extends JFrame {
         JPanel northPanel = new JPanel();
         northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS));
 
+        // Panel pour le titre et le bouton de connexion
+        JPanel titlePanel = new JPanel();
+        titlePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        titlePanel.setBackground(Color.WHITE); // Fond blanc pour le panel du titre
+
         // Titre de l'application
         JLabel appTitle = new JLabel("CARECE", SwingConstants.CENTER);
         appTitle.setFont(new Font("Arial", Font.BOLD, 40)); // Taille de police ajustée
         appTitle.setForeground(new Color(0, 128, 0)); // Couleur du texte en vert
-        appTitle.setAlignmentX(Component.CENTER_ALIGNMENT); // Centre le titre dans le northPanel
 
-        ImageIcon loginIcon = new ImageIcon(getClass().getResource("/Pictures/AccountPicture.png"));
-
-        // Créer un bouton avec cette icône
-        JButton btnLogin = new JButton(loginIcon);
+        // Bouton de connexion
+        JButton btnLogin = new JButton();
         btnLogin.setBorderPainted(false);
         btnLogin.setContentAreaFilled(false);
         btnLogin.setFocusPainted(false);
@@ -36,34 +38,30 @@ public class HomePage extends JFrame {
         try {
             // Chargement de l'image avec ImageIO pour une meilleure gestion des erreurs
             Image img = ImageIO.read(getClass().getResource("/Pictures/AccountPicture.png"));
-            ImageIcon icon = new ImageIcon(img);
-            btnLogin.setIcon(new ImageIcon(icon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH))); // Redimensionne si nécessaire
+            btnLogin.setIcon(new ImageIcon(img.getScaledInstance(50, 50, Image.SCALE_SMOOTH))); // Redimensionne l'image
         } catch (IOException e) {
             e.printStackTrace(); // Affiche l'erreur dans la console si l'image ne peut pas être chargée
             JOptionPane.showMessageDialog(this, "L'image ne peut pas être chargée : " + e.getMessage());
         }
 
-        btnLogin.addActionListener(e -> {
-            // Code pour afficher la fenêtre ou le dialogue de connexion
-            JOptionPane.showMessageDialog(this, "Fenêtre de connexion à implémenter");
-        });
+        // Ajoute le titre et le bouton au panel du titre
+        titlePanel.add(appTitle);
+        titlePanel.add(btnLogin);
 
-// Panel pour contenir le bouton de connexion et le positionner à droite
+        // Panel pour le bouton de connexion
         JPanel loginPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        loginPanel.setOpaque(false); // Rend le panel transparent
+        loginPanel.setOpaque(false);
         loginPanel.add(btnLogin);
 
-// Ajoute le panel de connexion à droite du northPanel
+        // Ajoute le titre et le panel de connexion au northPanel
+        northPanel.add(appTitle, BorderLayout.CENTER);
         northPanel.add(loginPanel, BorderLayout.EAST);
 
-        // Barre de recherche
+        // Barre de recherche directement sous le titre
         JPanel searchPanel = createSearchPanel();
+        northPanel.add(searchPanel, BorderLayout.SOUTH);
 
-        // Liste du nordPanel
-        northPanel.add(appTitle); // Ajoute le titre au northPanel
-        northPanel.add(searchPanel); // Ajoute la barre de recherche au northPanel
-
-        // Ajoute le northPanel contenant le titre et la barre de recherche en haut du mainPanel
+        // Ajoute le northPanel au mainPanel
         mainPanel.add(northPanel, BorderLayout.NORTH);
 
         // Contenu du panel de défilement pour les offres
@@ -73,18 +71,20 @@ public class HomePage extends JFrame {
         JScrollPane scrollPane = new JScrollPane(scrollableContentPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
+
+        // Ajoute le ScrollPane au mainPanel
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
+        // Configure le content pane
         setContentPane(mainPanel);
         setVisible(true);
     }
-
 
     private JPanel createSearchPanel() {
         // Panel de recherche
         JPanel searchPanel = new JPanel();
         searchPanel.setBackground(new Color(0xF8F8F8)); // Couleur de fond gris clair
-        searchPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        //searchPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); // Alignement à gauche
         searchPanel.setBackground(Color.WHITE); // Assure que le fond est blanc
 
         // Composants de la barre de recherche
