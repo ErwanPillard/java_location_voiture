@@ -1,8 +1,8 @@
 package View;
 
+import java.awt.*;
 import Controller.ClientFormController;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
@@ -11,7 +11,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class ClientFormView {
+
+public class ClientFormView extends JDialog{
+
+    private static ClientFormView clientform = new ClientFormView();
+
     private JTextField nomField;
     private JTextField prenomField;
     private JTextField emailField;
@@ -20,6 +24,10 @@ public class ClientFormView {
     private JTextField telephoneField;
     private JTextField numeroPermisField;
     private JTextField birthDateField;
+
+    private JButton jbSave;
+    private JButton jbCancel;
+
 
 
     public ClientFormView(ClientFormController clientFormController) {
@@ -103,6 +111,7 @@ public class ClientFormView {
 
                 String dateString = birthDateField.getText();
 
+
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                 LocalDate birthDate = LocalDate.parse(dateString, formatter);
 
@@ -124,6 +133,68 @@ public class ClientFormView {
                 }
             }
         });
+    }
+
+    public ClientFormView(){
+        createForms();
+        createButtons();
+        registerListeners();
+        configure();
+    }
+
+    private void configure(){
+        this.setResizable(false);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.pack();
+        this.setLocationRelativeTo(this.getRootPane());
+    }
+    private void createForms(){
+        JPanel jpForm = new JPanel(new GridLayout(2, 1, 0, 5));
+
+        jpForm.setBorder(BorderFactory.createTitledBorder("Données personnelles"));
+
+        jpForm.add(fieldset(new JLabel("Prénom :"),
+                prenomField = new JTextField(30)));
+
+        jpForm.add(fieldset(new JLabel("Nom :"),
+                nomField = new JTextField(30)));
+
+        this.add(jpForm, BorderLayout.CENTER);
+    }
+
+
+    private JPanel fieldset(JComponent...components){
+        JPanel fieldset = new JPanel();
+        for (JComponent component : components) {
+            fieldset.add(component);
+        }
+        return fieldset;
+    }
+
+    private void createButtons(){
+        JPanel jpButtons = new JPanel();
+
+        jpButtons.add(jbSave = new JButton("Sauvegarder"));
+        jpButtons.add(jbCancel = new JButton("Annuler"));
+
+        this.add(jpButtons, BorderLayout.SOUTH);
+    }
+
+    private void registerListeners() {
+        jbSave.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                //appeler controleur
+            }
+        });
+        jbCancel.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                //appeler controleur
+            }
+        });
+    }
+
+    public static void toggle(){
+        clientform.setVisible(!clientform.isVisible());
     }
 
     // Méthode pour vérifier le format de l'email

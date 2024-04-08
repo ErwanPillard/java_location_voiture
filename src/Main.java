@@ -1,3 +1,5 @@
+import View.MainJFrame;
+
 import java.sql.SQLException;
 
 
@@ -29,5 +31,7 @@ public class Main {
             throwables.printStackTrace();
         }
  */
+
+        MainJFrame.createAndShowGUI();
     }
 }
