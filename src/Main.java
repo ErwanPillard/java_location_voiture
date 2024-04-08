@@ -2,9 +2,12 @@ import View.MainJFrame;
 
 import java.sql.SQLException;
 
+import View.HomePage;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
+        HomePage.main(args);
+
         //init_bdd_graphique_SWING init_bdd_graphique = new init_bdd_graphique_SWING();
         //init_bdd_graphique.setVisible(true);
 
@@ -32,6 +35,6 @@ public class Main {
         }
  */
 
-        MainJFrame.createAndShowGUI();
+        //MainJFrame.createAndShowGUI();
     }
 }

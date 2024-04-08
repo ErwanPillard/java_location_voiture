@@ -1,5 +1,11 @@
 package View;
 
+import Controller.HomeController;
+import Controller.UserConnectionController;
+
+import Dao.UserConnexion;
+import Dao.UserConnexionImpl;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,15 +13,13 @@ public class HomePage extends JFrame {
     private JButton btnLogin;
     private JTextField tfLocation, tfPickUpDate, tfDropOffDate;
     private JButton btnSearch;
+    private JLabel loginStatusLabel;
 
     public HomePage() {
         initUI();
     }
 
     private void initUI() {
-        // Log pour le début de l'initialisation de l'interface
-        System.out.println("Initialisation de l'interface...");
-
         setTitle("Carece - Page d'Accueil");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -28,14 +32,17 @@ public class HomePage extends JFrame {
         appTitle.setFont(new Font("Arial", Font.BOLD, 40));
         appTitle.setForeground(new Color(0, 128, 0));
 
+        loginStatusLabel = new JLabel("Non connecté");
+        loginStatusLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
         btnLogin = new JButton(new ImageIcon(getClass().getResource("/Pictures/AccountPicture.png")));
         btnLogin.setBorderPainted(false);
         btnLogin.setContentAreaFilled(false);
         btnLogin.setFocusPainted(false);
         btnLogin.setOpaque(false);
-        if (btnLogin.getIcon() == null) {
-            System.out.println("L'image du bouton de connexion n'a pas pu être chargée.");
-        }
+
+        btnLogin.addActionListener(e -> showUserConnectionDialog());
+
 
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         titlePanel.add(appTitle);
@@ -48,10 +55,6 @@ public class HomePage extends JFrame {
 
         // Ajoute le northPanel au mainPanel
         mainPanel.add(northPanel, BorderLayout.NORTH);
-        // Vérifie si les composants sont correctement ajoutés
-        if (northPanel.isDisplayable()) {
-            System.out.println("northPanel est prêt à l'affichage.");
-        }
 
         // Centre de la page : Contenu principal
         JPanel centerPanel = new JPanel();
@@ -67,9 +70,6 @@ public class HomePage extends JFrame {
         setContentPane(mainPanel);
         pack(); // Ajuste la taille de la fenêtre aux composants
         setVisible(true);
-
-        // Log pour confirmer la visibilité
-        System.out.println("L'interface utilisateur est maintenant visible.");
     }
 
     // Getters pour les contrôleurs pour accéder aux composants
@@ -93,7 +93,31 @@ public class HomePage extends JFrame {
         return btnSearch;
     }
 
+    public void setUserLoggedIn(boolean isLoggedIn) {
+        loginStatusLabel.setText(isLoggedIn ? "Connecté" : "Non connecté");
+        // Tu pourrais aussi changer la couleur ou d'autres propriétés visuelles ici
+    }
+
+    private void showUserConnectionDialog() {
+        JDialog dialog = new JDialog();
+        UserConnection userConnectionPanel = new UserConnection();
+        UserConnexion userConnexionDao = new UserConnexionImpl(); // Assure-toi que cette implémentation est correcte et complète.
+        new UserConnectionController(userConnectionPanel, userConnexionDao);
+
+        dialog.setTitle("Connexion");
+        dialog.setContentPane(userConnectionPanel);
+        dialog.setSize(300, 200); // Ajuste la taille selon tes besoins
+        dialog.setModal(true);
+        dialog.setLocationRelativeTo(this); // Centrer par rapport à HomePage
+        dialog.setVisible(true);
+    }
+
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(HomePage::new);
+        SwingUtilities.invokeLater(() -> {
+            HomePage homePage = new HomePage();
+            UserConnexion userConnexion = new UserConnexionImpl(); // Assure-toi que cette classe est correctement implémentée.
+            new HomeController(homePage, userConnexion); // Cette ligne connecte la vue et le contrôleur.
+        });
     }
 }

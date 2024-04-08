@@ -15,7 +15,7 @@ public class UserConnexionImpl implements UserConnexion {
     public UserConnexionImpl() {
         try {
             // Assure-toi que le pilote JDBC est chargé
-            Class.forName("com.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -23,7 +23,7 @@ public class UserConnexionImpl implements UserConnexion {
 
     @Override
     public boolean connect(String username, String password) {
-        String query = "SELECT COUNT(*) AS count FROM users WHERE username = ? AND password = ?";
+        String query = "SELECT COUNT(*) AS count FROM User WHERE email = ? AND motDePasse = ?";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement pstmt = conn.prepareStatement(query)) {
