@@ -48,14 +48,14 @@ public class init_bdd {
 
 
     public static void insertUsers(Connection connection) throws SQLException {
-        String userSql = "INSERT INTO User (nom, prenom, email, motDePasse, telephone) VALUES (?, ?, ?, ?, ?)";
+        String userSql = "INSERT INTO User (nom, prenom, email, motDePasse) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(userSql)) {
             for (int i = 1; i <= 60; i++) {
                 stmt.setString(1, "Nom" + i); // Nom
                 stmt.setString(2, "Prenom" + i); // Prénom
                 stmt.setString(3, "email" + i); // Email
                 stmt.setString(4, "0" + i); // Mot de passe
-                stmt.setString(5, "0606060" + String.format("%03d", i)); // Téléphone
+                //stmt.setString(5, "0606060" + String.format("%03d", i)); // Téléphone
                 stmt.executeUpdate();
             }
         }
