@@ -21,7 +21,7 @@ CREATE TABLE Employe
 -- Création de la table Model.Client qui hérite de Model.User
 CREATE TABLE Client
 (
-    id  INT NOT NULL,
+    id  INT AUTO_INCREMENT NOT NULL,
     age INT NOT NULL,
     telephone  VARCHAR(255),
     PRIMARY KEY (id),
@@ -31,10 +31,10 @@ CREATE TABLE Client
 -- Création de la table Entreprise qui hérite de Model.Client
 CREATE TABLE Entreprise
 (
-    id          INT NOT NULL,
+    id          INT AUTO_INCREMENT NOT NULL,
     numeroSiret VARCHAR(255) NOT NULL UNIQUE,
     PRIMARY KEY (id),
-    CONSTRAINT fk_entreprise_user FOREIGN KEY (id) REFERENCES Client (id)
+    CONSTRAINT fk_entreprise_user FOREIGN KEY (id) REFERENCES User (id)
 ) ENGINE=InnoDB;
 
 -- Création de la table Particulier qui hérite de Model.Client
@@ -44,15 +44,7 @@ CREATE TABLE Particulier
     numeroPermis VARCHAR(255) NOT NULL UNIQUE,
     birthDate    DATE         NOT NULL,
     PRIMARY KEY (id),
-    CONSTRAINT fk_particulier_user FOREIGN KEY (id) REFERENCES Client (id)
-) ENGINE=InnoDB;
-
--- Création de la table Model.Categorie
-CREATE TABLE Categorie
-(
-    id  INT AUTO_INCREMENT NOT NULL,
-    nom VARCHAR(255) NOT NULL,
-    PRIMARY KEY (id)
+    CONSTRAINT fk_particulier_user FOREIGN KEY (id) REFERENCES User (id)
 ) ENGINE=InnoDB;
 
 -- Création de la table Model.Modele de voiture
