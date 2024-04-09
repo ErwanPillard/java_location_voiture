@@ -1,12 +1,17 @@
-import View.MainJFrame;
-
 import java.sql.SQLException;
 
+import View.HomePage;
+import Model.SessionManager;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
-        //init_bdd_graphique_SWING init_bdd_graphique = new init_bdd_graphique_SWING();
-        //init_bdd_graphique.setVisible(true);
+        SessionManager.getInstance();
+
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new HomePage();
+            }
+        });
 
         /*
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -32,6 +37,6 @@ public class Main {
         }
  */
 
-        MainJFrame.createAndShowGUI();
+        //MainJFrame.createAndShowGUI();
     }
 }
