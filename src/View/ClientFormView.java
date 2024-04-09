@@ -53,10 +53,29 @@ public class ClientFormView extends JDialog{
         jpForm.setBorder(BorderFactory.createTitledBorder("Données personnelles"));
 
         jpForm.add(fieldset(new JLabel("Prénom :"),
-                prenomField = new JTextField(30)));
+                prenomField = new JTextField(20)));
 
         jpForm.add(fieldset(new JLabel("Nom :"),
-                nomField = new JTextField(30)));
+                nomField = new JTextField(20)));
+
+        jpForm.add(fieldset(new JLabel("Email :"),
+                emailField = new JTextField(20)));
+
+        jpForm.add(fieldset(new JLabel("Mot de Passe :"),
+                mdpField = new JPasswordField(20)));
+
+        jpForm.add(fieldset(new JLabel("Age :"),
+                ageField = new JTextField(20)));
+
+        jpForm.add(fieldset(new JLabel("Numero de téléphone :"),
+                telephoneField = new JTextField(20)));
+
+        jpForm.add(fieldset(new JLabel("Numéro Permis de Conduire :"),
+                numeroPermisField = new JTextField(20)));
+
+        jpForm.add(fieldset(new JLabel("Date de naissance (dd-MM-yyyy): "),
+                birthDateField = new JTextField(20)));
+
 
         this.add(jpForm, BorderLayout.CENTER);
     }
