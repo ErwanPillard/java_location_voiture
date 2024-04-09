@@ -14,9 +14,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-
-
 public class ClientFormView extends JDialog{
 
     static ClientController clientController = new ClientController();
@@ -26,67 +23,133 @@ public class ClientFormView extends JDialog{
     private JTextField prenomField;
     private JTextField emailField;
     private JPasswordField mdpField;
+    private JPasswordField confirmeMdpField;
     private JTextField ageField;
     private JTextField telephoneField;
     private JTextField numeroPermisField;
     private JTextField birthDateField;
+    private JComboBox<String> typeField;
 
     private JButton jbSave;
     private JButton jbCancel;
 
+    // Déclarer une variable pour stocker la référence du dernier panneau ajouté
+    private JPanel lastAddedPanel;
+
     public ClientFormView(ClientController clientController){
-        createForms();
+        createForms(String.valueOf(typeField));
         createButtons();
         registerListeners(clientController);
         configure();
     }
 
     private void configure(){
-        this.setResizable(false);
+        setTitle("Création compte Particulier");
+        this.setResizable(true);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.pack();
         this.setLocationRelativeTo(this.getRootPane());
     }
-    private void createForms(){
-        JPanel jpForm = new JPanel(new GridLayout(2, 1, 0, 5));
 
-        jpForm.setBorder(BorderFactory.createTitledBorder("Données personnelles"));
+    private void createForms(String type) {
+        JPanel jpForm = new JPanel(new GridBagLayout());
+        GridBagConstraints gbcForm = new GridBagConstraints();
+        gbcForm.anchor = GridBagConstraints.WEST;
+        gbcForm.insets = new Insets(5, 5, 5, 5);
 
-        jpForm.add(fieldset(new JLabel("Prénom :"),
-                prenomField = new JTextField(20)));
+        // Créer les formulaires pour Particulier et Entreprise une seule fois
+        JPanel jpParticulierForms = createParticulierForms();
+        JPanel jpEntrepriseForms = createEntrepriseForms();
 
-        jpForm.add(fieldset(new JLabel("Nom :"),
-                nomField = new JTextField(20)));
+        // Ajouter les panneaux des catégories à jpForm
+        gbcForm.gridx = 0;
+        gbcForm.gridy = 0;
+        jpForm.add(createConnexionForm(), gbcForm);
 
-        jpForm.add(fieldset(new JLabel("Email :"),
-                emailField = new JTextField(20)));
+        // Ajouter les panneaux des formulaires Particulier et Entreprise à jpForm
+        gbcForm.gridy++;
+        jpForm.add(jpParticulierForms, gbcForm);
+        jpForm.add(jpEntrepriseForms, gbcForm);
 
-        jpForm.add(fieldset(new JLabel("Mot de Passe :"),
-                mdpField = new JPasswordField(20)));
+        // Masquer initialement le formulaire Entreprise
+        jpEntrepriseForms.setVisible(false);
 
-        jpForm.add(fieldset(new JLabel("Age :"),
-                ageField = new JTextField(20)));
+        // Ajouter un écouteur d'événement pour détecter les changements de sélection
+        typeField.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String selectedType = (String) typeField.getSelectedItem();
 
-        jpForm.add(fieldset(new JLabel("Numero de téléphone :"),
-                telephoneField = new JTextField(20)));
+                // Afficher ou cacher les formulaires en fonction du type sélectionné
+                if (selectedType.equals("Particulier")) {
+                    jpParticulierForms.setVisible(true);
+                    jpEntrepriseForms.setVisible(false);
+                } else if (selectedType.equals("Entreprise")) {
+                    jpParticulierForms.setVisible(false);
+                    jpEntrepriseForms.setVisible(true);
+                }
 
-        jpForm.add(fieldset(new JLabel("Numéro Permis de Conduire :"),
-                numeroPermisField = new JTextField(20)));
-
-        jpForm.add(fieldset(new JLabel("Date de naissance (dd-MM-yyyy): "),
-                birthDateField = new JTextField(20)));
-
+                // Actualiser l'affichage pour refléter les modifications
+                jpForm.revalidate();
+                jpForm.repaint();
+            }
+        });
 
         this.add(jpForm, BorderLayout.CENTER);
     }
 
 
-    private JPanel fieldset(JComponent...components){
-        JPanel fieldset = new JPanel();
-        for (JComponent component : components) {
-            fieldset.add(component);
-        }
-        return fieldset;
+    private JPanel createConnexionForm(){
+        // Catégorie 1 : Informations de connexion
+        JPanel jpLoginInfo = new JPanel(new GridBagLayout());
+        jpLoginInfo.setBorder(BorderFactory.createTitledBorder("Information de connexion"));
+        GridBagConstraints gbcLogin = new GridBagConstraints();
+        gbcLogin.anchor = GridBagConstraints.WEST;
+        gbcLogin.insets = new Insets(5, 5, 5, 5);
+        addFormField(jpLoginInfo, gbcLogin, "Email :", emailField = new JTextField(20));
+        addFormField(jpLoginInfo, gbcLogin, "Mot de Passe :", mdpField = new JPasswordField(20));
+        addFormField(jpLoginInfo, gbcLogin, "Confirmez mot de passe :", confirmeMdpField = new JPasswordField(20));
+        JComboBox<String> comboBox = new JComboBox<>(new String[]{"Particulier", "Entreprise"});
+        addFormField(jpLoginInfo, gbcLogin, "Type :", typeField = comboBox);
+
+        return jpLoginInfo;
+    }
+    private JPanel createParticulierForms() {
+        JPanel jpPersonalInfo = new JPanel(new GridBagLayout());
+        jpPersonalInfo.setBorder(BorderFactory.createTitledBorder("Données personnelles"));
+        GridBagConstraints gbcPersonal = new GridBagConstraints();
+        gbcPersonal.anchor = GridBagConstraints.WEST;
+        gbcPersonal.insets = new Insets(5, 5, 5, 5);
+
+        addFormField(jpPersonalInfo, gbcPersonal, "Prénom :", prenomField = new JTextField(20));
+        addFormField(jpPersonalInfo, gbcPersonal, "Nom :", nomField = new JTextField(20));
+        addFormField(jpPersonalInfo, gbcPersonal, "Age :", ageField = new JTextField(20));
+        addFormField(jpPersonalInfo, gbcPersonal, "Numero de téléphone :", telephoneField = new JTextField(20));
+        addFormField(jpPersonalInfo, gbcPersonal, "Numéro Permis de Conduire :", numeroPermisField = new JTextField(20));
+        addFormField(jpPersonalInfo, gbcPersonal, "Date de naissance (dd-MM-yyyy):", birthDateField = new JTextField(20));
+
+        return jpPersonalInfo;
+    }
+    private JPanel createEntrepriseForms() {
+        JPanel jpPersonalInfo = new JPanel(new GridBagLayout());
+        jpPersonalInfo.setBorder(BorderFactory.createTitledBorder("Données personnelles"));
+        GridBagConstraints gbcPersonal = new GridBagConstraints();
+        gbcPersonal.anchor = GridBagConstraints.WEST;
+        gbcPersonal.insets = new Insets(5, 5, 5, 5);
+
+        addFormField(jpPersonalInfo, gbcPersonal, "Nom :", prenomField = new JTextField(20));
+        addFormField(jpPersonalInfo, gbcPersonal, "Siret :", nomField = new JTextField(20));
+        addFormField(jpPersonalInfo, gbcPersonal, "Numero de téléphone :", telephoneField = new JTextField(20));
+
+        return jpPersonalInfo;
+    }
+
+    private void addFormField(JPanel panel, GridBagConstraints gbc, String label, JComponent component) {
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panel.add(new JLabel(label), gbc);
+
+        gbc.gridx = 1;
+        panel.add(component, gbc);
     }
 
     private void createButtons(){
@@ -101,6 +164,7 @@ public class ClientFormView extends JDialog{
     private void registerListeners(ClientController clientController) {
         jbSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
+
                 cmdSave(clientController);
             }
         });
@@ -121,15 +185,12 @@ public class ClientFormView extends JDialog{
         String telephone = telephoneField.getText();
         String numeroPermis = numeroPermisField.getText();
         String dateString = birthDateField.getText();
-
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate birthDate = LocalDate.parse(dateString, formatter);
 
-        clientController.addClient(nom, prenom, email, mdp, age, telephone, birthDate, numeroPermis, "Particulier");
-
+        clientController.addClientPariculier(nom, prenom, email, mdp, age, telephone, birthDate, numeroPermis, "Particulier");
         JOptionPane.showMessageDialog(this, "Utilisateur enregistré avec succès", "", JOptionPane.INFORMATION_MESSAGE);
         dispose();
-
     }
 
     private void cmdCancel(){
