@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class User {
     private int id;
+    private int age;
     private String nom;
     private String prenom;
     private String email;
@@ -27,11 +28,20 @@ public class User {
         this.email = email;
     }
 
-    public User(String numPermis, Date dateNaissance, String numSiret, String fonctionEmploye) {
+    public User(int age, String numPermis, Date dateNaissance, String numSiret, String fonctionEmploye) {
+        this.age = age;
         this.numPermis = numPermis;
         this.dateNaissance = dateNaissance;
         this.numSiret = numSiret;
         this.fonctionEmploye = fonctionEmploye;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public String getNumPermis() {
