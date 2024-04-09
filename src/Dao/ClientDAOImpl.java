@@ -8,7 +8,7 @@ import java.sql.*;
 
 
 public class ClientDAOImpl implements ClientDAO{
-    private Connection connection;
+    private final Connection connection;
 
     public ClientDAOImpl(Connection connection){this.connection = connection;}
 

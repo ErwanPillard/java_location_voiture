@@ -1,10 +1,15 @@
 package Model;
 
+import Dao.ClientDAO;
+
+import java.sql.SQLException;
+import java.time.LocalDate;
+
 public class Client extends User{
     private int age;
     private String telephone;
     private double numeroAdhesion;
-    private boolean adhesion;
+    private final boolean adhesion;
     private TypeAdhesion typeAdhesion;
 
 
@@ -39,4 +44,15 @@ public class Client extends User{
     public void setTelephone(String telephone) {
         this.telephone = telephone;
     }
+
+
+    /**
+     * Méthode pour sauvegarder l'objet User dans la base de données
+     * @throws SQLException
+     */
+    public void save(){
+        //ClientDAO.add();
+    }
 }
+
+

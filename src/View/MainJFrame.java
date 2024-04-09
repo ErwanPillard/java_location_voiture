@@ -2,10 +2,12 @@ package View;
 
 import javax.swing.*;
 import java.awt.*;
+import Controller.*;
 
 public class MainJFrame extends JFrame {
 
     public static final Dimension WINDOWSIZE = new Dimension(1000,500);
+
 
     public MainJFrame() {
         super("CARECE");
@@ -28,6 +30,9 @@ public class MainJFrame extends JFrame {
         frame.pack();
         frame.setVisible(true);
 
+
+        //Ouvrir formulaire Client
         ClientFormView.toggle();
     }
+
 }

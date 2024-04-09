@@ -1,10 +1,14 @@
 package View;
 
 import java.awt.*;
-import Controller.ClientFormController;
+import Controller.*;
+import Model.Client;
+
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
@@ -12,9 +16,11 @@ import java.util.regex.Pattern;
 
 
 
+
 public class ClientFormView extends JDialog{
 
-    private static ClientFormView clientform = new ClientFormView();
+    static ClientController clientController = new ClientController();
+    static ClientFormView clientFormView = new ClientFormView(clientController);
 
     private JTextField nomField;
     private JTextField prenomField;
@@ -28,117 +34,10 @@ public class ClientFormView extends JDialog{
     private JButton jbSave;
     private JButton jbCancel;
 
-
-
-    public ClientFormView(ClientFormController clientFormController) {
-        JFrame jFrame = new JFrame();
-        jFrame.setVisible(true);
-
-        // Center JFrame
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        jFrame.setLocation(dim.width / 2 - jFrame.getSize().width / 2, dim.height / 2 - jFrame.getSize().height / 2);
-
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(0, 1)); // Une seule colonne, lignes dynamiques
-        jFrame.add(mainPanel);
-
-        JPanel nomPanel = new JPanel(new BorderLayout());
-        nomPanel.add(new JLabel("Nom: "), BorderLayout.WEST);
-        nomField = new JTextField(20);
-        nomPanel.add(nomField, BorderLayout.CENTER);
-        mainPanel.add(nomPanel);
-
-        JPanel prenomPanel = new JPanel(new BorderLayout());
-        prenomPanel.add(new JLabel("Prenom: "), BorderLayout.WEST);
-        prenomField = new JTextField(20);
-        prenomPanel.add(prenomField, BorderLayout.CENTER);
-        mainPanel.add(prenomPanel);
-
-        JPanel emailPanel = new JPanel(new BorderLayout());
-        emailPanel.add(new JLabel("Email: "), BorderLayout.WEST);
-        emailField = new JTextField(20);
-        emailPanel.add(emailField, BorderLayout.CENTER);
-        mainPanel.add(emailPanel);
-
-        JPanel mdpPanel = new JPanel(new BorderLayout());
-        mdpPanel.add(new JLabel("Mot de passe: "), BorderLayout.WEST);
-        mdpField = new JPasswordField(20);
-        mdpPanel.add(mdpField, BorderLayout.CENTER);
-        mainPanel.add(mdpPanel);
-
-        JPanel agePanel = new JPanel(new BorderLayout());
-        agePanel.add(new JLabel("Age: "), BorderLayout.WEST);
-        ageField = new JTextField(20);
-        agePanel.add(ageField, BorderLayout.CENTER);
-        mainPanel.add(agePanel);
-
-        JPanel telephonePanel = new JPanel(new BorderLayout());
-        telephonePanel.add(new JLabel("Telephone: "), BorderLayout.WEST);
-        telephoneField = new JTextField(20);
-        telephonePanel.add(telephoneField, BorderLayout.CENTER);
-        mainPanel.add(telephonePanel);
-
-        JPanel birthDatePanel = new JPanel(new BorderLayout());
-        birthDatePanel.add(new JLabel("Date de naissance (dd-MM-yyyy): "), BorderLayout.WEST);
-        birthDateField = new JTextField(20);
-        birthDatePanel.add(birthDateField, BorderLayout.CENTER);
-        mainPanel.add(birthDatePanel);
-
-        JPanel nuermoPermisPanel = new JPanel(new BorderLayout());
-        nuermoPermisPanel.add(new JLabel("Numéro De Permis: "), BorderLayout.WEST);
-        numeroPermisField = new JTextField(20);
-        nuermoPermisPanel.add(numeroPermisField, BorderLayout.CENTER);
-        mainPanel.add(nuermoPermisPanel);
-
-
-        // Bien faire le setSize à la fin
-        jFrame.setSize(500, 500);
-        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        JButton userSetButton = new JButton("Valider");
-        jFrame.add(userSetButton, BorderLayout.SOUTH);
-
-        userSetButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String nom = nomField.getText();
-                String prenom = prenomField.getText();
-                String email = emailField.getText();
-                String mdp = String.valueOf(mdpField.getPassword());
-                int age = Integer.parseInt(ageField.getText());
-                String telephone = telephoneField.getText();
-                String numeroPermis = numeroPermisField.getText();
-
-                String dateString = birthDateField.getText();
-
-
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-                LocalDate birthDate = LocalDate.parse(dateString, formatter);
-
-                // Vérifier que les champs requis ne sont pas vides
-                if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || mdp.isEmpty()|| telephone.isEmpty() || String.valueOf(age).isEmpty() || dateString.isEmpty() || numeroPermis.isEmpty()) {
-                    JOptionPane.showMessageDialog(jFrame, "Veuillez remplir tous les champs.", "Erreur", JOptionPane.ERROR_MESSAGE);
-                } /*else if (!isValidEmail(email)) { // Vérification de l'email
-                    JOptionPane.showMessageDialog(jFrame, "Veuillez entrer une adresse email valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
-                }*/ else {
-                    //System.out.println(birthDate);
-                    clientFormController.addClient(nom, prenom, email, mdp, age, telephone, birthDate, numeroPermis, "Particulier");
-                    // Effacer les champs après soumission réussie (si nécessaire)
-                    /*nomField.setText("");
-                    prenomField.setText("");
-                    emailField.setText("");
-                    mdpField.setText("");
-                    ageField.setText("");
-                    telephoneField.setText("");*/
-                }
-            }
-        });
-    }
-
-    public ClientFormView(){
+    public ClientFormView(ClientController clientController){
         createForms();
         createButtons();
-        registerListeners();
+        registerListeners(clientController);
         configure();
     }
 
@@ -180,21 +79,53 @@ public class ClientFormView extends JDialog{
         this.add(jpButtons, BorderLayout.SOUTH);
     }
 
-    private void registerListeners() {
+    private void registerListeners(ClientController clientController) {
         jbSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                //appeler controleur
+                cmdSave(clientController);
             }
         });
         jbCancel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                //appeler controleur
+                cmdCancel();
             }
         });
     }
 
-    public static void toggle(){
-        clientform.setVisible(!clientform.isVisible());
+    private void cmdSave(ClientController clientController){
+
+        String nom = nomField.getText();
+        String prenom = prenomField.getText();
+        String email = emailField.getText();
+        String mdp = String.valueOf(mdpField.getPassword());
+        int age = Integer.parseInt(ageField.getText());
+        String telephone = telephoneField.getText();
+        String numeroPermis = numeroPermisField.getText();
+        String dateString = birthDateField.getText();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate birthDate = LocalDate.parse(dateString, formatter);
+
+        clientController.addClient(nom, prenom, email, mdp, age, telephone, birthDate, numeroPermis, "Particulier");
+
+        JOptionPane.showMessageDialog(this, "Utilisateur enregistré avec succès", "", JOptionPane.INFORMATION_MESSAGE);
+        dispose();
+
+    }
+
+    private void cmdCancel(){
+        dispose();
+    }
+
+    private void clearForm(JTextComponent... jtcomponets){
+        for (JTextComponent component : jtcomponets) {
+            component.setText("");
+        }
+    }
+    @Override
+    public void dispose(){
+        super.dispose();
+        clearForm(nomField, prenomField);
     }
 
     // Méthode pour vérifier le format de l'email
@@ -205,8 +136,7 @@ public class ClientFormView extends JDialog{
         return matcher.matches();
     }
 
-    public static void main(String[] args) {
-        ClientFormController clientFormController = new ClientFormController();
-        ClientFormView clientFormView = new ClientFormView(clientFormController);
+    public static void toggle(){
+        clientFormView.setVisible(!clientFormView.isVisible());
     }
 }

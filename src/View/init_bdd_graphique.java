@@ -7,14 +7,14 @@ import java.sql.*;
 import BDD.init_bdd;
 
 public class init_bdd_graphique extends JFrame {
-    private JButton btnNettoyer;
-    private JButton btnAjouterUsers;
-    private JButton btnAjouterEmployes;
-    private JButton btnAjouterClients;
-    private JButton btnAjouterParticulier;
-    private JButton btnAjouterEntreprise;
-    private JButton btnAjouterVoiture;
-    private JButton btnAjouterModele;
+    private final JButton btnNettoyer;
+    private final JButton btnAjouterUsers;
+    private final JButton btnAjouterEmployes;
+    private final JButton btnAjouterClients;
+    private final JButton btnAjouterParticulier;
+    private final JButton btnAjouterEntreprise;
+    private final JButton btnAjouterVoiture;
+    private final JButton btnAjouterModele;
 
     private Connection connection;
 

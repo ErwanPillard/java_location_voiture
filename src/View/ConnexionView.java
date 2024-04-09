@@ -10,8 +10,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class ConnexionView {
-    private JTextField loginField;
-    private JTextField passwordField;
+    private final JTextField loginField;
+    private final JTextField passwordField;
 
     public ConnexionView(ConnexionController connexionController){
         JFrame jFrame = new JFrame();
