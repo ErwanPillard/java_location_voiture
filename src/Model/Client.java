@@ -1,7 +1,9 @@
 package Model;
 
 import Dao.ClientDAO;
+import Dao.ClientDAOImpl;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
@@ -13,15 +15,15 @@ public class Client extends User{
     private TypeAdhesion typeAdhesion;
 
 
-    public Client(String nom, String prenom, String email, String motDePasse, int age, String telephone){ //Client non adhérant
-        super(nom, prenom, email, motDePasse);
+    public Client(String email, String motDePasse, int age, String telephone){ //Client non adhérant
+        super(email, motDePasse);
         this.age = age;
         this.telephone = telephone;
         this.adhesion = false;
     }
 
-    public Client(String nom, String prenom, String email, String motDePasse, int age, String telephone, double numeroAdhesion, TypeAdhesion typeAdhesion){ //Client adhérant
-        super(nom, prenom, email, motDePasse);
+    public Client(String email, String motDePasse, int age, String telephone, double numeroAdhesion, TypeAdhesion typeAdhesion){ //Client adhérant
+        super(email, motDePasse);
         this.age = age;
         this.telephone = telephone;
         this.adhesion = true;
@@ -50,8 +52,8 @@ public class Client extends User{
      * Méthode pour sauvegarder l'objet User dans la base de données
      * @throws SQLException
      */
-    public void save(){
-        //ClientDAO.add();
+    public void save() throws SQLException{
+        //ClientDAOImpl.add();
     }
 }
 

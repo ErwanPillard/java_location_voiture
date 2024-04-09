@@ -3,6 +3,8 @@ package View;
 import java.awt.*;
 import Controller.*;
 import Model.Client;
+import Model.Particulier;
+import Model.SessionManager;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
@@ -19,15 +21,18 @@ public class ClientFormView extends JDialog{
     static ClientController clientController = new ClientController();
     static ClientFormView clientFormView = new ClientFormView(clientController);
 
+    private JTextField nomEntrepriseField;
     private JTextField nomField;
     private JTextField prenomField;
     private JTextField emailField;
     private JPasswordField mdpField;
     private JPasswordField confirmeMdpField;
     private JTextField ageField;
+    private JTextField ageEntrepriseField;
     private JTextField telephoneField;
     private JTextField numeroPermisField;
     private JTextField birthDateField;
+    private JTextField numSiret;
     private JComboBox<String> typeField;
 
     private JButton jbSave;
@@ -83,9 +88,11 @@ public class ClientFormView extends JDialog{
                 if (selectedType.equals("Particulier")) {
                     jpParticulierForms.setVisible(true);
                     jpEntrepriseForms.setVisible(false);
+                    clearForm(nomField, prenomField, ageField, telephoneField,numeroPermisField, birthDateField,numSiret, nomEntrepriseField, ageEntrepriseField);
                 } else if (selectedType.equals("Entreprise")) {
                     jpParticulierForms.setVisible(false);
                     jpEntrepriseForms.setVisible(true);
+                    clearForm(nomField, prenomField, ageField, telephoneField,numeroPermisField, birthDateField,numSiret, nomEntrepriseField, ageEntrepriseField);
                 }
 
                 // Actualiser l'affichage pour refléter les modifications
@@ -136,8 +143,9 @@ public class ClientFormView extends JDialog{
         gbcPersonal.anchor = GridBagConstraints.WEST;
         gbcPersonal.insets = new Insets(5, 5, 5, 5);
 
-        addFormField(jpPersonalInfo, gbcPersonal, "Nom :", prenomField = new JTextField(20));
-        addFormField(jpPersonalInfo, gbcPersonal, "Siret :", nomField = new JTextField(20));
+        addFormField(jpPersonalInfo, gbcPersonal, "Nom :", nomEntrepriseField = new JTextField(20));
+        addFormField(jpPersonalInfo, gbcPersonal, "Siret :", numSiret = new JTextField(20));
+        addFormField(jpPersonalInfo, gbcPersonal, "Age :", ageEntrepriseField = new JTextField(20));
         addFormField(jpPersonalInfo, gbcPersonal, "Numero de téléphone :", telephoneField = new JTextField(20));
 
         return jpPersonalInfo;
@@ -177,19 +185,51 @@ public class ClientFormView extends JDialog{
 
     private void cmdSave(ClientController clientController){
 
-        String nom = nomField.getText();
-        String prenom = prenomField.getText();
-        String email = emailField.getText();
-        String mdp = String.valueOf(mdpField.getPassword());
-        int age = Integer.parseInt(ageField.getText());
-        String telephone = telephoneField.getText();
-        String numeroPermis = numeroPermisField.getText();
-        String dateString = birthDateField.getText();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate birthDate = LocalDate.parse(dateString, formatter);
+        String selectedItem = (String) typeField.getSelectedItem();
 
-        clientController.addClientPariculier(nom, prenom, email, mdp, age, telephone, birthDate, numeroPermis, "Particulier");
-        JOptionPane.showMessageDialog(this, "Utilisateur enregistré avec succès", "", JOptionPane.INFORMATION_MESSAGE);
+        if(selectedItem.equals("Particulier")){
+            String nom = nomField.getText();
+            String prenom = prenomField.getText();
+            String email = emailField.getText();
+            String mdp = String.valueOf(mdpField.getPassword());
+            String ageText = ageField.getText();
+            String telephone = telephoneField.getText();
+            String numeroPermis = numeroPermisField.getText();
+            String dateString = birthDateField.getText();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            LocalDate birthDate = LocalDate.parse(dateString, formatter);
+
+            // Vérifier si le champ d'âge est vide
+            if (ageText.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Veuillez saisir votre âge.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                return; // Sortir de la méthode sans enregistrer le client
+            }
+
+            // Convertir l'âge en entier
+            int age;
+            try {
+                age = Integer.parseInt(ageText);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Veuillez saisir un âge valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                return; // Sortir de la méthode sans enregistrer le client
+            }
+
+            clientController.addPariculier(nom, prenom, email, mdp, age, telephone, numeroPermis, birthDate);
+        }
+        else if (selectedItem.equals("Entreprise")){
+            String nomE = nomEntrepriseField.getText();
+            String email = emailField.getText();
+            String mdp = String.valueOf(mdpField.getPassword());
+            int age = Integer.parseInt(ageEntrepriseField.getText());
+            String telephone = telephoneField.getText();
+            String siret = numSiret.getText();
+
+            clientController.addEntreprise(nomE, email, mdp, age, telephone, siret);
+        }
+        else {
+            JOptionPane.showMessageDialog(this, "Problème ajout client", "", JOptionPane.INFORMATION_MESSAGE);
+        }
+        //JOptionPane.showMessageDialog(this, "Utilisateur enregistré avec succès", "", JOptionPane.INFORMATION_MESSAGE);
         dispose();
     }
 
@@ -205,7 +245,7 @@ public class ClientFormView extends JDialog{
     @Override
     public void dispose(){
         super.dispose();
-        clearForm(nomField, prenomField);
+        clearForm(nomField, prenomField, ageField, telephoneField,numeroPermisField, birthDateField,numSiret, nomEntrepriseField, ageEntrepriseField);
     }
 
     // Méthode pour vérifier le format de l'email

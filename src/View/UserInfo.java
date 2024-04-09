@@ -21,8 +21,6 @@ public class UserInfo extends JFrame {
 
         SessionManager.getInstance();
         JLabel labelUserType = new JLabel("Type : " + SessionManager.userType()); // Affiche le type d'utilisateur
-        JLabel labelNom = new JLabel("Nom : " + SessionManager.getCurrentUser().getNom());
-        JLabel labelPrenom = new JLabel("Prénom : " + SessionManager.getCurrentUser().getPrenom());
         JLabel labelEmail = new JLabel("Email : " + SessionManager.getCurrentUser().getEmail());
 
         btnLogout = new JButton("Déconnexion");
@@ -46,8 +44,6 @@ public class UserInfo extends JFrame {
         JPanel panelInfo = new JPanel();
         panelInfo.setLayout(new GridLayout(5, 1)); // Organise les labels verticalement
         panelInfo.add(labelUserType);
-        panelInfo.add(labelNom);
-        panelInfo.add(labelPrenom);
         panelInfo.add(labelEmail);
 
         JPanel southPanel = new JPanel();

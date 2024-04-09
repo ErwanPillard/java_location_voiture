@@ -30,12 +30,10 @@ public class UserConnectionImpl implements UserConnection {
                 if (rs.next()) {
                     // Création d'un nouvel utilisateur avec les informations récupérées.
                     int userId = rs.getInt("id");
-                    String userNom = rs.getString("nom");
-                    String userPrenom = rs.getString("prenom");
                     String userEmail = rs.getString("email");
 
                     // Retourne l'utilisateur si la connexion est réussie.
-                    return new User(userId, userNom, userPrenom, userEmail);
+                    return new User(userId, userEmail);
                 }
             }
         } catch (SQLException e) {

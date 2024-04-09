@@ -2,8 +2,6 @@
 CREATE TABLE User
 (
     id         INT AUTO_INCREMENT NOT NULL,
-    nom        VARCHAR(255) NOT NULL,
-    prenom     VARCHAR(255) NOT NULL,
     email      VARCHAR(255) NOT NULL,
     motDePasse VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
@@ -32,19 +30,22 @@ CREATE TABLE Client
 CREATE TABLE Entreprise
 (
     id          INT AUTO_INCREMENT NOT NULL,
+    nom        VARCHAR(255) NOT NULL,
     numeroSiret VARCHAR(255) NOT NULL UNIQUE,
     PRIMARY KEY (id),
-    CONSTRAINT fk_entreprise_user FOREIGN KEY (id) REFERENCES User (id)
+    CONSTRAINT fk_entreprise_user FOREIGN KEY (id) REFERENCES Client (id)
 ) ENGINE=InnoDB;
 
 -- Création de la table Particulier qui hérite de Model.Client
 CREATE TABLE Particulier
 (
     id           INT          NOT NULL,
+    nom        VARCHAR(255) NOT NULL,
+    prenom     VARCHAR(255) NOT NULL,
     numeroPermis VARCHAR(255) NOT NULL UNIQUE,
     birthDate    DATE         NOT NULL,
     PRIMARY KEY (id),
-    CONSTRAINT fk_particulier_user FOREIGN KEY (id) REFERENCES User (id)
+    CONSTRAINT fk_particulier_user FOREIGN KEY (id) REFERENCES Client (id)
 ) ENGINE=InnoDB;
 
 -- Création de la table Model.Modele de voiture
