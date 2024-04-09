@@ -52,11 +52,13 @@ public class HomePage extends JFrame {
 
         btnLogin.addActionListener(e -> {
             if (SessionManager.getInstance().isLoggedIn()) {
-                // afficher les informations de l'utilisateur dans une boite de dialogue
-                JOptionPane.showMessageDialog(this, "Prénom : " + SessionManager.getCurrentUser().getPrenom()
+                this.setVisible(false); // Cache HomePage
+                new UserInfo().setVisible(true); // Affiche UserInfo
+
+                /*JOptionPane.showMessageDialog(this, "Prénom : " + SessionManager.getCurrentUser().getPrenom()
                                 + "\nNom : " + SessionManager.getCurrentUser().getNom()
                                 + "\nEmail : " + SessionManager.getCurrentUser().getEmail()
-                        , "Informations utilisateur connecté", JOptionPane.INFORMATION_MESSAGE);
+                        , "Informations utilisateur connecté", JOptionPane.INFORMATION_MESSAGE);*/
             } else {
                 // L'utilisateur n'est pas connecté, ouvre le dialogue de connexion
                 this.setVisible(false);
@@ -139,3 +141,11 @@ public class HomePage extends JFrame {
         dialog.setVisible(true);
     }
 }
+
+
+
+/*
+Passer la boite de dialogue qui affiche les informations de l'utilisateur en une classe à part.
+Ajouter un bouton de déconnexion pour l'utilisateur connecté (dans la nouvelle classe 'UserInfo.java')
+Différencier l'affichage de l'utilisateur s'il est particulier, entreprise ou employee.
+ */

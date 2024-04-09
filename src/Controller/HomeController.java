@@ -1,13 +1,15 @@
 package Controller;
 
+import Dao.UserConnection;
 import Model.SessionManager;
 import Model.User;
 import View.HomePage;
-import Dao.UserConnection;
+
+import java.sql.SQLException;
 
 public class HomeController {
-    private HomePage homePage;
-    private UserConnection userConnexion;
+    private final HomePage homePage;
+    private final UserConnection userConnexion;
 
 
     public HomeController(HomePage homePage, UserConnection userConnexion) {
@@ -23,10 +25,16 @@ public class HomeController {
     }
 
     private void initController() {
-        homePage.getBtnLogin().addActionListener(e -> showLoginDialog());
+        homePage.getBtnLogin().addActionListener(e -> {
+            try {
+                showLoginDialog();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
     }
 
-    private void showLoginDialog() {
+    private void showLoginDialog() throws SQLException {
         // Exemple fictif de récupération de nom d'utilisateur et mot de passe
         String username = "user";
         String password = "pass";

@@ -7,6 +7,7 @@ import View.ConnexionUtilisateur;
 import View.HomePage;
 
 import javax.swing.*;
+import java.sql.SQLException;
 
 public class UserConnectionController {
     private final ConnexionUtilisateur connexionUtilisateurView;
@@ -30,10 +31,16 @@ public class UserConnectionController {
     }
 
     private void initController() {
-        connexionUtilisateurView.getLoginButton().addActionListener(e -> attemptLogin());
+        connexionUtilisateurView.getLoginButton().addActionListener(e -> {
+            try {
+                attemptLogin();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
     }
 
-    private void attemptLogin() {
+    private void attemptLogin() throws SQLException {
         String username = connexionUtilisateurView.getUsername();
         String password = connexionUtilisateurView.getPassword();
 
