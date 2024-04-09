@@ -1,11 +1,17 @@
 package Model;
 
+import java.util.Date;
+
 public class User {
     private int id;
     private String nom;
     private String prenom;
     private String email;
     private String motDePasse;
+    private String numPermis;
+    private Date dateNaissance;
+    private String numSiret;
+    private String fonctionEmploye;
 
     public User(String nom, String prenom, String email, String motDePasse) {
         this.nom = nom;
@@ -19,6 +25,45 @@ public class User {
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
+    }
+
+    public User(String numPermis, Date dateNaissance, String numSiret, String fonctionEmploye) {
+        this.numPermis = numPermis;
+        this.dateNaissance = dateNaissance;
+        this.numSiret = numSiret;
+        this.fonctionEmploye = fonctionEmploye;
+    }
+
+    public String getNumPermis() {
+        return numPermis;
+    }
+
+    public void setNumPermis(String numPermis) {
+        this.numPermis = numPermis;
+    }
+
+    public String getNumSiret() {
+        return numSiret;
+    }
+
+    public void setNumSiret(String numSiret) {
+        this.numSiret = numSiret;
+    }
+
+    public String getFonctionEmploye() {
+        return fonctionEmploye;
+    }
+
+    public void setFonctionEmploye(String fonctionEmploye) {
+        this.fonctionEmploye = fonctionEmploye;
+    }
+
+    public Date getDateNaissance() {
+        return dateNaissance;
+    }
+
+    public void setDateNaissance(Date dateNaissance) {
+        this.dateNaissance = dateNaissance;
     }
 
     public int getId() {
