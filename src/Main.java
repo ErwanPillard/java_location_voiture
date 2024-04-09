@@ -1,12 +1,17 @@
-import View.MainJFrame;
-
 import java.sql.SQLException;
 
 import View.HomePage;
+import Model.SessionManager;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
-        HomePage.main(args);
+        SessionManager.getInstance();
+
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new HomePage();
+            }
+        });
 
         //init_bdd_graphique_SWING init_bdd_graphique = new init_bdd_graphique_SWING();
         //init_bdd_graphique.setVisible(true);

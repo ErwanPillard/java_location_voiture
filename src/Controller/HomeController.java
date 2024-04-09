@@ -1,16 +1,16 @@
 package Controller;
 
-import View.ClientFormView;
+import Model.SessionManager;
+import Model.User;
 import View.HomePage;
-import Dao.UserConnexion;
+import Dao.UserConnection;
 
 public class HomeController {
-
     private HomePage homePage;
-    private UserConnexion userConnexion;
+    private UserConnection userConnexion;
 
 
-    public HomeController(HomePage homePage, UserConnexion userConnexion) {
+    public HomeController(HomePage homePage, UserConnection userConnexion) {
         this.homePage = homePage;
         this.userConnexion = userConnexion;
 
@@ -24,7 +24,6 @@ public class HomeController {
 
     private void initController() {
         homePage.getBtnLogin().addActionListener(e -> showLoginDialog());
-
     }
 
     private void showLoginDialog() {
@@ -33,10 +32,12 @@ public class HomeController {
         String password = "pass";
 
         // Appelle la méthode de connexion sur l'objet userConnexion
-        boolean isConnected = userConnexion.connect(username, password);
-        if (isConnected) {
+        User user = userConnexion.connect(username, password);
+        if (user != null) {
+            SessionManager.getInstance().logIn(user);
             homePage.setUserLoggedIn(true);
         } else {
+            SessionManager.getInstance().logOut();
             homePage.setUserLoggedIn(false);
         }
     }

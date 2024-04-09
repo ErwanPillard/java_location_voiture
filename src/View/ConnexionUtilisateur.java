@@ -3,20 +3,20 @@ package View;
 import javax.swing.*;
 import java.awt.*;
 
-public class UserConnection extends JPanel {
+public class ConnexionUtilisateur extends JPanel {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton loginButton;
 
-    public UserConnection() {
+    public ConnexionUtilisateur() {
         setLayout(new BorderLayout());
         JPanel formPanel = new JPanel(new GridLayout(3, 2));
 
-        formPanel.add(new JLabel("Nom d'utilisateur:"));
+        formPanel.add(new JLabel("Email :"));
         usernameField = new JTextField();
         formPanel.add(usernameField);
 
-        formPanel.add(new JLabel("Mot de passe:"));
+        formPanel.add(new JLabel("Mot de passe :"));
         passwordField = new JPasswordField();
         formPanel.add(passwordField);
 
