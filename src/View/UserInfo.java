@@ -10,7 +10,7 @@ import java.awt.event.WindowEvent;
 public class UserInfo extends JFrame {
     private final JButton btnLogout;
     private final JButton btnRetour;
-    // Ajoute les nouveaux boutons ici
+    JPanel panelBoutons = new JPanel(new FlowLayout(FlowLayout.CENTER));
     private JButton btnFactures;
     private JButton btnMettreAJourVoitures;
     private JButton btnOffresReduction;
@@ -106,14 +106,17 @@ public class UserInfo extends JFrame {
 
         // Ajoute les boutons de base
         southPanel.add(btnRetour);
+        southPanel.add(Box.createRigidArea(new Dimension(0, 5))); // Ajoute un espace vertical de 5 pixels entre les boutons
         southPanel.add(btnLogout);
 
+        add(panelInfo, BorderLayout.CENTER);
         add(southPanel, BorderLayout.SOUTH);
 
         // Listener pour la fermeture de la fenêtre
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                // Ceci est appelé lorsque l'utilisateur clique sur la croix pour fermer la fenêtre
                 ouvrirHomePage();
             }
         });
@@ -124,6 +127,7 @@ public class UserInfo extends JFrame {
     }
 
     private void ouvrirHomePage() {
+        // Cette méthode rend la HomePage visible à nouveau
         EventQueue.invokeLater(() -> {
             new HomePage().setVisible(true);
         });
