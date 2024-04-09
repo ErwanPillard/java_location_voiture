@@ -5,7 +5,7 @@ public enum Categorie{
     SUV("SUV"),
     FAMILLIALE("familliale"),
     UTILITAIRE("utilitaire"),
-    Citadine("citadine");
+    CITADINE("citadine");
     private final String nomCatergorie;
     Categorie(String nomCatergorie){
         this.nomCatergorie= nomCatergorie;
