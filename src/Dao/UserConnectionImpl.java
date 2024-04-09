@@ -8,11 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserConnectionImpl implements UserConnection {
-
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/Location_Voiture"; // Remplace avec l'URL de ta base de données
-    private static final String USER = "root"; // Remplace avec ton utilisateur de base de données
-    private static final String PASS = ""; // Remplace avec ton mot de passe de base de données
-
     public UserConnectionImpl() {
         try {
             // Assure-toi que le pilote JDBC est chargé

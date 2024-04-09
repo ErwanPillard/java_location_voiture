@@ -13,9 +13,6 @@ public class Main {
             }
         });
 
-        //init_bdd_graphique_SWING init_bdd_graphique = new init_bdd_graphique_SWING();
-        //init_bdd_graphique.setVisible(true);
-
         /*
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 

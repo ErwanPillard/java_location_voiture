@@ -1,24 +1,26 @@
 package Controller;
 
 import Dao.UserConnection;
-
 import Model.SessionManager;
 import Model.User;
-
 import View.ConnexionUtilisateur;
+import View.HomePage;
 
 import javax.swing.*;
 
 public class UserConnectionController {
-    private ConnexionUtilisateur connexionUtilisateurView;
-    private UserConnection userConnectionDao;
+    private final ConnexionUtilisateur connexionUtilisateurView;
+    private final UserConnection userConnectionDao;
+    private final HomePage homePage;
     private JDialog loginDialog;
 
-    public UserConnectionController(ConnexionUtilisateur connexionUtilisateurView, UserConnection userConnectionDao) {
+    public UserConnectionController(HomePage homePage, ConnexionUtilisateur connexionUtilisateurView, UserConnection userConnectionDao) {
+        this.homePage = homePage;
         this.connexionUtilisateurView = connexionUtilisateurView;
         this.userConnectionDao = userConnectionDao;
         initController();
     }
+
     public void showLoginDialog(JFrame parentFrame) {
         loginDialog = new JDialog(parentFrame, "Connexion", true);
         loginDialog.setContentPane(connexionUtilisateurView);
@@ -38,10 +40,12 @@ public class UserConnectionController {
         User user = userConnectionDao.connect(username, password);
         if (user != null) {
             SessionManager.getInstance().logIn(user);
+            homePage.setUserLoggedIn(true);
             JOptionPane.showMessageDialog(null, "Connexion réussie.", "Succès", JOptionPane.INFORMATION_MESSAGE);
             loginDialog.dispose();
         } else {
             JOptionPane.showMessageDialog(null, "Échec de la connexion. Veuillez vérifier vos identifiants.", "Erreur", JOptionPane.ERROR_MESSAGE);
+            homePage.setUserLoggedIn(false);
         }
     }
 }

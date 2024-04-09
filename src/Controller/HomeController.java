@@ -41,11 +41,4 @@ public class HomeController {
             homePage.setUserLoggedIn(false);
         }
     }
-
-    public static void main(String[] args) {
-        // Cet exemple suppose que tu as déjà initialisé UserConnexion et HomePage quelque part
-        // UserConnexion userConnexion = new UserConnexionImpl(); // Supposons que cette classe existe et est correctement implémentée
-        // HomePage homePage = new HomePage();
-        // new HomeController(homePage, userConnexion);
-    }
 }

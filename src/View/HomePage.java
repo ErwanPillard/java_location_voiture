@@ -3,10 +3,8 @@ package View;
 
 import Controller.HomeController;
 import Controller.UserConnectionController;
-
 import Dao.UserConnection;
 import Dao.UserConnectionImpl;
-
 import Model.SessionManager;
 
 import javax.swing.*;
@@ -20,6 +18,14 @@ public class HomePage extends JFrame {
 
     public HomePage() {
         initUI();
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            HomePage homePage = new HomePage();
+            UserConnection userConnexion = new UserConnectionImpl(); // Assure-toi que cette classe est correctement implémentée.
+            new HomeController(homePage, userConnexion); // Cette ligne connecte la vue et le contrôleur.
+        });
     }
 
     private void initUI() {
@@ -47,11 +53,14 @@ public class HomePage extends JFrame {
         btnLogin.addActionListener(e -> {
             if (SessionManager.getInstance().isLoggedIn()) {
                 // afficher les informations de l'utilisateur dans une boite de dialogue
-                JOptionPane.showMessageDialog(this, "Utilisateur connecté : " + SessionManager.getCurrentUser().getPrenom(), "Utilisateur connecté", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Prénom : " + SessionManager.getCurrentUser().getPrenom()
+                                + "\nNom : " + SessionManager.getCurrentUser().getNom()
+                                + "\nEmail : " + SessionManager.getCurrentUser().getEmail()
+                        , "Informations utilisateur connecté", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 // L'utilisateur n'est pas connecté, ouvre le dialogue de connexion
                 this.setVisible(false);
-                UserConnectionController controller = new UserConnectionController(new ConnexionUtilisateur(), new UserConnectionImpl());
+                UserConnectionController controller = new UserConnectionController(this, new ConnexionUtilisateur(), new UserConnectionImpl());
                 controller.showLoginDialog(this); // 'this' réfère à la JFrame HomePage
                 this.setVisible(true);
             }
@@ -65,7 +74,7 @@ public class HomePage extends JFrame {
 
         northPanel.add(titlePanel, BorderLayout.CENTER);
         northPanel.add(loginPanel, BorderLayout.EAST);
-        if(SessionManager.getInstance().isLoggedIn()) {
+        if (SessionManager.getInstance().isLoggedIn()) {
             loginStatusLabel.setText("Connecté");
         } else {
             loginStatusLabel.setText("Non connecté");
@@ -114,14 +123,13 @@ public class HomePage extends JFrame {
 
     public void setUserLoggedIn(boolean isLoggedIn) {
         loginStatusLabel.setText(isLoggedIn ? "Connecté" : "Non connecté");
-        // Tu pourrais aussi changer la couleur ou d'autres propriétés visuelles ici
     }
 
     private void showUserConnectionDialog() {
         JDialog dialog = new JDialog();
         ConnexionUtilisateur connexionUtilisateurPanel = new ConnexionUtilisateur();
         UserConnection userConnexionDao = new UserConnectionImpl(); // Assure-toi que cette implémentation est correcte et complète.
-        new UserConnectionController(connexionUtilisateurPanel, userConnexionDao);
+        new UserConnectionController(this, connexionUtilisateurPanel, userConnexionDao);
 
         dialog.setTitle("Connexion");
         dialog.setContentPane(connexionUtilisateurPanel);
@@ -129,14 +137,5 @@ public class HomePage extends JFrame {
         dialog.setModal(true);
         dialog.setLocationRelativeTo(this); // Centrer par rapport à HomePage
         dialog.setVisible(true);
-    }
-
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            HomePage homePage = new HomePage();
-            UserConnection userConnexion = new UserConnectionImpl(); // Assure-toi que cette classe est correctement implémentée.
-            new HomeController(homePage, userConnexion); // Cette ligne connecte la vue et le contrôleur.
-        });
     }
 }
