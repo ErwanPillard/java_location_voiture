@@ -1,42 +1,22 @@
 package Model;
 
-import Dao.ClientDAO;
-import Dao.ClientDAOImpl;
-
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.time.LocalDate;
 
-public class Client extends User{
-    private int age;
+public class Client extends User {
+    //private final boolean adhesion;
     private String telephone;
-    private double numeroAdhesion;
-    private final boolean adhesion;
-    private TypeAdhesion typeAdhesion;
+    private int id;
 
 
-    public Client(String email, String motDePasse, int age, String telephone){ //Client non adhérant
+    public Client(String email, String motDePasse, String telephone) { //Client non adhérant
         super(email, motDePasse);
-        this.age = age;
         this.telephone = telephone;
-        this.adhesion = false;
+        //this.adhesion = false;
     }
 
-    public Client(String email, String motDePasse, int age, String telephone, double numeroAdhesion, TypeAdhesion typeAdhesion){ //Client adhérant
-        super(email, motDePasse);
-        this.age = age;
-        this.telephone = telephone;
-        this.adhesion = true;
-        this.numeroAdhesion = numeroAdhesion;
-        this.typeAdhesion = typeAdhesion;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
+    public Client(int id) { //Client non adhérant
+        super(id);
+        this.id = id;
     }
 
     public String getTelephone() {
@@ -48,11 +28,11 @@ public class Client extends User{
     }
 
 
-    /**
+    /*
      * Méthode pour sauvegarder l'objet User dans la base de données
      * @throws SQLException
      */
-    public void save() throws SQLException{
+    public void save() throws SQLException {
         //ClientDAOImpl.add();
     }
 }
