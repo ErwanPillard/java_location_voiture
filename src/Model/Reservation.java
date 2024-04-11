@@ -5,13 +5,13 @@ import java.time.Duration;
 import java.time.format.DateTimeFormatter;
 
 public class Reservation {
-    private Voiture voiture;
+    private final Voiture voiture;
     private Facture facture;
     private float tarif;
     private LocalDateTime dateFin;
     private LocalDateTime dateDebut;
     private int numeroReservation;
-    private Client client;
+    private final Client client;
     private boolean etat;
 
     public Reservation(Voiture voiture, Client client, LocalDateTime dateFin, LocalDateTime dateDebut, int numeroReservation,boolean etat) {

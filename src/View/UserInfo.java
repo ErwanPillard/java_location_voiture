@@ -4,111 +4,60 @@ import Model.SessionManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class UserInfo extends JFrame {
-    JButton btnRetour = new JButton("Retour à la page principale");
-    JButton btnLogout = new JButton("Déconnexion");
-    JPanel panelBoutons = new JPanel(new FlowLayout(FlowLayout.CENTER));
-
-    JButton btnFactures = new JButton("Accéder aux factures");
-    JButton btnMettreAJourVoitures = new JButton("Mettre à jour les voitures");
-    JButton btnOffresReduction = new JButton("Offre de réduction");
-    JButton btnStatistiques = new JButton("Statistiques");
+    private final JButton btnLogout;
+    private final JButton btnRetour;
 
     public UserInfo() {
         setTitle("Informations de l'utilisateur");
-        setSize(500, 400); // Ajuste selon les besoins
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null); // Centre la fenêtre
-        getContentPane().setBackground(new Color(240, 240, 240)); // Couleur de fond
-
-        // Définit le layout principal
-        setLayout(new BorderLayout(10, 10));
-
-        // Informations de l'utilisateur
-        JPanel panelInfo = new JPanel();
-        panelInfo.setLayout(new GridLayout(0, 1, 10, 10)); // Ajuste l'espacement
-        panelInfo.setBackground(new Color(240, 240, 240)); // Assorti au fond
+        setLayout(new BorderLayout());
 
         SessionManager.getInstance();
-        String userType = SessionManager.userType();
-        JLabel labelUserType = new JLabel("Type : " + userType);
-        JLabel labelNom = new JLabel("Nom : " + SessionManager.getCurrentUser().getNom());
-        JLabel labelPrenom = new JLabel("Prénom : " + SessionManager.getCurrentUser().getPrenom());
+        JLabel labelUserType = new JLabel("Type : " + SessionManager.userType()); // Affiche le type d'utilisateur
         JLabel labelEmail = new JLabel("Email : " + SessionManager.getCurrentUser().getEmail());
 
-        // Ajoute les informations spécifiques selon le type d'utilisateur
+        btnLogout = new JButton("Déconnexion");
+        btnLogout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SessionManager.getInstance().logOut();
+                dispose(); // Ferme la fenêtre UserInfo
+                new HomePage().setVisible(true); // Rouvre HomePage
+            }
+        });
+        btnRetour = new JButton("Retour à la page principale");
+        btnRetour.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose(); // Ferme la fenêtre UserInfo
+                new HomePage().setVisible(true); // Rouvre HomePage
+            }
+        });
+
+        JPanel panelInfo = new JPanel();
+        panelInfo.setLayout(new GridLayout(5, 1)); // Organise les labels verticalement
         panelInfo.add(labelUserType);
-        panelInfo.add(labelNom);
-        panelInfo.add(labelPrenom);
         panelInfo.add(labelEmail);
 
-        // Conditions pour afficher les informations spécifiques et boutons selon le type
-        switch (userType) {
-            case "Particulier":
-                JLabel labelNumeroPermis = new JLabel("Numéro de permis : " + SessionManager.getCurrentUser().getNumPermis());
-                JLabel labelDateNaissance = new JLabel("Date de naissance : " + SessionManager.getCurrentUser().getDateNaissance());
-                panelInfo.add(labelNumeroPermis);
-                panelInfo.add(labelDateNaissance);
-
-                break;
-            case "Entreprise":
-                JLabel labelNumeroSiret = new JLabel("Numéro SIRET : " + SessionManager.getCurrentUser().getNumSiret());
-                panelInfo.add(labelNumeroSiret);
-
-                break;
-            case "Employe":
-                JLabel labelFonction = new JLabel("Fonction : " + SessionManager.getCurrentUser().getFonctionEmploye());
-                panelInfo.add(labelFonction);
-
-                break;
-        }
-
-        add(panelInfo, BorderLayout.CENTER);
-
-        // Panel Sud pour les boutons d'action
         JPanel southPanel = new JPanel();
         southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.Y_AXIS));
-        southPanel.setBackground(new Color(240, 240, 240)); // Assorti au fond
 
-        btnLogout.addActionListener(e -> {
-            SessionManager.getInstance().logOut();
-            dispose();
-            new HomePage().setVisible(true);
-        });
-
-        btnRetour.addActionListener(e -> {
-            dispose();
-            new HomePage().setVisible(true);
-        });
-
-        // Ajoute les boutons spécifiques selon le type d'utilisateur
-        if (userType.equals("Particulier") || userType.equals("Entreprise")) {
-            panelBoutons.add(btnFactures);
-
-            btnFactures.addActionListener(e -> {/* Accéder aux factures */});
-        } else if (userType.equals("Employe")) {
-            panelBoutons.add(btnMettreAJourVoitures);
-            panelBoutons.add(btnOffresReduction);
-            panelBoutons.add(btnStatistiques);
-
-            // Placeholders pour les fonctionnalités des boutons
-            btnMettreAJourVoitures.addActionListener(e -> {/* Mettre à jour les voitures */});
-            btnOffresReduction.addActionListener(e -> {/* Introduire offres de réduction */});
-            btnStatistiques.addActionListener(e -> {/* Afficher statistiques */});
-        }
-
-        // Ajoute les boutons de base
-        panelBoutons.add(btnLogout);
-
-        panelBoutons.add(Box.createRigidArea(new Dimension(0, 5))); // Ajoute un espace vertical de 5 pixels entre les boutons
-        panelBoutons.add(btnLogout);
+        btnRetour.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnLogout.setAlignmentX(Component.CENTER_ALIGNMENT);
+        southPanel.add(btnRetour);
+        southPanel.add(Box.createRigidArea(new Dimension(0, 5))); // Ajoute un espace vertical de 5 pixels entre les boutons
+        southPanel.add(btnLogout);
 
         add(panelInfo, BorderLayout.CENTER);
-        add(panelBoutons, BorderLayout.SOUTH);
+        add(southPanel, BorderLayout.SOUTH);
 
-        // Listener pour la fermeture de la fenêtre
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -118,14 +67,14 @@ public class UserInfo extends JFrame {
         });
     }
 
-    public JButton getBtnLogout() {
-        return btnLogout;
-    }
-
     private void ouvrirHomePage() {
         // Cette méthode rend la HomePage visible à nouveau
         EventQueue.invokeLater(() -> {
             new HomePage().setVisible(true);
         });
+    }
+
+    public JButton getBtnLogout() {
+        return btnLogout;
     }
 }
