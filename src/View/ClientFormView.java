@@ -6,6 +6,8 @@ import Model.Client;
 import Model.Particulier;
 import Model.SessionManager;
 
+import utils.util;
+
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import java.awt.event.ActionEvent;
@@ -16,10 +18,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static utils.util.addFormField;
+
 public class ClientFormView extends JDialog{
 
     static ClientController clientController = new ClientController();
-    static ClientFormView clientFormView = new ClientFormView(clientController);
+    static ClientFormView clientFormView = new ClientFormView();
 
     private JTextField nomEntrepriseField;
     private JTextField nomField;
@@ -41,10 +45,10 @@ public class ClientFormView extends JDialog{
     // Déclarer une variable pour stocker la référence du dernier panneau ajouté
     private JPanel lastAddedPanel;
 
-    public ClientFormView(ClientController clientController){
+    public ClientFormView(){
         createForms(String.valueOf(typeField));
         createButtons();
-        registerListeners(clientController);
+        registerListeners();
         configure();
     }
 
@@ -59,8 +63,7 @@ public class ClientFormView extends JDialog{
     private void createForms(String type) {
         JPanel jpForm = new JPanel(new GridBagLayout());
         GridBagConstraints gbcForm = new GridBagConstraints();
-        gbcForm.anchor = GridBagConstraints.WEST;
-        gbcForm.insets = new Insets(5, 5, 5, 5);
+
 
         // Créer les formulaires pour Particulier et Entreprise une seule fois
         JPanel jpParticulierForms = createParticulierForms();
@@ -151,15 +154,6 @@ public class ClientFormView extends JDialog{
         return jpPersonalInfo;
     }
 
-    private void addFormField(JPanel panel, GridBagConstraints gbc, String label, JComponent component) {
-        gbc.gridx = 0;
-        gbc.gridy++;
-        panel.add(new JLabel(label), gbc);
-
-        gbc.gridx = 1;
-        panel.add(component, gbc);
-    }
-
     private void createButtons(){
         JPanel jpButtons = new JPanel();
 
@@ -169,11 +163,11 @@ public class ClientFormView extends JDialog{
         this.add(jpButtons, BorderLayout.SOUTH);
     }
 
-    private void registerListeners(ClientController clientController) {
+    private void registerListeners() {
         jbSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
 
-                cmdSave(clientController);
+                cmdSave();
             }
         });
         jbCancel.addActionListener(new ActionListener() {
@@ -183,7 +177,7 @@ public class ClientFormView extends JDialog{
         });
     }
 
-    private void cmdSave(ClientController clientController){
+    private void cmdSave(){
 
         String selectedItem = (String) typeField.getSelectedItem();
 

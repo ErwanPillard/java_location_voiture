@@ -18,7 +18,8 @@ public class HomePage extends JFrame {
 
     public HomePage() {
         initUI();
-        ClientFormView.toggle();
+        //ClientFormView.toggle();
+        ModeleView.toggle();
     }
 
     public static void main(String[] args) {

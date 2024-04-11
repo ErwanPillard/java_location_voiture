@@ -15,10 +15,8 @@ public class ModeleDAOImpl implements ModeleDAO{
     @Override
     public void add(Modele modele) throws SQLException {
         String queryModele = "INSERT INTO Modele (nom, nbPlaces, nbPortes, tailleCoffre, caracteristique, prixJournalier, noteSatisfaction, categorie, attelage) VALUES (?, ?, ?, ?,?,?,?,?,?)";
-        Connection conn = DatabaseManager.getConnection();
 
-        try (
-                PreparedStatement modeleStatement = conn.prepareStatement(queryModele, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement modeleStatement = connection.prepareStatement(queryModele, Statement.RETURN_GENERATED_KEYS)) {
             // Insertion des données dans la table Modele
             modeleStatement.setString(1, modele.getNom());
             modeleStatement.setInt(2, modele.getNbPlace());
@@ -27,7 +25,7 @@ public class ModeleDAOImpl implements ModeleDAO{
             modeleStatement.setString(5, modele.getCaracteristiques());
             modeleStatement.setInt(6, modele.getPrixJournalier());
             modeleStatement.setFloat(7, modele.getNoteSatisfaction());
-            modeleStatement.setObject(8, modele.getCategorie());
+            modeleStatement.setString(8, modele.getCategorie().getNomCategorie());
             modeleStatement.setBoolean(9, modele.isAttelage());
             modeleStatement.executeUpdate();
                 System.out.println("on après caractère ");
@@ -39,7 +37,7 @@ public class ModeleDAOImpl implements ModeleDAO{
             } else {
                 throw new SQLException("Erreur lors de la récupération de l'ID du modele généré.");
             }
-            System.out.println("le modele a été ajouté a la BDD");
+            System.out.println("Le modele a été ajouté a la BDD");
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
