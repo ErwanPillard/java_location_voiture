@@ -19,7 +19,7 @@ public class UserConnectionImpl implements UserConnection {
 
     @Override
     public User connect(String email, String password) {
-        String query = "SELECT id, nom, prenom, email FROM User WHERE email = ? AND motDePasse = ?";
+        String query = "SELECT id, email FROM User WHERE email = ? AND motDePasse = ?";
         try (Connection conn = DatabaseManager.getConnection(); // Utilise la connexion unique gérée par DatabaseManager
              PreparedStatement pstmt = conn.prepareStatement(query)) {
 
