@@ -60,7 +60,7 @@ CREATE TABLE Modele
     prixJournalier   INT          NOT NULL,
     noteSatisfaction INT,
     categorie        ENUM('Citadine', 'Berline', 'SUV', 'Familiale', 'Utilitaire') NOT NULL,
-    attelage         ENUM ('Oui', 'Non') NOT NULL,
+    attelage         BOOLEAN NOT NULL
     PRIMARY KEY (id)
 ) ENGINE=InnoDB;
 

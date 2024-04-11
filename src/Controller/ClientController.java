@@ -2,15 +2,17 @@ package Controller;
 
 import Dao.ClientDAO;
 import Dao.ClientDAOImpl;
-import Model.Client;
-import Model.Entreprise;
-import Model.Particulier;
+import Dao.ModeleDAO;
+import Dao.ModeleDAOImpl;
+import Model.*;
+import Model.*;
 import Model.User;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static BDD.init_bdd.*;
 
@@ -35,6 +37,19 @@ public class ClientController {
         }
     }
 
+
+    public void addModele(String nom, int nbPlace, int  nbPorte, float tailleCoffre, String caracteristique, int prixJournalier, int noteSatisfaction, Categorie categorie, boolean attelage){
+
+        try(Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD)) {
+            System.out.println("on passe en addModele");
+            Modele modele = new Modele(nom, nbPlace, nbPorte,tailleCoffre, caracteristique, prixJournalier,noteSatisfaction, categorie, attelage);
+            ModeleDAO modeleDAO = new ModeleDAOImpl(connection);
+            modeleDAO.add(modele);
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 
 
 

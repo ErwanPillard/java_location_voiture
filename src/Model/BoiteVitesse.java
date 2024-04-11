@@ -8,4 +8,8 @@ public enum BoiteVitesse {
     BoiteVitesse(String typeBoite) {
         this.typeBoite = typeBoite;
     }
+
+    public String getTypeBoite() {
+        return typeBoite;
+    }
 }

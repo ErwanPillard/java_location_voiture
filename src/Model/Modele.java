@@ -7,14 +7,13 @@ public class Modele {
     private int nbPorte;
     private float tailleCoffre;
     private String caracteristiques;
-    private float prixJournalier;
+    private int prixJournalier;
     private boolean attelage;
     private float noteSatisfaction;
-    private BoiteVitesse boiteVitesse;
+    //private BoiteVitesse boiteVitesse;
     private Categorie categorie;
 
-    public Modele(int id, String nom, int nbPlace, int nbPorte, float tailleCoffre, String caracteristiques, float prixJournalier, boolean attelage, float noteSatisfaction, BoiteVitesse boiteVitesse, Categorie categorie) {
-        this.id = id;
+    public Modele(String nom, int nbPlace, int nbPorte, float tailleCoffre, String caracteristiques, int prixJournalier, float noteSatisfaction, Categorie  categorie, boolean attelage) {
         this.nom = nom;
         this.nbPlace = nbPlace;
         this.nbPorte = nbPorte;
@@ -23,7 +22,7 @@ public class Modele {
         this.prixJournalier = prixJournalier;
         this.attelage = attelage;
         this.noteSatisfaction = noteSatisfaction;
-        this.boiteVitesse = boiteVitesse;
+        //this.boiteVitesse = boiteVitesse;
         this.categorie = categorie;
     }
 
@@ -75,11 +74,11 @@ public class Modele {
         this.caracteristiques = caracteristiques;
     }
 
-    public float getPrixJournalier() {
+    public int getPrixJournalier() {
         return prixJournalier;
     }
 
-    public void setPrixJournalier(float prixJournalier) {
+    public void setPrixJournalier(int prixJournalier) {
         this.prixJournalier = prixJournalier;
     }
 
@@ -99,13 +98,13 @@ public class Modele {
         this.noteSatisfaction = noteSatisfaction;
     }
 
-    public BoiteVitesse getBoiteVitesse() {
+    /*public BoiteVitesse getBoiteVitesse() {
         return boiteVitesse;
     }
 
     public void setBoiteVitesse(BoiteVitesse boiteVitesse) {
         this.boiteVitesse = boiteVitesse;
-    }
+    }*/
 
     public Categorie getCategorie() {
         return categorie;
@@ -114,5 +113,6 @@ public class Modele {
     public void setCategorie(Categorie categorie) {
         this.categorie = categorie;
     }
+
 }
 
