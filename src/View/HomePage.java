@@ -19,7 +19,6 @@ public class HomePage extends JFrame {
     public HomePage() {
         initUI();
         //ClientFormView.toggle();
-        ModeleView.toggle();
     }
 
     public static void main(String[] args) {
@@ -56,11 +55,6 @@ public class HomePage extends JFrame {
             if (SessionManager.getInstance().isLoggedIn()) {
                 this.setVisible(false); // Cache HomePage
                 new UserInfo().setVisible(true); // Affiche UserInfo
-
-                /*JOptionPane.showMessageDialog(this, "Prénom : " + SessionManager.getCurrentUser().getPrenom()
-                                + "\nNom : " + SessionManager.getCurrentUser().getNom()
-                                + "\nEmail : " + SessionManager.getCurrentUser().getEmail()
-                        , "Informations utilisateur connecté", JOptionPane.INFORMATION_MESSAGE);*/
             } else {
                 // L'utilisateur n'est pas connecté, ouvre le dialogue de connexion
                 this.setVisible(false);

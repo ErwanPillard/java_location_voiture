@@ -48,7 +48,6 @@ public class UserConnectionController {
         if (user != null) {
             SessionManager.getInstance().logIn(user);
             homePage.setUserLoggedIn(true);
-            JOptionPane.showMessageDialog(null, "Connexion réussie.", "Succès", JOptionPane.INFORMATION_MESSAGE);
             loginDialog.dispose();
         } else {
             JOptionPane.showMessageDialog(null, "Échec de la connexion. Veuillez vérifier vos identifiants.", "Erreur", JOptionPane.ERROR_MESSAGE);

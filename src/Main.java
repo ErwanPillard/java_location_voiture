@@ -1,7 +1,7 @@
-import java.sql.SQLException;
-
-import View.HomePage;
 import Model.SessionManager;
+import View.HomePage;
+
+import java.sql.SQLException;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
@@ -19,7 +19,7 @@ public class Main {
         try (Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD)){
 
             User user = new User("Pillard", "Erwan", "email", "azerty");
-
+®
             Client client = new Client(19, "0782852779");
 
             Modele modeleGTI = new Modele(1, "Polo GTI", 5, 5, 30, "GROS CALIBRE", 90.0f, false, 4.1f, BoiteVitesse.AUTOMATIC, Categorie.BERLINE);

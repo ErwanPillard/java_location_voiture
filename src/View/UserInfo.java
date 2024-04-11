@@ -15,7 +15,8 @@ public class UserInfo extends JFrame {
 
     public UserInfo() {
         setTitle("Informations de l'utilisateur");
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setSize(500, 300);
         setLocationRelativeTo(null); // Centre la fenêtre
         setLayout(new BorderLayout());
 
@@ -44,6 +45,8 @@ public class UserInfo extends JFrame {
         JPanel panelInfo = new JPanel();
         panelInfo.setLayout(new GridLayout(5, 1)); // Organise les labels verticalement
         panelInfo.add(labelUserType);
+        //panelInfo.add(labelNom);
+        //panelInfo.add(labelPrenom);
         panelInfo.add(labelEmail);
 
         JPanel southPanel = new JPanel();

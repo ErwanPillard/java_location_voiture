@@ -2,17 +2,13 @@ package Controller;
 
 import Dao.ClientDAO;
 import Dao.ClientDAOImpl;
-import Dao.ModeleDAO;
-import Dao.ModeleDAOImpl;
-import Model.*;
-import Model.*;
-import Model.User;
+import Model.Entreprise;
+import Model.Particulier;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import static BDD.init_bdd.*;
 
