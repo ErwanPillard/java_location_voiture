@@ -1,22 +1,22 @@
 package Dao;
 
-import Model.Client;
 import Model.Entreprise;
 import Model.Particulier;
-import Model.User;
 
 import java.sql.*;
 
 
-public class ClientDAOImpl implements ClientDAO{
+public class ClientDAOImpl implements ClientDAO {
     private final Connection connection;
 
-    public ClientDAOImpl(Connection connection){this.connection = connection;}
+    public ClientDAOImpl(Connection connection) {
+        this.connection = connection;
+    }
 
     @Override
     public void addParticulier(Particulier particulier) throws SQLException {
         String queryUser = "INSERT INTO User (email, motDePasse) VALUES (?, ?)";
-        String queryClient = "INSERT INTO Client (id, age, telephone) VALUES (?, ?, ?)";
+        String queryClient = "INSERT INTO Client (id, telephone) VALUES (?, ?, ?)";
         String queryParticulier = "INSERT INTO Particulier (id, nom, prenom, numeroPermis, birthDate) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement userStatement = connection.prepareStatement(queryUser, Statement.RETURN_GENERATED_KEYS);
@@ -59,7 +59,7 @@ public class ClientDAOImpl implements ClientDAO{
     @Override
     public void addEntreprise(Entreprise entreprise) throws SQLException {
         String queryUser = "INSERT INTO User (email, motDePasse) VALUES (?, ?)";
-        String queryClient = "INSERT INTO Client (id, age, telephone) VALUES (?, ?, ?)";
+        String queryClient = "INSERT INTO Client (id, telephone) VALUES (?, ?, ?)";
         String queryEntreprise = "INSERT INTO Entreprise (id, nom, numeroSiret) VALUES (?, ?, ?)";
 
         try (PreparedStatement userStatement = connection.prepareStatement(queryUser, Statement.RETURN_GENERATED_KEYS);
@@ -81,8 +81,7 @@ public class ClientDAOImpl implements ClientDAO{
 
             // Insertion des données dans la table Client
             clientStatement.setInt(1, userId);
-            clientStatement.setInt(2, entreprise.getAge());
-            clientStatement.setString(3, entreprise.getTelephone());
+            clientStatement.setString(2, entreprise.getTelephone());
             clientStatement.executeUpdate();
 
             entrepriseStatement.setInt(1, userId);
