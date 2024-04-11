@@ -9,16 +9,18 @@ import Model.SessionManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class HomePage extends JFrame {
     private JButton btnLogin;
     private JTextField tfLocation, tfPickUpDate, tfDropOffDate;
     private JButton btnSearch;
     private JLabel loginStatusLabel;
+    private JButton btnClientForm;
 
     public HomePage() {
         initUI();
-        //ClientFormView.toggle();
     }
 
     public static void main(String[] args) {
@@ -78,6 +80,15 @@ public class HomePage extends JFrame {
             loginStatusLabel.setText("Non connecté");
         }
         northPanel.add(loginStatusLabel, BorderLayout.SOUTH);
+
+        btnClientForm = new JButton("Crée un compte");
+        btnClientForm.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ClientFormView.toggle();
+            }
+        });
+        btnClientForm.setAlignmentX(Component.CENTER_ALIGNMENT);
+        northPanel.add(btnClientForm, BorderLayout.WEST);
 
         // Ajoute le northPanel au mainPanel
         mainPanel.add(northPanel, BorderLayout.NORTH);

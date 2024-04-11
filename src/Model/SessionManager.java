@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class SessionManager {
     private static SessionManager instance;
@@ -66,12 +68,21 @@ public class SessionManager {
             rs = stmt.executeQuery();
             if (rs.next()) {
                 userType = "Particulier";
+
+                // Extraire la date depuis le ResultSet et la convertir en String
+                String birthDateStr = rs.getDate("birthDate").toString();
+                // Définir le format de la date
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Assure-toi que le format correspond à celui retourné par .toString()
+                // Parser la chaîne de caractères en LocalDate
+                LocalDate birthDate = LocalDate.parse(birthDateStr, formatter);
+
+                // Maintenant, tu peux utiliser la variable birthDate lors de la création de l'instance de Particulier
                 currentParticulier = new Particulier(
                         rs.getInt("id"),
                         rs.getString("nom"),
                         rs.getString("prenom"),
                         rs.getString("numeroPermis"),
-                        rs.getDate("dateDeNaissance").toLocalDate(), // Assure-toi que la classe Particulier accepte une LocalDate pour la date de naissance
+                        birthDate,
                         rs.getInt("age")
                 );
                 return;
@@ -89,11 +100,9 @@ public class SessionManager {
                         rs.getString("numeroSiret")
                 );
             }
-
-            // Si aucun type n'est trouvé, userType reste à son état initial
         } catch (SQLException e) {
             e.printStackTrace();
-            throw e; // Rethrow l'exception pour la gestion d'erreur externe
+            throw e;
         }
     }
 
