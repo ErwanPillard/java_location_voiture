@@ -1,29 +1,21 @@
 package View;
 
-import java.awt.*;
-import Controller.*;
-import Model.Client;
-import Model.Particulier;
-import Model.SessionManager;
-
-import utils.util;
+import Controller.ClientController;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static utils.util.addFormField;
-
-public class ClientFormView extends JDialog{
+public class ClientFormView extends JDialog {
 
     static ClientController clientController = new ClientController();
-    static ClientFormView clientFormView = new ClientFormView();
+    static ClientFormView clientFormView = new ClientFormView(clientController);
 
     private JTextField nomEntrepriseField;
     private JTextField nomField;
@@ -45,14 +37,18 @@ public class ClientFormView extends JDialog{
     // Déclarer une variable pour stocker la référence du dernier panneau ajouté
     private JPanel lastAddedPanel;
 
-    public ClientFormView(){
+    public ClientFormView(ClientController clientController) {
         createForms(String.valueOf(typeField));
         createButtons();
-        registerListeners();
+        registerListeners(clientController);
         configure();
     }
 
-    private void configure(){
+    public static void toggle() {
+        clientFormView.setVisible(!clientFormView.isVisible());
+    }
+
+    private void configure() {
         setTitle("Création compte Particulier");
         this.setResizable(true);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -63,7 +59,8 @@ public class ClientFormView extends JDialog{
     private void createForms(String type) {
         JPanel jpForm = new JPanel(new GridBagLayout());
         GridBagConstraints gbcForm = new GridBagConstraints();
-
+        gbcForm.anchor = GridBagConstraints.WEST;
+        gbcForm.insets = new Insets(5, 5, 5, 5);
 
         // Créer les formulaires pour Particulier et Entreprise une seule fois
         JPanel jpParticulierForms = createParticulierForms();
@@ -91,11 +88,11 @@ public class ClientFormView extends JDialog{
                 if (selectedType.equals("Particulier")) {
                     jpParticulierForms.setVisible(true);
                     jpEntrepriseForms.setVisible(false);
-                    clearForm(nomField, prenomField, ageField, telephoneField,numeroPermisField, birthDateField,numSiret, nomEntrepriseField, ageEntrepriseField);
+                    clearForm(nomField, prenomField, ageField, telephoneField, numeroPermisField, birthDateField, numSiret, nomEntrepriseField, ageEntrepriseField);
                 } else if (selectedType.equals("Entreprise")) {
                     jpParticulierForms.setVisible(false);
                     jpEntrepriseForms.setVisible(true);
-                    clearForm(nomField, prenomField, ageField, telephoneField,numeroPermisField, birthDateField,numSiret, nomEntrepriseField, ageEntrepriseField);
+                    clearForm(nomField, prenomField, ageField, telephoneField, numeroPermisField, birthDateField, numSiret, nomEntrepriseField, ageEntrepriseField);
                 }
 
                 // Actualiser l'affichage pour refléter les modifications
@@ -107,8 +104,7 @@ public class ClientFormView extends JDialog{
         this.add(jpForm, BorderLayout.CENTER);
     }
 
-
-    private JPanel createConnexionForm(){
+    private JPanel createConnexionForm() {
         // Catégorie 1 : Informations de connexion
         JPanel jpLoginInfo = new JPanel(new GridBagLayout());
         jpLoginInfo.setBorder(BorderFactory.createTitledBorder("Information de connexion"));
@@ -123,6 +119,7 @@ public class ClientFormView extends JDialog{
 
         return jpLoginInfo;
     }
+
     private JPanel createParticulierForms() {
         JPanel jpPersonalInfo = new JPanel(new GridBagLayout());
         jpPersonalInfo.setBorder(BorderFactory.createTitledBorder("Données personnelles"));
@@ -139,6 +136,7 @@ public class ClientFormView extends JDialog{
 
         return jpPersonalInfo;
     }
+
     private JPanel createEntrepriseForms() {
         JPanel jpPersonalInfo = new JPanel(new GridBagLayout());
         jpPersonalInfo.setBorder(BorderFactory.createTitledBorder("Données personnelles"));
@@ -148,13 +146,21 @@ public class ClientFormView extends JDialog{
 
         addFormField(jpPersonalInfo, gbcPersonal, "Nom :", nomEntrepriseField = new JTextField(20));
         addFormField(jpPersonalInfo, gbcPersonal, "Siret :", numSiret = new JTextField(20));
-        addFormField(jpPersonalInfo, gbcPersonal, "Age :", ageEntrepriseField = new JTextField(20));
         addFormField(jpPersonalInfo, gbcPersonal, "Numero de téléphone :", telephoneField = new JTextField(20));
 
         return jpPersonalInfo;
     }
 
-    private void createButtons(){
+    private void addFormField(JPanel panel, GridBagConstraints gbc, String label, JComponent component) {
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panel.add(new JLabel(label), gbc);
+
+        gbc.gridx = 1;
+        panel.add(component, gbc);
+    }
+
+    private void createButtons() {
         JPanel jpButtons = new JPanel();
 
         jpButtons.add(jbSave = new JButton("Sauvegarder"));
@@ -163,11 +169,11 @@ public class ClientFormView extends JDialog{
         this.add(jpButtons, BorderLayout.SOUTH);
     }
 
-    private void registerListeners() {
+    private void registerListeners(ClientController clientController) {
         jbSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
 
-                cmdSave();
+                cmdSave(clientController);
             }
         });
         jbCancel.addActionListener(new ActionListener() {
@@ -177,11 +183,11 @@ public class ClientFormView extends JDialog{
         });
     }
 
-    private void cmdSave(){
+    private void cmdSave(ClientController clientController) {
 
         String selectedItem = (String) typeField.getSelectedItem();
 
-        if(selectedItem.equals("Particulier")){
+        if (selectedItem.equals("Particulier")) {
             String nom = nomField.getText();
             String prenom = prenomField.getText();
             String email = emailField.getText();
@@ -208,38 +214,35 @@ public class ClientFormView extends JDialog{
                 return; // Sortir de la méthode sans enregistrer le client
             }
 
-            clientController.addPariculier(nom, prenom, email, mdp, age, telephone, numeroPermis, birthDate);
-        }
-        else if (selectedItem.equals("Entreprise")){
+            clientController.addParticulier(nom, prenom, email, mdp, age, telephone, numeroPermis, birthDate);
+        } else if (selectedItem.equals("Entreprise")) {
             String nomE = nomEntrepriseField.getText();
             String email = emailField.getText();
             String mdp = String.valueOf(mdpField.getPassword());
-            int age = Integer.parseInt(ageEntrepriseField.getText());
             String telephone = telephoneField.getText();
             String siret = numSiret.getText();
-
-            clientController.addEntreprise(nomE, email, mdp, age, telephone, siret);
-        }
-        else {
+            clientController.addEntreprise(nomE, email, mdp, telephone, siret);
+        } else {
             JOptionPane.showMessageDialog(this, "Problème ajout client", "", JOptionPane.INFORMATION_MESSAGE);
         }
         //JOptionPane.showMessageDialog(this, "Utilisateur enregistré avec succès", "", JOptionPane.INFORMATION_MESSAGE);
         dispose();
     }
 
-    private void cmdCancel(){
+    private void cmdCancel() {
         dispose();
     }
 
-    private void clearForm(JTextComponent... jtcomponets){
+    private void clearForm(JTextComponent... jtcomponets) {
         for (JTextComponent component : jtcomponets) {
             component.setText("");
         }
     }
+
     @Override
-    public void dispose(){
+    public void dispose() {
         super.dispose();
-        clearForm(nomField, prenomField, ageField, telephoneField,numeroPermisField, birthDateField,numSiret, nomEntrepriseField, ageEntrepriseField);
+        clearForm(nomField, prenomField, ageField, telephoneField, numeroPermisField, birthDateField, numSiret, nomEntrepriseField, ageEntrepriseField);
     }
 
     // Méthode pour vérifier le format de l'email
@@ -248,9 +251,5 @@ public class ClientFormView extends JDialog{
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
-    }
-
-    public static void toggle(){
-        clientFormView.setVisible(!clientFormView.isVisible());
     }
 }
