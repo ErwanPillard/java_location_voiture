@@ -12,6 +12,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static utils.util.addFormField;
+
 public class ClientFormView extends JDialog {
 
     static ClientController clientController = new ClientController();
@@ -150,16 +152,6 @@ public class ClientFormView extends JDialog {
 
         return jpPersonalInfo;
     }
-
-    private void addFormField(JPanel panel, GridBagConstraints gbc, String label, JComponent component) {
-        gbc.gridx = 0;
-        gbc.gridy++;
-        panel.add(new JLabel(label), gbc);
-
-        gbc.gridx = 1;
-        panel.add(component, gbc);
-    }
-
     private void createButtons() {
         JPanel jpButtons = new JPanel();
 

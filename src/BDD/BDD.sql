@@ -63,6 +63,7 @@ CREATE TABLE Modele
     noteSatisfaction INT,
     categorie        ENUM ('Citadine', 'Berline', 'SUV', 'Familiale', 'Utilitaire') NOT NULL,
     attelage         ENUM ('Oui', 'Non')                                            NOT NULL,
+    boiteVitesse     ENUM ('automatique', 'manuel')                                 NOT NULL,
     PRIMARY KEY (id)
 ) ENGINE = InnoDB;
 

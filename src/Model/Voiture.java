@@ -1,28 +1,32 @@
 package Model;
 
+import Dao.*;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Voiture {
-    private LocalDateTime dateMiseCirculation;
+    private LocalDate dateMiseCirculation;
     private String immatriculation;
     private String couleur;
-    private int nbKilometre;
-    private  Modele modele;
+    private double nbKilometre;
+    private int modele_id;
 
-    public Voiture(LocalDateTime dateMiseCirculation, String immatriculation, String couleur, int nbKilometre, Modele modele) {
+    public Voiture(LocalDate dateMiseCirculation, String immatriculation, String couleur, double nbKilometre, int modele_id) {
         this.dateMiseCirculation = dateMiseCirculation;
         this.immatriculation = immatriculation;
         this.couleur = couleur;
         this.nbKilometre = nbKilometre;
-        this.modele= modele;
+        this.modele_id= modele_id;
     }
 
-    public LocalDateTime getDateMiseCirculation() {
+    public LocalDate getDateMiseCirculation() {
         return dateMiseCirculation;
     }
 
-    public void setDateMiseCirculation(LocalDateTime dateMiseCirculation) {
+    public void setDateMiseCirculation(LocalDate dateMiseCirculation) {
         this.dateMiseCirculation = dateMiseCirculation;
     }
 
@@ -42,7 +46,7 @@ public class Voiture {
         this.couleur = couleur;
     }
 
-    public int getNbKilometre() {
+    public double getNbKilometre() {
         return nbKilometre;
     }
 
@@ -50,11 +54,19 @@ public class Voiture {
         this.nbKilometre = nbKilometre;
     }
 
-    public Modele getModele() {
-        return modele;
+    public int getModele_id() {
+        return modele_id;
     }
 
-    public void setModele(Modele modele) {
-        this.modele = modele;
+    public void setModele_id(int modele_id) {
+        this.modele_id = modele_id;
     }
+
+
+    public void add(Voiture voiture) throws SQLException {
+        Connection connection = DatabaseManager.getConnection();
+        VoitureDAO voitureDAO = new VoitureDAOImpl(connection);
+        voitureDAO.add(voiture);
+    }
+
 }

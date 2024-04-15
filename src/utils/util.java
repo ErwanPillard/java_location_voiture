@@ -1,6 +1,7 @@
 package utils;
 
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 
 public class util {
@@ -12,6 +13,14 @@ public class util {
 
         gbc.gridx = 1;
         panel.add(component, gbc);
+    }
+
+    public static void clearForm(JTextComponent... jtcomponets) {
+        for (JTextComponent component : jtcomponets) {
+            if (component != null) {
+                component.setText("");
+            }
+        }
     }
 
 }

@@ -2,9 +2,11 @@ package View;
 
 
 import Controller.HomeController;
+import Controller.ModeleController;
 import Controller.UserConnectionController;
 import Dao.UserConnection;
 import Dao.UserConnectionImpl;
+import Model.Modele;
 import Model.SessionManager;
 
 import javax.swing.*;
@@ -21,6 +23,8 @@ public class HomePage extends JFrame {
 
     public HomePage() {
         initUI();
+        //ModeleView.toggle();
+        VoitureFormView.toggle();
     }
 
     public static void main(String[] args) {

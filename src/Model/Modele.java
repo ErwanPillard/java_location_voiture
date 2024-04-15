@@ -1,5 +1,14 @@
 package Model;
 
+import Dao.DatabaseManager;
+import Dao.ModeleDAO;
+import Dao.ModeleDAOImpl;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Collections;
+import java.util.List;
+
 public class Modele {
     private int id;
     private String nom;
@@ -10,10 +19,10 @@ public class Modele {
     private int prixJournalier;
     private boolean attelage;
     private float noteSatisfaction;
-    //private BoiteVitesse boiteVitesse;
+    private BoiteVitesse boiteVitesse;
     private Categorie categorie;
 
-    public Modele(String nom, int nbPlace, int nbPorte, float tailleCoffre, String caracteristiques, int prixJournalier, float noteSatisfaction, Categorie  categorie, boolean attelage) {
+    public Modele(String nom, int nbPlace, int nbPorte, float tailleCoffre, String caracteristiques, int prixJournalier, float noteSatisfaction, Categorie  categorie, boolean attelage, BoiteVitesse boiteVitesse) {
         this.nom = nom;
         this.nbPlace = nbPlace;
         this.nbPorte = nbPorte;
@@ -22,7 +31,7 @@ public class Modele {
         this.prixJournalier = prixJournalier;
         this.attelage = attelage;
         this.noteSatisfaction = noteSatisfaction;
-        //this.boiteVitesse = boiteVitesse;
+        this.boiteVitesse = boiteVitesse;
         this.categorie = categorie;
     }
 
@@ -110,8 +119,32 @@ public class Modele {
         return categorie;
     }
 
+    public BoiteVitesse getBoiteVitesse(){
+        return boiteVitesse;
+    }
+
     public void setCategorie(Categorie categorie) {
         this.categorie = categorie;
+    }
+
+    /**
+     * Méthode pour récupérer tous les modèle de la base de données
+     * @return Un tablea contenant tous les modèles de la base de données
+     */
+    public static String[] all() throws SQLException {
+        Connection connection = DatabaseManager.getConnection();
+        ModeleDAO modeleDAO = new ModeleDAOImpl(connection);
+        return modeleDAO.all();
+    }
+
+    /**
+     * Méthode pour récupérer l'id du modèle avec le nom
+     * @return Un tablea contenant tous les modèles de la base de données
+     */
+    public static int getIdByName(String modelName) throws SQLException{
+        Connection connection = DatabaseManager.getConnection();
+        ModeleDAO modeleDAO = new ModeleDAOImpl(connection);
+        return modeleDAO.getIdByName(modelName);
     }
 
 }

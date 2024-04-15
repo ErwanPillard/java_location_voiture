@@ -3,6 +3,7 @@ package View;
 
 import Controller.ModeleController;
 
+import Model.BoiteVitesse;
 import Model.Categorie;
 
 
@@ -20,7 +21,7 @@ import java.util.Objects;
 public class ModeleView extends JDialog {
 
     static ModeleController modeleController = new ModeleController();
-    static ModeleView modeleView = new ModeleView();
+    //static ModeleView modeleView = new ModeleView();
 
     private JTextField nomField;
     private JComboBox<Integer> nbPlaceBox;
@@ -46,17 +47,17 @@ public class ModeleView extends JDialog {
             public void actionPerformed(ActionEvent arg0) {
 
                 String nom = nomField.getText();
-                int nbPlace = nbPlaceBox.getSelectedIndex();
-                int nbPorte = nbPorteBox.getSelectedIndex();
+                int nbPlace = (Integer) nbPlaceBox.getSelectedItem();
+                int nbPorte = (Integer) nbPorteBox.getSelectedItem();
                 float tailleCoffre = Integer.parseInt(tailleCoffreField.getText());
                 String caracteristique = caracteristiquesField.getText();
                 int prixJournalier = Integer.parseInt(prixJournalierField.getText());
                 boolean attelage = attelageCheckBox.isSelected();
                 int noteSatisfaction = noteSatisfactionBar.getValue();
-                //ComboBoxModel<Model.BoiteVitesse> boiteVitesse = boiteVitesseBox.getModel();
+                BoiteVitesse boiteVitesse = (BoiteVitesse) Objects.requireNonNull(boiteVitesseBox.getSelectedItem());
                 Categorie categorieSelectionnee = (Categorie) Objects.requireNonNull(categorieBox.getSelectedItem());
 
-                modeleController.addModele(nom, nbPlace, nbPorte,tailleCoffre, caracteristique, prixJournalier, noteSatisfaction,categorieSelectionnee, attelage);
+                modeleController.addModele(nom, nbPlace, nbPorte,tailleCoffre, caracteristique, prixJournalier, noteSatisfaction,categorieSelectionnee, attelage, boiteVitesse);
             }
         });
     }
@@ -167,8 +168,8 @@ public class ModeleView extends JDialog {
 
 
 
-    public static void toggle(){
-        modeleView.setVisible(!modeleView.isVisible());
+    public static void toggle(){// modeleView.setVisible(!modeleView.isVisible());
+        new ModeleView();
     }
 
 }
