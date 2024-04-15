@@ -1,10 +1,9 @@
 package Dao;
 
-import Model.Client;
 import Model.Entreprise;
 import Model.Particulier;
-import Model.User;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 public interface ClientDAO {

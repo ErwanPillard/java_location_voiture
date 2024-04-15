@@ -235,7 +235,9 @@ public class ClientFormView extends JDialog {
 
     private void clearForm(JTextComponent... jtcomponets) {
         for (JTextComponent component : jtcomponets) {
-            component.setText("");
+            if (component != null) {
+                component.setText("");
+            }
         }
     }
 

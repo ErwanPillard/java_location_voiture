@@ -5,18 +5,18 @@ public class Entreprise extends Client {
     private String nom;
     private String numSiret;
 
-    /*public Entreprise(String nom, String email, String motDePasse, int age, String telephone, double numeroAdhesion, TypeAdhesion typeAdhesion, String numSiret) {
+    /*
+    public Entreprise(String nom, String email, String motDePasse, int age, String telephone, double numeroAdhesion, TypeAdhesion typeAdhesion, String numSiret) {
         super(email, motDePasse, age, telephone, numeroAdhesion, typeAdhesion);
         this.nom = nom;
         this.numSiret = numSiret;
-    }
+    }*/
 
-    public Entreprise(int id, String nom, String email, String motDePasse, int age, String telephone, String numSiret) {
-        super(email, motDePasse, age, telephone);
+    public Entreprise(String nom, String email, String motDePasse, String telephone, String numSiret) {
+        super(email, motDePasse, telephone);
         this.nom = nom;
         this.numSiret = numSiret;
-        this.id = id;
-    }*/
+    }
 
     public Entreprise(int id, String nom, String numSiret) {
         super(id);
