@@ -13,7 +13,6 @@ public class VoitureController {
     public void addVoiture(Voiture voiture) throws SQLException {
         if (voiture != null){
             voiture.add(voiture);
-            System.out.println("OK2");
         }
     }
 

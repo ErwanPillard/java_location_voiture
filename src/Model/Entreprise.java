@@ -1,5 +1,10 @@
 package Model;
 
+import Dao.ClientDAO;
+import Dao.ClientDAOImpl;
+
+import java.sql.SQLException;
+
 public class Entreprise extends Client {
     private int id;
     private String nom;
@@ -48,4 +53,10 @@ public class Entreprise extends Client {
     public void setNumSiret(String numSiret) {
         this.numSiret = numSiret;
     }
+
+    public void add(Entreprise entreprise) throws SQLException {
+        ClientDAO clientDAO = new ClientDAOImpl();
+        clientDAO.addEntreprise(entreprise);
+    }
+
 }

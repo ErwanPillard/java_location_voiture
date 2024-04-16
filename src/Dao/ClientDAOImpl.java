@@ -7,11 +7,6 @@ import java.sql.*;
 
 
 public class ClientDAOImpl implements ClientDAO {
-    private final Connection connection;
-
-    public ClientDAOImpl(Connection connection) {
-        this.connection = connection;
-    }
 
     @Override
     public void addParticulier(Particulier particulier) throws SQLException {
@@ -19,7 +14,8 @@ public class ClientDAOImpl implements ClientDAO {
         String queryClient = "INSERT INTO Client (id, telephone) VALUES (?, ?)";
         String queryParticulier = "INSERT INTO Particulier (id, nom, prenom, numeroPermis, birthDate, age) VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement userStatement = connection.prepareStatement(queryUser, Statement.RETURN_GENERATED_KEYS);
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement userStatement = connection.prepareStatement(queryUser, Statement.RETURN_GENERATED_KEYS);
              PreparedStatement clientStatement = connection.prepareStatement(queryClient);
              PreparedStatement particulierStatement = connection.prepareStatement(queryParticulier)) {
             // Insertion des données dans la table User
@@ -61,7 +57,8 @@ public class ClientDAOImpl implements ClientDAO {
         String queryClient = "INSERT INTO Client (id, telephone) VALUES (?, ?)";
         String queryEntreprise = "INSERT INTO Entreprise (id, nom, numeroSiret) VALUES (?, ?, ?)";
 
-        try (PreparedStatement userStatement = connection.prepareStatement(queryUser, Statement.RETURN_GENERATED_KEYS);
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement userStatement = connection.prepareStatement(queryUser, Statement.RETURN_GENERATED_KEYS);
              PreparedStatement clientStatement = connection.prepareStatement(queryClient);
              PreparedStatement entrepriseStatement = connection.prepareStatement(queryEntreprise)) {
             // Insertion des données dans la table User
@@ -91,6 +88,21 @@ public class ClientDAOImpl implements ClientDAO {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
+
+    public boolean emailExists(String email) throws SQLException {
+        String query = "SELECT COUNT(email) FROM User WHERE email = ?";
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+            pstmt.setString(1, email);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0; // Vérifie si le compteur est supérieur à 0
+                }
+            }
+        }
+        return false; // Par défaut, considère que l'email n'existe pas
     }
 
 }

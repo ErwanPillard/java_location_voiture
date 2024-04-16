@@ -23,7 +23,7 @@ public class HomePage extends JFrame {
 
     public HomePage() {
         initUI();
-        //ModeleView.toggle();
+        ModeleView.toggle();
         VoitureFormView.toggle();
     }
 

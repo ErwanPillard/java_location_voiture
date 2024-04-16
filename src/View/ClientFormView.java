@@ -1,12 +1,15 @@
 package View;
 
 import Controller.ClientController;
+import Model.Entreprise;
+import Model.Particulier;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
@@ -16,8 +19,7 @@ import static utils.util.addFormField;
 
 public class ClientFormView extends JDialog {
 
-    static ClientController clientController = new ClientController();
-    static ClientFormView clientFormView = new ClientFormView(clientController);
+    static ClientFormView clientFormView = new ClientFormView();
 
     private JTextField nomEntrepriseField;
     private JTextField nomField;
@@ -39,10 +41,10 @@ public class ClientFormView extends JDialog {
     // Déclarer une variable pour stocker la référence du dernier panneau ajouté
     private JPanel lastAddedPanel;
 
-    public ClientFormView(ClientController clientController) {
+    public ClientFormView() {
         createForms(String.valueOf(typeField));
         createButtons();
-        registerListeners(clientController);
+        registerListeners();
         configure();
     }
 
@@ -161,11 +163,11 @@ public class ClientFormView extends JDialog {
         this.add(jpButtons, BorderLayout.SOUTH);
     }
 
-    private void registerListeners(ClientController clientController) {
+    private void registerListeners() {
         jbSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
 
-                cmdSave(clientController);
+                cmdSave();
             }
         });
         jbCancel.addActionListener(new ActionListener() {
@@ -175,7 +177,7 @@ public class ClientFormView extends JDialog {
         });
     }
 
-    private void cmdSave(ClientController clientController) {
+    private void cmdSave() {
 
         String selectedItem = (String) typeField.getSelectedItem();
 
@@ -183,6 +185,17 @@ public class ClientFormView extends JDialog {
             String nom = nomField.getText();
             String prenom = prenomField.getText();
             String email = emailField.getText();
+
+            try {
+                if (ClientController.getInstance().emailExists(email)) {
+                    JOptionPane.showMessageDialog(null, "L'email existe déjà. Veuillez en choisir un autre.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                    return; // Annule l'opération
+                }
+            }catch (SQLException e){
+                JOptionPane.showMessageDialog(this, "Erreur", e.getMessage(), JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
+
             String mdp = String.valueOf(mdpField.getPassword());
             String ageText = ageField.getText();
             String telephone = telephoneField.getText();
@@ -206,18 +219,43 @@ public class ClientFormView extends JDialog {
                 return; // Sortir de la méthode sans enregistrer le client
             }
 
-            clientController.addParticulier(nom, prenom, email, mdp, age, telephone, numeroPermis, birthDate);
+            try {
+                Particulier particulier = new Particulier(nom, prenom, email, mdp, age, telephone, numeroPermis, birthDate);
+                ClientController.getInstance().addParticulier(particulier);
+            }catch (SQLException e){
+                JOptionPane.showMessageDialog(this, "Erreur", e.getMessage(), JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
+
         } else if (selectedItem.equals("Entreprise")) {
             String nomE = nomEntrepriseField.getText();
+
             String email = emailField.getText();
+            try {
+                if (ClientController.getInstance().emailExists(email)) {
+                    JOptionPane.showMessageDialog(null, "L'email existe déjà. Veuillez en choisir un autre.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                    return; // Annule l'opération
+                }
+            }catch (SQLException e){
+                JOptionPane.showMessageDialog(this, "Erreur", e.getMessage(), JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
+
             String mdp = String.valueOf(mdpField.getPassword());
             String telephone = telephoneField.getText();
             String siret = numSiret.getText();
-            clientController.addEntreprise(nomE, email, mdp, telephone, siret);
+
+            try {
+                Entreprise entreprise = new Entreprise(nomE, email, mdp, telephone, siret);
+                ClientController.getInstance().addEntreprise(entreprise);
+            }catch (SQLException e){
+                JOptionPane.showMessageDialog(this, "Erreur", e.getMessage(), JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Problème ajout client", "", JOptionPane.INFORMATION_MESSAGE);
         }
-        //JOptionPane.showMessageDialog(this, "Utilisateur enregistré avec succès", "", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Utilisateur enregistré avec succès", "", JOptionPane.INFORMATION_MESSAGE);
         dispose();
     }
 

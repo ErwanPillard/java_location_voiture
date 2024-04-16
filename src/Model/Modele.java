@@ -132,8 +132,7 @@ public class Modele {
      * @return Un tablea contenant tous les modèles de la base de données
      */
     public static String[] all() throws SQLException {
-        Connection connection = DatabaseManager.getConnection();
-        ModeleDAO modeleDAO = new ModeleDAOImpl(connection);
+        ModeleDAO modeleDAO = new ModeleDAOImpl();
         return modeleDAO.all();
     }
 
@@ -142,9 +141,16 @@ public class Modele {
      * @return Un tablea contenant tous les modèles de la base de données
      */
     public static int getIdByName(String modelName) throws SQLException{
-        Connection connection = DatabaseManager.getConnection();
-        ModeleDAO modeleDAO = new ModeleDAOImpl(connection);
+        ModeleDAO modeleDAO = new ModeleDAOImpl();
         return modeleDAO.getIdByName(modelName);
+    }
+
+    /**
+     * Méthode pour ajouter modèle
+     */
+    public void add(Modele modele) throws SQLException {
+        ModeleDAO modeleDAO = new ModeleDAOImpl();
+        modeleDAO.add(modele);
     }
 
 }

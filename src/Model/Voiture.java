@@ -64,8 +64,7 @@ public class Voiture {
 
 
     public void add(Voiture voiture) throws SQLException {
-        Connection connection = DatabaseManager.getConnection();
-        VoitureDAO voitureDAO = new VoitureDAOImpl(connection);
+        VoitureDAO voitureDAO = new VoitureDAOImpl();
         voitureDAO.add(voiture);
     }
 

@@ -28,7 +28,6 @@ import static utils.util.clearForm;
 public class VoitureFormView extends JDialog {
 
     static VoitureFormView voitureFormView = new VoitureFormView();
-    private VoitureController voitureController = new VoitureController();
 
     private JTextField immatriculationField;
     private JTextField dateMiseEnCirculationField;

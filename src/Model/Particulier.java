@@ -1,5 +1,9 @@
 package Model;
 
+import Dao.ClientDAO;
+import Dao.ClientDAOImpl;
+
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class Particulier extends Client {
@@ -84,5 +88,10 @@ public class Particulier extends Client {
 
     public void setPrenom(String prenom) {
         this.prenom = prenom;
+    }
+
+    public void add(Particulier particulier) throws SQLException {
+        ClientDAO clientDAO = new ClientDAOImpl();
+        clientDAO.addParticulier(particulier);
     }
 }

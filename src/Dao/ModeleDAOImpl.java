@@ -8,16 +8,12 @@ import java.util.ArrayList;
 
 
 public class ModeleDAOImpl implements ModeleDAO{
-    private Connection connection;
-
-    public ModeleDAOImpl(Connection connection){this.connection = connection;}
-
-
     @Override
     public void add(Modele modele) throws SQLException {
         String queryModele = "INSERT INTO Modele (nom, nbPlaces, nbPortes, tailleCoffre, caracteristique, prixJournalier, noteSatisfaction, categorie, attelage, boiteVitesse) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement modeleStatement = connection.prepareStatement(queryModele, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection connection = DatabaseManager.getConnection() ;
+             PreparedStatement modeleStatement = connection.prepareStatement(queryModele, Statement.RETURN_GENERATED_KEYS)) {
             // Insertion des données dans la table Modele
             modeleStatement.setString(1, modele.getNom());
             modeleStatement.setInt(2, modele.getNbPlace());

@@ -1,28 +1,20 @@
 package View;
 
-
 import Controller.ModeleController;
 
 import Model.BoiteVitesse;
 import Model.Categorie;
-
+import Model.Modele;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.Objects;
 
-
-
-
-
 public class ModeleView extends JDialog {
-
-    static ModeleController modeleController = new ModeleController();
-    //static ModeleView modeleView = new ModeleView();
-
     private JTextField nomField;
     private JComboBox<Integer> nbPlaceBox;
     private JComboBox<Integer> nbPorteBox;
@@ -35,7 +27,6 @@ public class ModeleView extends JDialog {
     private JComboBox<Model.Categorie>  categorieBox;
 
     private JButton jbSave;
-
 
     public ModeleView(){
         createForms();
@@ -57,7 +48,13 @@ public class ModeleView extends JDialog {
                 BoiteVitesse boiteVitesse = (BoiteVitesse) Objects.requireNonNull(boiteVitesseBox.getSelectedItem());
                 Categorie categorieSelectionnee = (Categorie) Objects.requireNonNull(categorieBox.getSelectedItem());
 
-                modeleController.addModele(nom, nbPlace, nbPorte,tailleCoffre, caracteristique, prixJournalier, noteSatisfaction,categorieSelectionnee, attelage, boiteVitesse);
+                try {
+                    Modele modele = new Modele(nom, nbPlace, nbPorte,tailleCoffre, caracteristique, prixJournalier, noteSatisfaction,categorieSelectionnee, attelage, boiteVitesse);
+                    ModeleController.getInstance().addModele(modele);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
             }
         });
     }
@@ -165,8 +162,6 @@ public class ModeleView extends JDialog {
         jFrame.setSize(400, 400);
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
-
-
 
     public static void toggle(){// modeleView.setVisible(!modeleView.isVisible());
         new ModeleView();

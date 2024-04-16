@@ -20,14 +20,9 @@ public class ModeleController {
         return instance;
     }
 
-    public void addModele(String nom, int nbPlace, int  nbPorte, float tailleCoffre, String caracteristique, int prixJournalier, int noteSatisfaction, Categorie categorie, boolean attelage, BoiteVitesse boiteVitesse){
-
-        try(Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD)) {
-            Modele modele = new Modele(nom, nbPlace, nbPorte,tailleCoffre, caracteristique, prixJournalier,noteSatisfaction, categorie, attelage, boiteVitesse);
-            ModeleDAO modeleDAO = new ModeleDAOImpl(connection);
-            modeleDAO.add(modele);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+    public void addModele(Modele modele) throws SQLException{
+        if (modele != null){
+            modele.add(modele);
         }
     }
 

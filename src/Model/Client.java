@@ -1,5 +1,8 @@
 package Model;
 
+import Dao.ClientDAO;
+import Dao.ClientDAOImpl;
+
 import java.sql.SQLException;
 
 public class Client extends User {
@@ -34,6 +37,11 @@ public class Client extends User {
      */
     public void save() throws SQLException {
         //ClientDAOImpl.add();
+    }
+
+    public static boolean emailExists(String email) throws SQLException {
+        ClientDAO clientDAO = new ClientDAOImpl();
+        return clientDAO.emailExists(email);
     }
 }
 
