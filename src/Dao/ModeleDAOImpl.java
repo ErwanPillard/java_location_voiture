@@ -10,21 +10,22 @@ import java.util.ArrayList;
 public class ModeleDAOImpl implements ModeleDAO{
     @Override
     public void add(Modele modele) throws SQLException {
-        String queryModele = "INSERT INTO Modele (nom, nbPlaces, nbPortes, tailleCoffre, caracteristique, prixJournalier, noteSatisfaction, categorie, attelage, boiteVitesse) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String queryModele = "INSERT INTO Modele (marque, nom, nbPlaces, nbPortes, tailleCoffre, caracteristique, prixJournalier, noteSatisfaction, categorie, attelage, boiteVitesse) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = DatabaseManager.getConnection() ;
              PreparedStatement modeleStatement = connection.prepareStatement(queryModele, Statement.RETURN_GENERATED_KEYS)) {
             // Insertion des données dans la table Modele
-            modeleStatement.setString(1, modele.getNom());
-            modeleStatement.setInt(2, modele.getNbPlace());
-            modeleStatement.setInt(3, modele.getNbPorte());
-            modeleStatement.setFloat(4, modele.getTailleCoffre());
-            modeleStatement.setString(5, modele.getCaracteristiques());
-            modeleStatement.setInt(6, modele.getPrixJournalier());
-            modeleStatement.setFloat(7, modele.getNoteSatisfaction());
-            modeleStatement.setString(8, modele.getCategorie().getNomCategorie());
-            modeleStatement.setString(9, modele.isAttelage() ? "Oui" : "Non");
-            modeleStatement.setString(10, modele.getBoiteVitesse().getTypeBoite());
+            modeleStatement.setString(1, modele.getMarque());
+            modeleStatement.setString(2, modele.getNom());
+            modeleStatement.setInt(3, modele.getNbPlace());
+            modeleStatement.setInt(4, modele.getNbPorte());
+            modeleStatement.setFloat(5, modele.getTailleCoffre());
+            modeleStatement.setString(6, modele.getCaracteristiques());
+            modeleStatement.setInt(7, modele.getPrixJournalier());
+            modeleStatement.setFloat(8, modele.getNoteSatisfaction());
+            modeleStatement.setString(9, modele.getCategorie().getNomCategorie());
+            modeleStatement.setString(10, modele.isAttelage() ? "Oui" : "Non");
+            modeleStatement.setString(11, modele.getBoiteVitesse().getTypeBoite());
             modeleStatement.executeUpdate();
             // Récupération de l'ID généré pour le modele inséré
             ResultSet generatedKeys = modeleStatement.getGeneratedKeys();

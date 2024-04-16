@@ -54,6 +54,7 @@ CREATE TABLE Particulier
 CREATE TABLE Modele
 (
     id               INT AUTO_INCREMENT                                             NOT NULL,
+    marque           VARCHAR(255)                                                   NOT NULL,
     nom              VARCHAR(255)                                                   NOT NULL,
     nbPlaces         INT                                                            NOT NULL,
     nbPortes         INT                                                            NOT NULL,

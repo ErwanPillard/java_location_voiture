@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 public class ModeleView extends JDialog {
+    private JTextField marqueField;
     private JTextField nomField;
     private JComboBox<Integer> nbPlaceBox;
     private JComboBox<Integer> nbPorteBox;
@@ -37,6 +38,7 @@ public class ModeleView extends JDialog {
         jbSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
 
+                String marque = marqueField.getText();
                 String nom = nomField.getText();
                 int nbPlace = (Integer) nbPlaceBox.getSelectedItem();
                 int nbPorte = (Integer) nbPorteBox.getSelectedItem();
@@ -49,7 +51,7 @@ public class ModeleView extends JDialog {
                 Categorie categorieSelectionnee = (Categorie) Objects.requireNonNull(categorieBox.getSelectedItem());
 
                 try {
-                    Modele modele = new Modele(nom, nbPlace, nbPorte,tailleCoffre, caracteristique, prixJournalier, noteSatisfaction,categorieSelectionnee, attelage, boiteVitesse);
+                    Modele modele = new Modele(marque, nom, nbPlace, nbPorte,tailleCoffre, caracteristique, prixJournalier, noteSatisfaction,categorieSelectionnee, attelage, boiteVitesse);
                     ModeleController.getInstance().addModele(modele);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
@@ -77,6 +79,12 @@ public class ModeleView extends JDialog {
 
         jbSave = new JButton("Valider");
         jFrame.add(jbSave, BorderLayout.SOUTH);
+
+        JPanel marquePanel = new JPanel(new BorderLayout());
+        marquePanel.add(new JLabel("Marque: "), BorderLayout.WEST);
+        marqueField = new JTextField(30);
+        marquePanel.add(marqueField, BorderLayout.EAST);
+        mainPanel.add(marquePanel);
 
         JPanel nomPanel = new JPanel(new BorderLayout());
         nomPanel.add(new JLabel("Nom du vehicule: "), BorderLayout.WEST);
@@ -159,7 +167,7 @@ public class ModeleView extends JDialog {
 
         // Bien faire le setSize à la fin
 
-        jFrame.setSize(400, 400);
+        jFrame.setSize(600, 500);
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 

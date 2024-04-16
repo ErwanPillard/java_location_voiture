@@ -1,16 +1,14 @@
 package Model;
 
-import Dao.DatabaseManager;
 import Dao.ModeleDAO;
 import Dao.ModeleDAOImpl;
 
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.List;
+
 
 public class Modele {
     private int id;
+    private String marque;
     private String nom;
     private int nbPlace;
     private int nbPorte;
@@ -22,7 +20,8 @@ public class Modele {
     private BoiteVitesse boiteVitesse;
     private Categorie categorie;
 
-    public Modele(String nom, int nbPlace, int nbPorte, float tailleCoffre, String caracteristiques, int prixJournalier, float noteSatisfaction, Categorie  categorie, boolean attelage, BoiteVitesse boiteVitesse) {
+    public Modele(String marque,String nom, int nbPlace, int nbPorte, float tailleCoffre, String caracteristiques, int prixJournalier, float noteSatisfaction, Categorie  categorie, boolean attelage, BoiteVitesse boiteVitesse) {
+        this.marque = marque;
         this.nom = nom;
         this.nbPlace = nbPlace;
         this.nbPorte = nbPorte;
@@ -55,65 +54,29 @@ public class Modele {
         return nbPlace;
     }
 
-    public void setNbPlace(int nbPlace) {
-        this.nbPlace = nbPlace;
-    }
-
     public int getNbPorte() {
         return nbPorte;
-    }
-
-    public void setNbPorte(int nbPorte) {
-        this.nbPorte = nbPorte;
     }
 
     public float getTailleCoffre() {
         return tailleCoffre;
     }
 
-    public void setTailleCoffre(float tailleCoffre) {
-        this.tailleCoffre = tailleCoffre;
-    }
-
     public String getCaracteristiques() {
         return caracteristiques;
-    }
-
-    public void setCaracteristiques(String caracteristiques) {
-        this.caracteristiques = caracteristiques;
     }
 
     public int getPrixJournalier() {
         return prixJournalier;
     }
 
-    public void setPrixJournalier(int prixJournalier) {
-        this.prixJournalier = prixJournalier;
-    }
-
     public boolean isAttelage() {
         return attelage;
-    }
-
-    public void setAttelage(boolean attelage) {
-        this.attelage = attelage;
     }
 
     public float getNoteSatisfaction() {
         return noteSatisfaction;
     }
-
-    public void setNoteSatisfaction(float noteSatisfaction) {
-        this.noteSatisfaction = noteSatisfaction;
-    }
-
-    /*public BoiteVitesse getBoiteVitesse() {
-        return boiteVitesse;
-    }
-
-    public void setBoiteVitesse(BoiteVitesse boiteVitesse) {
-        this.boiteVitesse = boiteVitesse;
-    }*/
 
     public Categorie getCategorie() {
         return categorie;
@@ -121,10 +84,6 @@ public class Modele {
 
     public BoiteVitesse getBoiteVitesse(){
         return boiteVitesse;
-    }
-
-    public void setCategorie(Categorie categorie) {
-        this.categorie = categorie;
     }
 
     /**
@@ -153,5 +112,8 @@ public class Modele {
         modeleDAO.add(modele);
     }
 
+    public String getMarque() {
+        return marque;
+    }
 }
 

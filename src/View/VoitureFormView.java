@@ -132,7 +132,6 @@ public class VoitureFormView extends JDialog {
         try {
             Voiture voiture = new Voiture(dateMiseEnCirculation, immatriculation, couleur,nbKilometre,modele_id);
             VoitureController.getInstance().addVoiture(voiture);
-            System.out.println("OK1");
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erreur", e.getMessage(), JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
