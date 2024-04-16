@@ -1,4 +1,4 @@
-package View;
+package View.Employe;
 
 import Controller.ModeleController;
 

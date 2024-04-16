@@ -1,15 +1,9 @@
-package View;
+package View.Employe;
 
 import Controller.ClientController;
 import Controller.ModeleController;
 import Controller.VoitureController;
-import Dao.DatabaseManager;
-import Dao.ModeleDAO;
-import Dao.ModeleDAOImpl;
-import Dao.ModeleDAOImpl.*;
-import Model.Modele;
 import Model.Voiture;
-import utils.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,12 +12,8 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-
-
-import static utils.util.addFormField;
-import static utils.util.clearForm;
-
+import static utils.Util.addFormField;
+import static utils.Util.clearForm;
 
 public class VoitureFormView extends JDialog {
 
@@ -113,6 +103,16 @@ public class VoitureFormView extends JDialog {
     private void cmdSave() {
         String immatriculation = immatriculationField.getText();
 
+        try {
+            if (VoitureController.getInstance().immatExists(immatriculation)) {
+                JOptionPane.showMessageDialog(null, "L'immatriculation du véhicule existe déjà.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }catch (SQLException e){
+            JOptionPane.showMessageDialog(this, "Erreur", e.getMessage(), JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+
         String dateString = dateMiseEnCirculationField.getText();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate dateMiseEnCirculation = LocalDate.parse(dateString, formatter);
@@ -132,6 +132,11 @@ public class VoitureFormView extends JDialog {
         try {
             Voiture voiture = new Voiture(dateMiseEnCirculation, immatriculation, couleur,nbKilometre,modele_id);
             VoitureController.getInstance().addVoiture(voiture);
+
+            clearForm(immatriculationField, dateMiseEnCirculationField, nbKilometreField, couleurField);
+
+            JOptionPane.showMessageDialog(this, "Voiture ajouté avec succès");
+
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erreur", e.getMessage(), JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();

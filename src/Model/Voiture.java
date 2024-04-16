@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Voiture {
     private LocalDate dateMiseCirculation;
@@ -62,10 +63,27 @@ public class Voiture {
         this.modele_id = modele_id;
     }
 
+    public String[] toArray(){
+        return new String[] {this.immatriculation, this.dateMiseCirculation.toString(), String.valueOf(this.nbKilometre), this.couleur, String.valueOf(this.modele_id)};
+    }
 
     public void add(Voiture voiture) throws SQLException {
         VoitureDAO voitureDAO = new VoitureDAOImpl();
         voitureDAO.add(voiture);
+    }
+
+    /**
+     * Méthode pour récupérer toutes les voitures de la base de données
+     * @return Une liste contenant toutes les voitures de la base de données
+     */
+    public static List<Voiture> all() throws SQLException {
+        VoitureDAO voitureDAO = new VoitureDAOImpl();
+        return voitureDAO.all();
+    }
+
+    public static boolean immatExists(String immatriculation) throws SQLException{
+        VoitureDAO voitureDAO = new VoitureDAOImpl();
+        return voitureDAO.immatExists(immatriculation);
     }
 
 }

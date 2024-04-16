@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static utils.util.addFormField;
+import static utils.Util.addFormField;
 
 public class ClientFormView extends JDialog {
 

@@ -4,7 +4,12 @@ import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 
-public class util {
+public class Util {
+    private static final String ICONS_PATH = "/View/icons/";
+
+    public static ImageIcon getIcon(Class<?> kclass, String icone){
+        return new ImageIcon(kclass.getResource(ICONS_PATH + icone + ".gif"));
+    }
 
     public static void addFormField(JPanel panel, GridBagConstraints gbc, String label, JComponent component) {
         gbc.gridx = 0;
