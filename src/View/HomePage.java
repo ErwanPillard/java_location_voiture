@@ -6,6 +6,7 @@ import Controller.UserConnectionController;
 import Dao.UserConnection;
 import Dao.UserConnectionImpl;
 import Model.SessionManager;
+import View.Employe.ModeleView;
 import View.Employe.VoitureJTableView;
 import View.layouts.MenuOver;
 
@@ -24,7 +25,7 @@ public class HomePage extends JFrame {
     public HomePage() {
         initUI();
 
-        //ModeleView.toggle();
+        ModeleView.toggle();
         //VoitureFormView.toggle();
     }
 

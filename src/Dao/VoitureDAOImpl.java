@@ -34,7 +34,7 @@ public class VoitureDAOImpl implements VoitureDAO{
 
         ResultSet rset = pstmt.executeQuery();
         while (rset.next()) {
-            voitures.add(createUser(rset));
+            voitures.add(createVoiture(rset));
         }
 
         pstmt.close();
@@ -65,8 +65,61 @@ public class VoitureDAOImpl implements VoitureDAO{
      * @return Nouvel objet User construit à partir du résultat de requête SQL
      * @throws SQLException
      */
-    public Voiture createUser(ResultSet rset) throws SQLException {
+    public Voiture createVoiture(ResultSet rset) throws SQLException {
         Voiture voiture = new Voiture(rset.getDate("dateMiseEnCirculation").toLocalDate(), rset.getString("immatriculation"), rset.getString("couleur"), rset.getInt("nbKilometre"), rset.getInt("modele_id"));
         return voiture;
+    }
+
+    public Voiture findByImmat(String immatriculation) throws SQLException{
+        Connection c = DatabaseManager.getConnection();
+
+        PreparedStatement pstmt = c.prepareStatement("SELECT * FROM Voiture WHERE immatriculation = ?");
+        pstmt.setString(1, immatriculation);
+
+        Voiture voiture= null;
+        ResultSet rset = pstmt.executeQuery();
+
+        while (rset.next()){
+            voiture = createVoiture(rset);
+        }
+
+        pstmt.close();
+        c.close();
+
+        return voiture;
+    }
+
+    public int delete(Voiture voiture) throws SQLException{
+        Connection c = DatabaseManager.getConnection();
+        PreparedStatement pstmt = c.prepareStatement("DELETE FROM Voiture where immatriculation = ?");
+        pstmt.setString(1, voiture.getImmatriculation());
+
+        int rowsAffected = pstmt.executeUpdate();
+
+        pstmt.close();
+        c.close();
+
+        return rowsAffected;
+    }
+
+    public void update(Voiture voiture) throws SQLException{
+        String query = "UPDATE Voiture SET dateMiseEnCirculation = ?, nbKilometre = ?, couleur = ?, modele_id = ? WHERE immatriculation = ?";
+
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            // Mettre à jour les valeurs des champs
+            pstmt.setDate(1, Date.valueOf(voiture.getDateMiseCirculation()));
+            pstmt.setDouble(2, voiture.getNbKilometre());
+            pstmt.setString(3, voiture.getCouleur());
+            pstmt.setInt(4, voiture.getModele_id());
+
+            pstmt.setString(5, voiture.getImmatriculation());
+
+            // Exécuter la requête SQL
+            pstmt.executeUpdate();
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 }

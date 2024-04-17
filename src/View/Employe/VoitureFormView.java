@@ -17,7 +17,12 @@ import static utils.Util.clearForm;
 
 public class VoitureFormView extends JDialog {
 
-    static VoitureFormView voitureFormView = new VoitureFormView();
+    private static final VoitureFormView instance = new VoitureFormView();
+    public static VoitureFormView getInstance() {
+        return instance;
+    }
+
+    private boolean editMode = false;
 
     private JTextField immatriculationField;
     private JTextField dateMiseEnCirculationField;
@@ -55,7 +60,6 @@ public class VoitureFormView extends JDialog {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Aucun modèle n'existe.", "Erreur", JOptionPane.ERROR_MESSAGE); // Afficher une alerte
         }
-
         if (modeleDispo != null && modeleDispo.length > 0) {
             JComboBox<String> comboBox = new JComboBox<>(modeleDispo);
             addFormField(jpForm, gbcForm, "Modèle :", modeleField = comboBox);
@@ -80,7 +84,6 @@ public class VoitureFormView extends JDialog {
     private void registerListeners() {
         jbSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-
                 cmdSave();
             }
         });
@@ -92,7 +95,7 @@ public class VoitureFormView extends JDialog {
 
     }
 
-    private void configure() {
+    public void configure() {
         setTitle("Ajout de voiture");
         this.setResizable(true);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -101,45 +104,75 @@ public class VoitureFormView extends JDialog {
     }
 
     private void cmdSave() {
-        String immatriculation = immatriculationField.getText();
+        if(!editMode) {
+            String immatriculation = immatriculationField.getText();
 
-        try {
-            if (VoitureController.getInstance().immatExists(immatriculation)) {
-                JOptionPane.showMessageDialog(null, "L'immatriculation du véhicule existe déjà.", "Erreur", JOptionPane.ERROR_MESSAGE);
-                return;
+            try {
+                if (VoitureController.getInstance().immatExists(immatriculation)) {
+                    JOptionPane.showMessageDialog(null, "L'immatriculation du véhicule existe déjà.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Erreur", e.getMessage(), JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
             }
-        }catch (SQLException e){
-            JOptionPane.showMessageDialog(this, "Erreur", e.getMessage(), JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
 
-        String dateString = dateMiseEnCirculationField.getText();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate dateMiseEnCirculation = LocalDate.parse(dateString, formatter);
+            String dateString = dateMiseEnCirculationField.getText();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate dateMiseEnCirculation = LocalDate.parse(dateString, formatter);
 
-        Double nbKilometre = Double.valueOf(nbKilometreField.getText());
-        String couleur = couleurField.getText();
-        String modele = (String) modeleField.getSelectedItem();
-        int modele_id = 0;
+            Double nbKilometre = Double.valueOf(nbKilometreField.getText());
+            String couleur = couleurField.getText();
+            String modele = (String) modeleField.getSelectedItem();
+            int modele_id = 0;
 
-        try {
-            modele_id = ModeleController.getInstance().getIdByName(modele);
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Erreur", e.getMessage(), JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
+            try {
+                modele_id = ModeleController.getInstance().getIdByName(modele);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Erreur", e.getMessage(), JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
 
-        try {
-            Voiture voiture = new Voiture(dateMiseEnCirculation, immatriculation, couleur,nbKilometre,modele_id);
-            VoitureController.getInstance().addVoiture(voiture);
+            try {
+                Voiture voiture = new Voiture(dateMiseEnCirculation, immatriculation, couleur, nbKilometre, modele_id);
+                VoitureController.getInstance().addVoiture(voiture);
 
-            clearForm(immatriculationField, dateMiseEnCirculationField, nbKilometreField, couleurField);
+                clearForm(immatriculationField, dateMiseEnCirculationField, nbKilometreField, couleurField);
 
-            JOptionPane.showMessageDialog(this, "Voiture ajouté avec succès");
+                JOptionPane.showMessageDialog(this, "Voiture ajouté avec succès");
 
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Erreur", e.getMessage(), JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Erreur", e.getMessage(), JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
+        }else if(editMode) {
+            String immatriculation = immatriculationField.getText();
+
+            try {
+                if (VoitureController.getInstance().immatExists(immatriculation)) {
+
+                    String dateString = dateMiseEnCirculationField.getText();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    LocalDate dateMiseEnCirculation = LocalDate.parse(dateString, formatter);
+
+                    Double nbKilometre = Double.valueOf(nbKilometreField.getText());
+                    String couleur = couleurField.getText();
+                    String modele = (String) modeleField.getSelectedItem();
+                    int modele_id = 0;
+
+                    try {
+                        modele_id = ModeleController.getInstance().getIdByName(modele);
+                    } catch (SQLException e) {
+                        JOptionPane.showMessageDialog(this, "Erreur", e.getMessage(), JOptionPane.ERROR_MESSAGE);
+                        e.printStackTrace();
+                    }
+                    Voiture voiture = new Voiture(dateMiseEnCirculation, immatriculation, couleur, nbKilometre, modele_id);
+                    VoitureController.getInstance().update(voiture);
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Erreur", e.getMessage(), JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
         }
 
     }
@@ -153,6 +186,21 @@ public class VoitureFormView extends JDialog {
         super.dispose();
     }
 
-    public static void toggle() {voitureFormView.setVisible(!voitureFormView.isVisible());}
+    public void setEditMode(boolean editMode) {
+        this.editMode = editMode;
+    }
+
+    public void fillForm(Voiture voiture) {
+        // Remplir les champs du formulaire avec les valeurs de l'objet Voiture
+        immatriculationField.setText(voiture.getImmatriculation());
+        dateMiseEnCirculationField.setText(voiture.getDateMiseCirculation().toString());
+        nbKilometreField.setText(String.valueOf(voiture.getNbKilometre()));
+        couleurField.setText(voiture.getCouleur());
+        modeleField.setSelectedItem(voiture.getModele_id());
+    }
+
+    public static void toggle() {
+        instance.setVisible(!instance.isVisible());
+    }
 
 }

@@ -1,5 +1,7 @@
 package utils;
 
+import Model.Voiture;
+
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
@@ -27,5 +29,4 @@ public class Util {
             }
         }
     }
-
 }

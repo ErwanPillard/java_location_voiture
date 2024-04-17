@@ -5,7 +5,9 @@ import Controller.listeners.VoitureListener;
 import Model.Voiture;
 import View.Employe.VoitureJTableView;
 
+import javax.swing.table.TableModel;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -24,6 +26,41 @@ public class VoitureController {
             voiture.add(voiture);
             notifyListeners(voiture);
         }
+    }
+
+    public Voiture findByImmat(String immatriculation) throws SQLException{
+        return Voiture.findByImmat(immatriculation);
+    }
+
+    public void remove(String immatriculation) throws SQLException{
+        Voiture voiture = Voiture.findByImmat(immatriculation);
+        voiture.delete();
+    }
+
+    public void update(Voiture voiture) throws SQLException{
+        voiture.update(voiture);
+    }
+
+    public void update(int column, Object value,String immat) throws SQLException{
+        Voiture voiture = Voiture.findByImmat(immat);
+        switch (column){
+            case 0:
+                voiture.setImmatriculation((String) value);
+                break;
+            case 1:
+                voiture.setDateMiseCirculation((LocalDate) value);
+                break;
+            case 2:
+                voiture.setNbKilometre((Double) value);
+                break;
+            case 3:
+                voiture.setCouleur((String) value);
+                break;
+            case 4:
+                voiture.setModele_id((Integer) value);
+                break;
+        }
+        voiture.update(voiture);
     }
 
     public List<Voiture> allVoitures() throws SQLException{

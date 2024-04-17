@@ -166,7 +166,6 @@ public class ClientFormView extends JDialog {
     private void registerListeners() {
         jbSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-
                 cmdSave();
             }
         });

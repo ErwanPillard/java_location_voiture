@@ -51,7 +51,7 @@ public class Voiture {
         return nbKilometre;
     }
 
-    public void setNbKilometre(int nbKilometre) {
+    public void setNbKilometre(double nbKilometre) {
         this.nbKilometre = nbKilometre;
     }
 
@@ -66,6 +66,18 @@ public class Voiture {
     public String[] toArray(){
         return new String[] {this.immatriculation, this.dateMiseCirculation.toString(), String.valueOf(this.nbKilometre), this.couleur, String.valueOf(this.modele_id)};
     }
+
+    @Override
+    public String toString() {
+        return "Voiture{" +
+                "dateMiseCirculation=" + dateMiseCirculation +
+                ", immatriculation='" + immatriculation + '\'' +
+                ", couleur='" + couleur + '\'' +
+                ", nbKilometre=" + nbKilometre +
+                ", modele_id=" + modele_id +
+                '}';
+    }
+
 
     public void add(Voiture voiture) throws SQLException {
         VoitureDAO voitureDAO = new VoitureDAOImpl();
@@ -84,6 +96,21 @@ public class Voiture {
     public static boolean immatExists(String immatriculation) throws SQLException{
         VoitureDAO voitureDAO = new VoitureDAOImpl();
         return voitureDAO.immatExists(immatriculation);
+    }
+
+    public void delete() throws SQLException{
+        VoitureDAO voitureDAO = new VoitureDAOImpl();
+        voitureDAO.delete(this);
+    }
+
+    public void update(Voiture voiture) throws SQLException{
+        VoitureDAO voitureDAO = new VoitureDAOImpl();
+        voitureDAO.update(voiture);
+    }
+
+    public static Voiture findByImmat(String immatriculation) throws SQLException {
+        VoitureDAO voitureDAO = new VoitureDAOImpl();
+        return voitureDAO.findByImmat(immatriculation);
     }
 
 }
