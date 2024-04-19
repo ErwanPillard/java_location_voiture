@@ -5,33 +5,16 @@ import View.layouts.MenuOver;
 import View.layouts.Options;
 
 import javax.swing.*;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
 
 public class MainJFrame extends JFrame {
-    private JPanel panel;
-    private JRadioButton particulierRadioButton;
-    private JRadioButton entrepriseRadioButton;
-    private ButtonGroup radioButtonGroup;
-    private JLabel label1;
-    private JLabel label2;
-    private JTextField nomField;
-    private JTextField prenomField;
-    private JTextField emailField;
-    private JTextField siretField;
-    private JTextField nomEntrepriseField;
-    private JButton suivantButton;
-
     public MainJFrame() {
         JPanel jpBody = new JPanel();
         jpBody.setLayout(new BorderLayout());
-        JScrollPane jspList = new JScrollPane();
-        VoitureJTableView jTableList = new VoitureJTableView();
-        jspList.setViewportView(jTableList);
 
-        jpBody.add(new Options(jTableList), BorderLayout.SOUTH);
-        jpBody.add(jspList, BorderLayout.CENTER);
-        this.setJMenuBar(new MenuOver(jTableList));
+        this.setJMenuBar(new MenuOver(jpBody));
         this.setContentPane(jpBody);
     }
 

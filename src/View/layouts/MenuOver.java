@@ -1,15 +1,17 @@
 package View.layouts;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
+import Controller.ModeleController;
+import View.Employe.ModeleView;
+import View.Employe.VoitureJTableView;
+import View.MainJFrame;
 import View.listeners.EventListener;
 import utils.Util;
 
@@ -21,6 +23,9 @@ public class MenuOver extends JMenuBar {
     private static final long serialVersionUID = 1L;
     private JMenu jmFile;
     private JMenuItem jmiExit;
+    private JMenuItem jmiModele;
+    private JMenuItem jmiVoiture;
+
 
     private JMenu jmEdit;
     private JMenuItem jmiAdd;
@@ -30,28 +35,32 @@ public class MenuOver extends JMenuBar {
     private JMenu jmHelp;
     private JMenuItem jmiAbout;
 
+    private JPanel jpBody; // Ajoutez ce champ à votre classe MenuOver
 
     private EventListener eventListener;
 
-    public MenuOver(EventListener eventListener) {
-        //this.eventListener = eventListener;
+    public MenuOver(JPanel jpBody) {
+        this.jpBody = jpBody;
         configure();
         registerListeners();
     }
 
 
     private void configure() {
-        jmFile = createMenu("Fichier", 'A');
+        jmFile = createMenu("Affichage", 'A');
 
         jmEdit = createMenu("Édition", 'E');
 
         jmHelp = createMenu("Aide", 'H');
 
+        jmiVoiture = createMenuItem(jmFile, "Park auto", 'S', "details",
+                KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.ALT_MASK));
+
         jmiExit = createMenuItem(jmFile, "Quitter", 'S', "close_view",
                 KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.ALT_MASK));
 
 
-        jmiAdd = createMenuItem(jmEdit, "Ajouter", 'A', "add_obj",
+        jmiAdd = createMenuItem(jmEdit, "Ajouter Modèle", 'A', "add_obj",
                 KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, 0));
 
 
@@ -94,9 +103,24 @@ public class MenuOver extends JMenuBar {
             }
         });
 
+        jmiVoiture.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                // Instancier le JScrollPane et le VoitureJTableView
+                JScrollPane jspList = new JScrollPane();
+                VoitureJTableView jTableList = new VoitureJTableView();
+                jspList.setViewportView(jTableList);
+
+                // Ajouter les éléments à votre interface utilisateur
+                jpBody.removeAll(); // Supprimer tous les composants existants de jpBody
+                jpBody.add(new Options(jTableList), BorderLayout.SOUTH);
+                jpBody.add(jspList, BorderLayout.CENTER);
+                jpBody.revalidate(); // Actualiser l'affichage
+            }
+        });
+
         jmiAdd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                eventListener.cmdAdd();
+                ModeleView.toggle();
             }
         });
 

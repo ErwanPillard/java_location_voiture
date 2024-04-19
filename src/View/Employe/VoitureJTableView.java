@@ -12,11 +12,13 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class VoitureJTableView extends JTable implements VoitureListener, EventListener {
     private TableModel model = new TableModel();
+    private TableRowSorter<TableModel> sorter;
 
     private Object originalValue;
     public VoitureJTableView(){
@@ -36,6 +38,9 @@ public class VoitureJTableView extends JTable implements VoitureListener, EventL
             JOptionPane.showMessageDialog(this, "Erreur", e.getMessage(), JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
+
+        sorter = new TableRowSorter<>(model);
+        setRowSorter(sorter); // Assignez le TableRowSorter à la JTable
     }
 
     public class TableModel extends DefaultTableModel {
@@ -48,7 +53,10 @@ public class VoitureJTableView extends JTable implements VoitureListener, EventL
 
         @Override
         public boolean isCellEditable(int row, int column) {
-            return true;
+            if (column == 2 || column == 3){
+                return true;
+            }
+            return false;
         }
 
     };
@@ -84,22 +92,14 @@ public class VoitureJTableView extends JTable implements VoitureListener, EventL
                 String immatriculation = (String) getValueAt(row, 0);
                 if (!newValue.equals(originalValue)) {
                     try {
-
                         switch (column){
-                            case 0:
-                                break;
-                            case 1:
-                                newValue = LocalDate.parse((String) newValue);
-                                break;
                             case 2:
                                 newValue = Double.parseDouble((String) newValue);
                                 break;
                             case 3:
                                 newValue = String.valueOf(newValue);
                                 break;
-                            case 4:
-                                newValue = Integer.parseInt((String) newValue);
-                                break;
+
                         }
                         VoitureController.getInstance().update(column, newValue,immatriculation);
                         System.out.println("La cellule à la ligne " + row + ", colonne " + column + " a été modifiée.");

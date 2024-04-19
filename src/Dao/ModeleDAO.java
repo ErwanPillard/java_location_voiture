@@ -8,5 +8,7 @@ public interface ModeleDAO {
 
     String[] all() throws SQLException;
 
-    public int getIdByName(String modelName) throws SQLException;
+    int getIdByName(String modelName) throws SQLException;
+
+    String getNameById(int id) throws SQLException;
 }

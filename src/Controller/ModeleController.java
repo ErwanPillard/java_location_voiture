@@ -33,4 +33,8 @@ public class ModeleController {
     public int getIdByName(String modelName) throws SQLException{
         return Modele.getIdByName(modelName);
     }
+
+    public String getNameById(int id) throws SQLException{
+        return Modele.getNameById(id);
+    }
 }

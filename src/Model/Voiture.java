@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class Voiture {
+    private int id;
     private LocalDate dateMiseCirculation;
     private String immatriculation;
     private String couleur;
@@ -63,8 +64,14 @@ public class Voiture {
         this.modele_id = modele_id;
     }
 
-    public String[] toArray(){
-        return new String[] {this.immatriculation, this.dateMiseCirculation.toString(), String.valueOf(this.nbKilometre), this.couleur, String.valueOf(this.modele_id)};
+    public String[] toArray() {
+        String modeleName;
+        try {
+            modeleName = Modele.getNameById(modele_id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return new String[] {this.immatriculation, this.dateMiseCirculation.toString(), String.valueOf(this.nbKilometre), this.couleur, modeleName};
     }
 
     @Override
