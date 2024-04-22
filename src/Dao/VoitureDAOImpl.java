@@ -1,10 +1,9 @@
 package Dao;
 
 import Model.Voiture;
+import com.mysql.cj.exceptions.DataReadException;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -214,5 +213,37 @@ public class VoitureDAOImpl implements VoitureDAO {
 
         return imageBytes;
 
+    }
+
+    public void addImage(String immatriculation, File imageFile) throws SQLException {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        FileInputStream inputStream = null;
+
+        try {
+            conn = DatabaseManager.getConnection();
+
+            // Préparer la requête SQL pour ajouter l'image
+            pstmt = conn.prepareStatement("UPDATE Voiture SET image = ? WHERE immatriculation = ?");
+            // Lire le fichier image
+            inputStream = new FileInputStream(imageFile);
+            // Définir le BLOB
+            pstmt.setBinaryStream(1, inputStream);
+            pstmt.setString(2, immatriculation);
+
+            // Exécuter la requête
+            pstmt.executeUpdate();
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        } finally {
+            // Fermer les ressources
+            try {
+                if (inputStream != null) inputStream.close();
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException | IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -1,14 +1,15 @@
 package View.Employe;
 
-import Controller.ClientController;
 import Controller.ModeleController;
 import Controller.VoitureController;
 import Model.Voiture;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -32,6 +33,9 @@ public class VoitureFormView extends JDialog {
 
     private JButton jbSave;
     private JButton jbCancel;
+
+    private JButton jbSelectImage;
+    private File selectedFile;
 
     public VoitureFormView() {
         createForm();
@@ -69,6 +73,7 @@ public class VoitureFormView extends JDialog {
             addFormField(jpForm, gbcForm, "", label);
         }
 
+        addFormField(jpForm, gbcForm, "Image", jbSelectImage = new JButton("Sélectionner Image"));
         this.add(jpForm, BorderLayout.CENTER);
     }
 
@@ -81,7 +86,7 @@ public class VoitureFormView extends JDialog {
         this.add(jpButtons, BorderLayout.SOUTH);
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
         jbSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 cmdSave();
@@ -93,7 +98,26 @@ public class VoitureFormView extends JDialog {
             }
         });
 
+        jbSelectImage.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {selectImage();}
+        });
+
     }
+    public File selectImage() {
+        JFileChooser fileChooser = new JFileChooser();
+
+        // Créer un filtre pour n'afficher que les fichiers .jpg et .png
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Images (*.jpg, *.png)", "jpg", "png");
+        fileChooser.setFileFilter(filter);
+
+        int returnValue = fileChooser.showOpenDialog(this);
+
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            selectedFile = fileChooser.getSelectedFile();
+        }
+        return selectedFile;
+    }
+
 
     private void configure() {
         setTitle("Ajout de voiture");
@@ -135,6 +159,7 @@ public class VoitureFormView extends JDialog {
         try {
             Voiture voiture = new Voiture(dateMiseEnCirculation, immatriculation, couleur, nbKilometre, modele_id);
             VoitureController.getInstance().addVoiture(voiture);
+            Voiture.addImage(immatriculation, selectedFile);
 
             clearForm(immatriculationField, dateMiseEnCirculationField, nbKilometreField, couleurField);
 

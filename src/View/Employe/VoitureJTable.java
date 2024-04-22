@@ -4,6 +4,8 @@ import Controller.VoitureController;
 import Controller.listeners.MailEvent;
 import Controller.listeners.VoitureListener;
 import Model.Voiture;
+import View.Employe.Button.CustomButtonEditor;
+import View.Employe.Button.CustomButtonRenderer;
 import View.listeners.EventListener;
 
 import javax.swing.*;
@@ -11,25 +13,26 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
+import javax.swing.table.*;
+import java.awt.*;
 import java.sql.SQLException;
-import java.time.LocalDate;
 
-public class VoitureJTableView extends JTable implements VoitureListener, EventListener {
+public class VoitureJTable extends JTable implements VoitureListener, EventListener {
     private TableModel model = new TableModel();
     private TableRowSorter<TableModel> sorter;
 
     private Object originalValue;
-    public VoitureJTableView(){
+
+    public VoitureJTable() {
         this.setModel(model);
         this.getTableHeader().setReorderingAllowed(false);
         VoitureController.getInstance().addUserListener(this);
         loadVoitures();
         cellEdit();
+        imageSelector();
     }
 
-    public void loadVoitures(){
+    public void loadVoitures() {
         try {
             for (Voiture voiture : VoitureController.getInstance().allVoitures()) {
                 model.insertRow(0, voiture.toArray());
@@ -48,25 +51,25 @@ public class VoitureJTableView extends JTable implements VoitureListener, EventL
         private static final long serialVersionUID = 1L;
 
         public TableModel() {
-            super(new Object[][]{}, new String[] {"Immatriculation", "Mise en circulation", "Kilometrage", "Couleur", "Modele"});
+            super(new Object[][]{}, new String[]{"Immatriculation", "Mise en circulation", "Kilometrage", "Couleur", "Modele"});
         }
 
         @Override
         public boolean isCellEditable(int row, int column) {
-            if (column == 2 || column == 3){
+            if (column == 2 || column == 3 || column == 5) {
                 return true;
             }
             return false;
         }
 
-    };
+    }
 
     @Override
     public void cmdEdit() {
 
     }
 
-    public void cellEdit(){
+    public void cellEdit() {
 
         // Ajouter un écouteur pour détecter la sélection de cellule
         this.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -92,16 +95,15 @@ public class VoitureJTableView extends JTable implements VoitureListener, EventL
                 String immatriculation = (String) getValueAt(row, 0);
                 if (!newValue.equals(originalValue)) {
                     try {
-                        switch (column){
+                        switch (column) {
                             case 2:
                                 newValue = Double.parseDouble((String) newValue);
                                 break;
                             case 3:
                                 newValue = String.valueOf(newValue);
                                 break;
-
                         }
-                        VoitureController.getInstance().update(column, newValue,immatriculation);
+                        VoitureController.getInstance().update(column, newValue, immatriculation);
                         System.out.println("La cellule à la ligne " + row + ", colonne " + column + " a été modifiée.");
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
@@ -115,7 +117,6 @@ public class VoitureJTableView extends JTable implements VoitureListener, EventL
             }
         });
     }
-
 
     @Override
     public void cmdRemove() {
@@ -137,7 +138,26 @@ public class VoitureJTableView extends JTable implements VoitureListener, EventL
     }
 
     @Override
-    public void voitureadd(MailEvent<Voiture> event){
+    public void voitureadd(MailEvent<Voiture> event) {
         model.insertRow(0, event.getSource().toArray());
     }
+
+    public void imageSelector() {
+        model.addColumn("");
+        // Associez l'éditeur de cellules personnalisé à la colonne où vous souhaitez afficher le bouton
+        TableColumn column = getColumnModel().getColumn(5); // Remplacez 5 par l'indice de la colonne où vous souhaitez afficher le bouton
+        column.setCellRenderer(new CustomButtonRenderer());
+        column.setCellEditor(new CustomButtonEditor(null));
+    }
+
+    @Override
+    public Component prepareEditor(TableCellEditor editor, int row, int column) {
+        Component c = super.prepareEditor(editor, row, column);
+        if (editor instanceof CustomButtonEditor) {
+            CustomButtonEditor customEditor = new CustomButtonEditor((String) getValueAt(row, 0));
+            return customEditor.getTableCellEditorComponent(this, getValueAt(row, column), true, row, column);
+        }
+        return c;
+    }
+
 }

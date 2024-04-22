@@ -2,17 +2,11 @@ package Controller;
 
 import Controller.listeners.MailEvent;
 import Controller.listeners.VoitureListener;
-import Dao.VoitureDAO;
-import Dao.VoitureDAOImpl;
 import Model.Voiture;
-import View.Employe.VoitureJTableView;
 
-import javax.swing.table.TableModel;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class VoitureController {
 
@@ -74,6 +68,4 @@ public class VoitureController {
             listener.voitureadd(event);
         }
     }
-
-
 }

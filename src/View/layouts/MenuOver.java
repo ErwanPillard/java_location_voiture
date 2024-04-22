@@ -1,6 +1,5 @@
 package View.layouts;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -8,10 +7,8 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.*;
 
-import Controller.ModeleController;
 import View.Employe.ModeleView;
-import View.Employe.VoitureJTableView;
-import View.MainJFrame;
+import View.Employe.ParkAutoView;
 import View.listeners.EventListener;
 import utils.Util;
 
@@ -105,16 +102,7 @@ public class MenuOver extends JMenuBar {
 
         jmiVoiture.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                // Instancier le JScrollPane et le VoitureJTableView
-                JScrollPane jspList = new JScrollPane();
-                VoitureJTableView jTableList = new VoitureJTableView();
-                jspList.setViewportView(jTableList);
-
-                // Ajouter les éléments à votre interface utilisateur
-                jpBody.removeAll(); // Supprimer tous les composants existants de jpBody
-                jpBody.add(new Options(jTableList), BorderLayout.SOUTH);
-                jpBody.add(jspList, BorderLayout.CENTER);
-                jpBody.revalidate(); // Actualiser l'affichage
+                new ParkAutoView(jpBody);
             }
         });
 

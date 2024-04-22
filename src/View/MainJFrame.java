@@ -1,13 +1,9 @@
 package View;
 
-import View.Employe.VoitureJTableView;
 import View.layouts.MenuOver;
-import View.layouts.Options;
 
 import javax.swing.*;
-import javax.swing.table.TableRowSorter;
 import java.awt.*;
-import java.awt.event.*;
 
 public class MainJFrame extends JFrame {
     public MainJFrame() {

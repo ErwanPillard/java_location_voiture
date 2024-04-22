@@ -2,6 +2,7 @@ package Dao;
 
 import Model.Voiture;
 
+import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -20,4 +21,6 @@ public interface VoitureDAO {
     void update(Voiture voiture) throws SQLException;
 
     byte[] getImageByImmatriculation(String immatriculation);
+
+    void addImage(String immatriculation, File imageFile) throws SQLException;
 }

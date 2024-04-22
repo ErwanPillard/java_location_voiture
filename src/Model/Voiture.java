@@ -2,6 +2,7 @@ package Model;
 
 import Dao.*;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -123,6 +124,11 @@ public class Voiture {
     public static byte[] getImageByImmatriculation(String immatriculation){
         VoitureDAO voitureDAO = new VoitureDAOImpl();
         return voitureDAO.getImageByImmatriculation(immatriculation);
+    }
+
+    public static void addImage(String immatriculation, File imageFile) throws SQLException {
+        VoitureDAO voitureDAO = new VoitureDAOImpl();
+        voitureDAO.addImage(immatriculation, imageFile);
     }
 
 }
