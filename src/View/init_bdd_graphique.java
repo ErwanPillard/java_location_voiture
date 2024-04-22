@@ -1,6 +1,7 @@
 package View;
 
 import BDD.init_bdd;
+import Dao.DatabaseManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,16 +18,18 @@ public class init_bdd_graphique extends JFrame {
     private final JButton btnAjouterVoiture;
     private final JButton btnAjouterModele;
 
-    private Connection connection;
+    private final Connection connection;
 
-    public init_bdd_graphique() {
+    public init_bdd_graphique() throws SQLException {
         super("Test BDD avec GUI");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(400, 250);
         setLocationRelativeTo(null);
         setLayout(new FlowLayout());
 
-        btnNettoyer = new JButton("Nettoyer la BDD (optionnel)");
+        connection = DatabaseManager.getConnection();
+
+        btnNettoyer = new JButton("Nettoyer la BDD");
         btnAjouterUsers = new JButton("1. Ajouter Utilisateurs");
         btnAjouterEmployes = new JButton("2. Ajouter Employés");
         btnAjouterClients = new JButton("3. Ajouter Clients");
@@ -48,7 +51,13 @@ public class init_bdd_graphique extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new init_bdd_graphique().setVisible(true));
+        SwingUtilities.invokeLater(() -> {
+            try {
+                new init_bdd_graphique().setVisible(true);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     private void setupButtonActions() {

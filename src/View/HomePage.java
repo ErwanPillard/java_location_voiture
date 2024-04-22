@@ -1,6 +1,5 @@
 package View;
 
-
 import Controller.HomeController;
 import Controller.UserConnectionController;
 import Dao.UserConnection;
@@ -88,6 +87,7 @@ public class HomePage extends JFrame {
         btnClientForm.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 ClientFormView.toggle();
+                init_bdd_graphique.main(new String[]{});
             }
         });
         btnClientForm.setAlignmentX(Component.CENTER_ALIGNMENT);
