@@ -5,9 +5,11 @@ import Model.Voiture;
 import javax.swing.*;
 import java.awt.*;
 import javax.imageio.ImageIO;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import Controller.VoitureController;
@@ -83,18 +85,21 @@ public class HomePageClient extends JFrame {
             JPanel carInfoPanel = new JPanel(new BorderLayout());
             carInfoPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
+            byte[] image = Voiture.getImageByImmatriculation(voiture.getImmatriculation());
+
             // Chargement de l'image de la voiture
-            /*
             ImageIcon carImage = null;
             try {
-                Image img = ImageIO.read(getClass().getResource(voiture.getImagePath()));
+                ByteArrayInputStream bais = new ByteArrayInputStream(image);
+                Image img = ImageIO.read(bais);
                 carImage = new ImageIcon(img.getScaledInstance(150, 100, Image.SCALE_SMOOTH));
             } catch (IOException e) {
                 e.printStackTrace();
-            }*/
+            }
 
-            //JLabel carImageLabel = new JLabel(carImage);
-            //carInfoPanel.add(carImageLabel, BorderLayout.NORTH);
+            JLabel carImageLabel = new JLabel(carImage);
+            carInfoPanel.add(carImageLabel, BorderLayout.NORTH);
+
 
             // Ajout des autres informations de la voiture
             JPanel carDetailsPanel = new JPanel(new GridLayout(0, 1));

@@ -75,6 +75,7 @@ CREATE TABLE Voiture
     nbKilometre           DOUBLE       NOT NULL,
     couleur               VARCHAR(255) NOT NULL,
     modele_id             INT          NOT NULL,
+    image                 LONGBLOB,
     PRIMARY KEY (immatriculation),
     CONSTRAINT fk_voiture_modele FOREIGN KEY (modele_id) REFERENCES Modele (id) -- Référence correcte à la clé primaire de Model.Modele
 ) ENGINE = InnoDB;
