@@ -41,7 +41,6 @@ public class VoitureDAOImpl implements VoitureDAO{
         c.close();
 
         return voitures;
-
     }
 
     public boolean immatExists(String immatriculation) throws SQLException{

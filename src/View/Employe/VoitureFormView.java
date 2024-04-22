@@ -117,7 +117,7 @@ public class VoitureFormView extends JDialog {
         }
 
         String dateString = dateMiseEnCirculationField.getText();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate dateMiseEnCirculation = LocalDate.parse(dateString, formatter);
 
         Double nbKilometre = Double.valueOf(nbKilometreField.getText());
