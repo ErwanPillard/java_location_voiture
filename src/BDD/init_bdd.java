@@ -1,21 +1,19 @@
 package BDD;
 
-import java.sql.*;
+import Dao.DatabaseManager;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.util.Random;
 
 public class init_bdd {
 
-    public static final String DATABASE_URL = "jdbc:mysql://localhost:3306/Location_Voiture";
-    public static final String DATABASE_USER = "root";
-    public static final String DATABASE_PASSWORD = "";
-
     public static void main(String[] args) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            try (Connection connection = DriverManager.getConnection(DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD)) {
-                // Optionnel : Nettoyer la base de données si nécessaire
-                //clearData(connection);
-
+            try (Connection connection = DatabaseManager.getConnection()) {
                 // Insérer 60 utilisateurs
                 insertUsers(connection);
 
@@ -48,14 +46,11 @@ public class init_bdd {
 
 
     public static void insertUsers(Connection connection) throws SQLException {
-        String userSql = "INSERT INTO User (nom, prenom, email, motDePasse) VALUES (?, ?, ?, ?)";
+        String userSql = "INSERT INTO User (id, email, motDePasse) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(userSql)) {
             for (int i = 1; i <= 60; i++) {
-                stmt.setString(1, "Nom" + i); // Nom
-                stmt.setString(2, "Prenom" + i); // Prénom
-                stmt.setString(3, "email" + i); // Email
-                stmt.setString(4, "0" + i); // Mot de passe
-                //stmt.setString(5, "0606060" + String.format("%03d", i)); // Téléphone
+                stmt.setString(2, "" + i); // Email
+                stmt.setString(3, "" + i); // Mot de passe
                 stmt.executeUpdate();
             }
         }
@@ -63,15 +58,10 @@ public class init_bdd {
 
     public static void insertClient(Connection connection) throws SQLException {
         String clientSql = "INSERT INTO Client (id, telephone) VALUES (?, ?)";
-        Random rand = new Random(); // generer un nombre aléatoire
 
         try (PreparedStatement stmt = connection.prepareStatement(clientSql)) {
             for (int i = 1; i <= 40; i++) {
-                int randomAge = 18 + rand.nextInt(52); // Génère un âge aléatoire entre 18 et 70.
-
-                stmt.setInt(1, i); // id
-                stmt.setInt(2, randomAge); // age
-
+                stmt.setString(2, "06112233" + i); // telephone
                 stmt.executeUpdate();
             }
         }
@@ -79,22 +69,23 @@ public class init_bdd {
 
 
     public static void insertParticuliers(Connection connection) throws SQLException {
-        String particulierSql = "INSERT INTO Particulier (id, numeroPermis, birthDate) VALUES (?, ?, ?)";
+        String particulierSql = "INSERT INTO Particulier (id, nom, prenom, numeroPermis, birthDate) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(particulierSql)) {
             for (int i = 1; i <= 20; i++) {
-                stmt.setInt(1, i); // id
-                stmt.setString(2, "Permis" + i); // numero de permis
-                stmt.setDate(3, new java.sql.Date(new java.util.Date().getTime())); // date de naissance
+                stmt.setString(2, "nom" + i); // nom
+                stmt.setString(3, "prenom" + i); // prenom
+                stmt.setString(4, "Permis" + i); // numero de permis
+                stmt.setDate(5, new java.sql.Date(new java.util.Date().getTime())); // date de naissance
                 stmt.executeUpdate();
             }
         }
     }
 
     public static void insertEntreprises(Connection connection) throws SQLException {
-        String entrepriseSql = "INSERT INTO Entreprise (id, numeroSiret) VALUES (?, ?)";
+        String entrepriseSql = "INSERT INTO Entreprise (id, nom, numeroSiret) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(entrepriseSql)) {
             for (int i = 21; i <= 40; i++) {
-                stmt.setInt(1, i); // id
+                stmt.setString(2, "nom" + i); // nom
                 stmt.setString(2, "Siret" + i); // numero de siret
                 stmt.executeUpdate();
             }
@@ -102,11 +93,12 @@ public class init_bdd {
     }
 
     public static void insertEmployes(Connection connection) throws SQLException {
-        String employeSql = "INSERT INTO Employe (id, fonction) VALUES (?, ?)";
+        String employeSql = "INSERT INTO Employe (id, nom, prenom, fonction) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(employeSql)) {
             for (int i = 41; i <= 60; i++) {
-                stmt.setInt(1, i); // id
-                stmt.setString(2, "Fonction" + i); // fonction
+                stmt.setString(2, "nom" + i); // nom
+                stmt.setString(3, "prenom" + i); // prenom
+                stmt.setString(4, "Fonction" + i); // fonction
                 stmt.executeUpdate();
             }
         }

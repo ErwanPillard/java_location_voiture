@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -183,14 +184,16 @@ public class ClientFormView extends JDialog {
             String prenom = prenomField.getText();
             String email = emailField.getText();
 
+            // Partie de récupération et vérification des données du formulaire
             try {
                 if (ClientController.getInstance().emailExists(email)) {
                     JOptionPane.showMessageDialog(null, "L'email existe déjà. Veuillez en choisir un autre.", "Erreur", JOptionPane.ERROR_MESSAGE);
                     return; // Annule l'opération
                 }
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(this, "Erreur", e.getMessage(), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Erreur de base de données", "Erreur", JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
+                return; // Annule l'opération
             }
 
             String mdp = String.valueOf(mdpField.getPassword());
@@ -198,13 +201,23 @@ public class ClientFormView extends JDialog {
             String numeroPermis = numeroPermisField.getText();
             String dateString = birthDateField.getText();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            LocalDate birthDate = LocalDate.parse(dateString, formatter);
+            LocalDate birthDate;
+            try {
+                birthDate = LocalDate.parse(dateString, formatter);
+                if (birthDate.isAfter(LocalDate.now()) || birthDate.isEqual(LocalDate.now()) || birthDate.getMonthValue() < 1 || birthDate.getMonthValue() > 12) {
+                    JOptionPane.showMessageDialog(this, "La date de naissance est invalide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                    return; // Annule l'opération
+                }
+            } catch (DateTimeParseException e) {
+                JOptionPane.showMessageDialog(null, "Format de la date de naissance invalide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                return; // Annule l'opération
+            }
 
             try {
                 Particulier particulier = new Particulier(nom, prenom, email, mdp, telephone, numeroPermis, birthDate);
                 ClientController.getInstance().addParticulier(particulier);
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(this, "Erreur", e.getMessage(), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout du particulier: " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
             }
 
