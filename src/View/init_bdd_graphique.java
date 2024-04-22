@@ -1,10 +1,11 @@
 package View;
 
+import BDD.init_bdd;
+
 import javax.swing.*;
 import java.awt.*;
-import java.sql.*;
-
-import BDD.init_bdd;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class init_bdd_graphique extends JFrame {
     private final JButton btnNettoyer;
@@ -43,19 +44,11 @@ public class init_bdd_graphique extends JFrame {
         add(btnAjouterModele);
         add(btnAjouterVoiture);
 
-        try {
-            setupDatabaseConnection();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erreur de connexion à la base de données", "Erreur", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-        }
-
         setupButtonActions();
     }
 
-    private void setupDatabaseConnection() throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        connection = DriverManager.getConnection(init_bdd.DATABASE_URL, init_bdd.DATABASE_USER, init_bdd.DATABASE_PASSWORD);
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new init_bdd_graphique().setVisible(true));
     }
 
     private void setupButtonActions() {
@@ -123,9 +116,5 @@ public class init_bdd_graphique extends JFrame {
                 JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout des modeles", "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         });
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new init_bdd_graphique().setVisible(true));
     }
 }
