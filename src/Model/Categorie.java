@@ -1,13 +1,18 @@
 package Model;
 
 public enum Categorie{
-    BERLINE("berline"),
+    BERLINE("Berline"),
     SUV("SUV"),
-    FAMILLIALE("familliale"),
-    UTILITAIRE("utilitaire"),
-    Citadine("citadine");
-    private final String nomCatergorie;
-    Categorie(String nomCatergorie){
-        this.nomCatergorie= nomCatergorie;
+    FAMILIALE("Familiale"),
+    UTILITAIRE("Utilitaire"),
+    CITADINE("Citadine");
+    private final String nomCategorie;
+
+    Categorie(String nomCategorie){
+        this.nomCategorie = nomCategorie;
+    }
+
+    public String getNomCategorie() {
+        return nomCategorie;
     }
 }

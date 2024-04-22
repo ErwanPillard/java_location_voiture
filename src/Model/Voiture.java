@@ -1,28 +1,34 @@
 package Model;
 
+import Dao.*;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Voiture {
-    private LocalDateTime dateMiseCirculation;
+    private int id;
+    private LocalDate dateMiseCirculation;
     private String immatriculation;
     private String couleur;
-    private int nbKilometre;
-    private  Modele modele;
+    private double nbKilometre;
+    private int modele_id;
 
-    public Voiture(LocalDateTime dateMiseCirculation, String immatriculation, String couleur, int nbKilometre, Modele modele) {
+    public Voiture(LocalDate dateMiseCirculation, String immatriculation, String couleur, double nbKilometre, int modele_id) {
         this.dateMiseCirculation = dateMiseCirculation;
         this.immatriculation = immatriculation;
         this.couleur = couleur;
         this.nbKilometre = nbKilometre;
-        this.modele= modele;
+        this.modele_id= modele_id;
     }
 
-    public LocalDateTime getDateMiseCirculation() {
+    public LocalDate getDateMiseCirculation() {
         return dateMiseCirculation;
     }
 
-    public void setDateMiseCirculation(LocalDateTime dateMiseCirculation) {
+    public void setDateMiseCirculation(LocalDate dateMiseCirculation) {
         this.dateMiseCirculation = dateMiseCirculation;
     }
 
@@ -42,19 +48,76 @@ public class Voiture {
         this.couleur = couleur;
     }
 
-    public int getNbKilometre() {
+    public double getNbKilometre() {
         return nbKilometre;
     }
 
-    public void setNbKilometre(int nbKilometre) {
+    public void setNbKilometre(double nbKilometre) {
         this.nbKilometre = nbKilometre;
     }
 
-    public Modele getModele() {
-        return modele;
+    public int getModele_id() {
+        return modele_id;
     }
 
-    public void setModele(Modele modele) {
-        this.modele = modele;
+    public void setModele_id(int modele_id) {
+        this.modele_id = modele_id;
     }
+
+    public String[] toArray() {
+        String modeleName;
+        try {
+            modeleName = Modele.getNameById(modele_id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return new String[] {this.immatriculation, this.dateMiseCirculation.toString(), String.valueOf(this.nbKilometre), this.couleur, modeleName};
+    }
+
+    @Override
+    public String toString() {
+        return "Voiture{" +
+                "dateMiseCirculation=" + dateMiseCirculation +
+                ", immatriculation='" + immatriculation + '\'' +
+                ", couleur='" + couleur + '\'' +
+                ", nbKilometre=" + nbKilometre +
+                ", modele_id=" + modele_id +
+                '}';
+    }
+
+
+    public void add(Voiture voiture) throws SQLException {
+        VoitureDAO voitureDAO = new VoitureDAOImpl();
+        voitureDAO.add(voiture);
+    }
+
+    /**
+     * Méthode pour récupérer toutes les voitures de la base de données
+     * @return Une liste contenant toutes les voitures de la base de données
+     */
+    public static List<Voiture> all() throws SQLException {
+        VoitureDAO voitureDAO = new VoitureDAOImpl();
+        return voitureDAO.all();
+    }
+
+    public static boolean immatExists(String immatriculation) throws SQLException{
+        VoitureDAO voitureDAO = new VoitureDAOImpl();
+        return voitureDAO.immatExists(immatriculation);
+    }
+
+    public void delete() throws SQLException{
+        VoitureDAO voitureDAO = new VoitureDAOImpl();
+        voitureDAO.delete(this);
+    }
+
+    public void update(Voiture voiture) throws SQLException{
+        VoitureDAO voitureDAO = new VoitureDAOImpl();
+        voitureDAO.update(voiture);
+    }
+
+    public static Voiture findByImmat(String immatriculation) throws SQLException {
+        VoitureDAO voitureDAO = new VoitureDAOImpl();
+        return voitureDAO.findByImmat(immatriculation);
+    }
+
 }

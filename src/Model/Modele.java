@@ -1,20 +1,27 @@
 package Model;
 
+import Dao.ModeleDAO;
+import Dao.ModeleDAOImpl;
+
+import java.sql.SQLException;
+
+
 public class Modele {
     private int id;
+    private String marque;
     private String nom;
     private int nbPlace;
     private int nbPorte;
     private float tailleCoffre;
     private String caracteristiques;
-    private float prixJournalier;
+    private int prixJournalier;
     private boolean attelage;
     private float noteSatisfaction;
     private BoiteVitesse boiteVitesse;
     private Categorie categorie;
 
-    public Modele(int id, String nom, int nbPlace, int nbPorte, float tailleCoffre, String caracteristiques, float prixJournalier, boolean attelage, float noteSatisfaction, BoiteVitesse boiteVitesse, Categorie categorie) {
-        this.id = id;
+    public Modele(String marque,String nom, int nbPlace, int nbPorte, float tailleCoffre, String caracteristiques, int prixJournalier, float noteSatisfaction, Categorie  categorie, boolean attelage, BoiteVitesse boiteVitesse) {
+        this.marque = marque;
         this.nom = nom;
         this.nbPlace = nbPlace;
         this.nbPorte = nbPorte;
@@ -47,72 +54,71 @@ public class Modele {
         return nbPlace;
     }
 
-    public void setNbPlace(int nbPlace) {
-        this.nbPlace = nbPlace;
-    }
-
     public int getNbPorte() {
         return nbPorte;
-    }
-
-    public void setNbPorte(int nbPorte) {
-        this.nbPorte = nbPorte;
     }
 
     public float getTailleCoffre() {
         return tailleCoffre;
     }
 
-    public void setTailleCoffre(float tailleCoffre) {
-        this.tailleCoffre = tailleCoffre;
-    }
-
     public String getCaracteristiques() {
         return caracteristiques;
     }
 
-    public void setCaracteristiques(String caracteristiques) {
-        this.caracteristiques = caracteristiques;
-    }
-
-    public float getPrixJournalier() {
+    public int getPrixJournalier() {
         return prixJournalier;
-    }
-
-    public void setPrixJournalier(float prixJournalier) {
-        this.prixJournalier = prixJournalier;
     }
 
     public boolean isAttelage() {
         return attelage;
     }
 
-    public void setAttelage(boolean attelage) {
-        this.attelage = attelage;
-    }
-
     public float getNoteSatisfaction() {
         return noteSatisfaction;
-    }
-
-    public void setNoteSatisfaction(float noteSatisfaction) {
-        this.noteSatisfaction = noteSatisfaction;
-    }
-
-    public BoiteVitesse getBoiteVitesse() {
-        return boiteVitesse;
-    }
-
-    public void setBoiteVitesse(BoiteVitesse boiteVitesse) {
-        this.boiteVitesse = boiteVitesse;
     }
 
     public Categorie getCategorie() {
         return categorie;
     }
 
-    public void setCategorie(Categorie categorie) {
-        this.categorie = categorie;
+    public BoiteVitesse getBoiteVitesse(){
+        return boiteVitesse;
+    }
+
+    /**
+     * Méthode pour récupérer tous les modèle de la base de données
+     * @return Un tablea contenant tous les modèles de la base de données
+     */
+    public static String[] all() throws SQLException {
+        ModeleDAO modeleDAO = new ModeleDAOImpl();
+        return modeleDAO.all();
+    }
+
+    /**
+     * Méthode pour récupérer l'id du modèle avec le nom
+     * @return Un tablea contenant tous les modèles de la base de données
+     */
+    public static int getIdByName(String modelName) throws SQLException{
+        ModeleDAO modeleDAO = new ModeleDAOImpl();
+        return modeleDAO.getIdByName(modelName);
+    }
+
+    public static String getNameById(int id) throws SQLException{
+        ModeleDAO modeleDAO = new ModeleDAOImpl();
+        return modeleDAO.getNameById(id);
+    }
+
+    /**
+     * Méthode pour ajouter modèle
+     */
+    public void add(Modele modele) throws SQLException {
+        ModeleDAO modeleDAO = new ModeleDAOImpl();
+        modeleDAO.add(modele);
+    }
+
+    public String getMarque() {
+        return marque;
     }
 }
 

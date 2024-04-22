@@ -1,38 +1,42 @@
 package View;
 
+import View.Employe.VoitureJTableView;
+import View.layouts.MenuOver;
+import View.layouts.Options;
+
 import javax.swing.*;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
-import Controller.*;
+import java.awt.event.*;
 
 public class MainJFrame extends JFrame {
-
-    public static final Dimension WINDOWSIZE = new Dimension(1000,500);
-
-
     public MainJFrame() {
-        super("CARECE");
-
         JPanel jpBody = new JPanel();
         jpBody.setLayout(new BorderLayout());
 
+        this.setJMenuBar(new MenuOver(jpBody));
         this.setContentPane(jpBody);
     }
-    public static void createAndShowGUI() {
-        // Création et paramétrage de la fenêtre
+
+    //TEST pour interface employe
+    public static final Dimension PREFERREDSIZE = new Dimension(600,500);
+    public static void employeInterface() {
+        //Create and set up the window.
         JFrame frame = new MainJFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setMinimumSize(WINDOWSIZE);
-        frame.setPreferredSize(WINDOWSIZE);
+        frame.setMinimumSize(PREFERREDSIZE);
+        frame.setPreferredSize(PREFERREDSIZE);
 
-        // Centrage de la fenêtre
+        //Center the frame
         frame.setLocationRelativeTo(null);
-
+        //Display the window.
         frame.pack();
         frame.setVisible(true);
+    }
 
-
-        //Ouvrir formulaire Client
-        ClientFormView.toggle();
+    //Test interface employé
+    public static void main(String[] args) {
+        MainJFrame.employeInterface();
     }
 
 }

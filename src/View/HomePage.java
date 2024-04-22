@@ -6,19 +6,27 @@ import Controller.UserConnectionController;
 import Dao.UserConnection;
 import Dao.UserConnectionImpl;
 import Model.SessionManager;
+import View.Employe.ModeleView;
+import View.Employe.VoitureJTableView;
+import View.layouts.MenuOver;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class HomePage extends JFrame {
     private JButton btnLogin;
     private JTextField tfLocation, tfPickUpDate, tfDropOffDate;
     private JButton btnSearch;
     private JLabel loginStatusLabel;
+    private JButton btnClientForm;
 
     public HomePage() {
         initUI();
-        ClientFormView.toggle();
+
+        ModeleView.toggle();
+        //VoitureFormView.toggle();
     }
 
     public static void main(String[] args) {
@@ -55,11 +63,6 @@ public class HomePage extends JFrame {
             if (SessionManager.getInstance().isLoggedIn()) {
                 this.setVisible(false); // Cache HomePage
                 new UserInfo().setVisible(true); // Affiche UserInfo
-
-                /*JOptionPane.showMessageDialog(this, "Prénom : " + SessionManager.getCurrentUser().getPrenom()
-                                + "\nNom : " + SessionManager.getCurrentUser().getNom()
-                                + "\nEmail : " + SessionManager.getCurrentUser().getEmail()
-                        , "Informations utilisateur connecté", JOptionPane.INFORMATION_MESSAGE);*/
             } else {
                 // L'utilisateur n'est pas connecté, ouvre le dialogue de connexion
                 this.setVisible(false);
@@ -83,6 +86,15 @@ public class HomePage extends JFrame {
             loginStatusLabel.setText("Non connecté");
         }
         northPanel.add(loginStatusLabel, BorderLayout.SOUTH);
+
+        btnClientForm = new JButton("Crée un compte");
+        btnClientForm.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ClientFormView.toggle();
+            }
+        });
+        btnClientForm.setAlignmentX(Component.CENTER_ALIGNMENT);
+        northPanel.add(btnClientForm, BorderLayout.WEST);
 
         // Ajoute le northPanel au mainPanel
         mainPanel.add(northPanel, BorderLayout.NORTH);

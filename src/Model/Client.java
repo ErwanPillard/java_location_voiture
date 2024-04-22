@@ -1,40 +1,25 @@
 package Model;
 
 import Dao.ClientDAO;
+import Dao.ClientDAOImpl;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 
-public class Client extends User{
-    private int age;
+public class Client extends User {
+    //private final boolean adhesion;
     private String telephone;
-    private double numeroAdhesion;
-    private final boolean adhesion;
-    private TypeAdhesion typeAdhesion;
+    private int id;
 
 
-    public Client(String nom, String prenom, String email, String motDePasse, int age, String telephone){ //Client non adhérant
-        super(nom, prenom, email, motDePasse);
-        this.age = age;
+    public Client(String email, String motDePasse, String telephone) { //Client non adhérant
+        super(email, motDePasse);
         this.telephone = telephone;
-        this.adhesion = false;
+        //this.adhesion = false;
     }
 
-    public Client(String nom, String prenom, String email, String motDePasse, int age, String telephone, double numeroAdhesion, TypeAdhesion typeAdhesion){ //Client adhérant
-        super(nom, prenom, email, motDePasse);
-        this.age = age;
-        this.telephone = telephone;
-        this.adhesion = true;
-        this.numeroAdhesion = numeroAdhesion;
-        this.typeAdhesion = typeAdhesion;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
+    public Client(int id) { //Client non adhérant
+        super(id);
+        this.id = id;
     }
 
     public String getTelephone() {
@@ -46,12 +31,17 @@ public class Client extends User{
     }
 
 
-    /**
+    /*
      * Méthode pour sauvegarder l'objet User dans la base de données
      * @throws SQLException
      */
-    public void save(){
-        //ClientDAO.add();
+    public void save() throws SQLException {
+        //ClientDAOImpl.add();
+    }
+
+    public static boolean emailExists(String email) throws SQLException {
+        ClientDAO clientDAO = new ClientDAOImpl();
+        return clientDAO.emailExists(email);
     }
 }
 
