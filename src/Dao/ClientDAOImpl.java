@@ -12,7 +12,7 @@ public class ClientDAOImpl implements ClientDAO {
     public void addParticulier(Particulier particulier) throws SQLException {
         String queryUser = "INSERT INTO User (email, motDePasse) VALUES (?, ?)";
         String queryClient = "INSERT INTO Client (id, telephone) VALUES (?, ?)";
-        String queryParticulier = "INSERT INTO Particulier (id, nom, prenom, numeroPermis, birthDate, age) VALUES (?, ?, ?, ?, ?, ?)";
+        String queryParticulier = "INSERT INTO Particulier (id, nom, prenom, numeroPermis, birthDate) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection connection = DatabaseManager.getConnection();
              PreparedStatement userStatement = connection.prepareStatement(queryUser, Statement.RETURN_GENERATED_KEYS);
@@ -43,7 +43,6 @@ public class ClientDAOImpl implements ClientDAO {
 
             //particulierStatement.setDate(3, Date.valueOf(particulier.getBirthDate().toLocalDate())); //.toLocalDate()
             particulierStatement.setDate(5, new java.sql.Date(new java.util.Date().getTime())); //.toLocalDate()
-            particulierStatement.setInt(6, particulier.getAge());
             particulierStatement.executeUpdate();
 
         } catch (SQLException throwables) {

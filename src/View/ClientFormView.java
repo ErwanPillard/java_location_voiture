@@ -27,8 +27,6 @@ public class ClientFormView extends JDialog {
     private JTextField emailField;
     private JPasswordField mdpField;
     private JPasswordField confirmeMdpField;
-    private JTextField ageField;
-    private JTextField ageEntrepriseField;
     private JTextField telephoneField;
     private JTextField numeroPermisField;
     private JTextField birthDateField;
@@ -92,11 +90,11 @@ public class ClientFormView extends JDialog {
                 if (selectedType.equals("Particulier")) {
                     jpParticulierForms.setVisible(true);
                     jpEntrepriseForms.setVisible(false);
-                    clearForm(nomField, prenomField, ageField, telephoneField, numeroPermisField, birthDateField, numSiret, nomEntrepriseField, ageEntrepriseField);
+                    clearForm(nomField, prenomField, telephoneField, numeroPermisField, birthDateField, numSiret, nomEntrepriseField);
                 } else if (selectedType.equals("Entreprise")) {
                     jpParticulierForms.setVisible(false);
                     jpEntrepriseForms.setVisible(true);
-                    clearForm(nomField, prenomField, ageField, telephoneField, numeroPermisField, birthDateField, numSiret, nomEntrepriseField, ageEntrepriseField);
+                    clearForm(nomField, prenomField, telephoneField, numeroPermisField, birthDateField, numSiret, nomEntrepriseField);
                 }
 
                 // Actualiser l'affichage pour refléter les modifications
@@ -133,7 +131,6 @@ public class ClientFormView extends JDialog {
 
         addFormField(jpPersonalInfo, gbcPersonal, "Prénom :", prenomField = new JTextField(20));
         addFormField(jpPersonalInfo, gbcPersonal, "Nom :", nomField = new JTextField(20));
-        addFormField(jpPersonalInfo, gbcPersonal, "Age :", ageField = new JTextField(20));
         addFormField(jpPersonalInfo, gbcPersonal, "Numero de téléphone :", telephoneField = new JTextField(20));
         addFormField(jpPersonalInfo, gbcPersonal, "Numéro Permis de Conduire :", numeroPermisField = new JTextField(20));
         addFormField(jpPersonalInfo, gbcPersonal, "Date de naissance (dd-MM-yyyy):", birthDateField = new JTextField(20));
@@ -154,6 +151,7 @@ public class ClientFormView extends JDialog {
 
         return jpPersonalInfo;
     }
+
     private void createButtons() {
         JPanel jpButtons = new JPanel();
 
@@ -190,38 +188,22 @@ public class ClientFormView extends JDialog {
                     JOptionPane.showMessageDialog(null, "L'email existe déjà. Veuillez en choisir un autre.", "Erreur", JOptionPane.ERROR_MESSAGE);
                     return; // Annule l'opération
                 }
-            }catch (SQLException e){
+            } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, "Erreur", e.getMessage(), JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
             }
 
             String mdp = String.valueOf(mdpField.getPassword());
-            String ageText = ageField.getText();
             String telephone = telephoneField.getText();
             String numeroPermis = numeroPermisField.getText();
             String dateString = birthDateField.getText();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             LocalDate birthDate = LocalDate.parse(dateString, formatter);
 
-            // Vérifier si le champ d'âge est vide
-            if (ageText.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Veuillez saisir votre âge.", "Erreur", JOptionPane.ERROR_MESSAGE);
-                return; // Sortir de la méthode sans enregistrer le client
-            }
-
-            // Convertir l'âge en entier
-            int age;
             try {
-                age = Integer.parseInt(ageText);
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Veuillez saisir un âge valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
-                return; // Sortir de la méthode sans enregistrer le client
-            }
-
-            try {
-                Particulier particulier = new Particulier(nom, prenom, email, mdp, age, telephone, numeroPermis, birthDate);
+                Particulier particulier = new Particulier(nom, prenom, email, mdp, telephone, numeroPermis, birthDate);
                 ClientController.getInstance().addParticulier(particulier);
-            }catch (SQLException e){
+            } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, "Erreur", e.getMessage(), JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
             }
@@ -235,7 +217,7 @@ public class ClientFormView extends JDialog {
                     JOptionPane.showMessageDialog(null, "L'email existe déjà. Veuillez en choisir un autre.", "Erreur", JOptionPane.ERROR_MESSAGE);
                     return; // Annule l'opération
                 }
-            }catch (SQLException e){
+            } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, "Erreur", e.getMessage(), JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
             }
@@ -247,7 +229,7 @@ public class ClientFormView extends JDialog {
             try {
                 Entreprise entreprise = new Entreprise(nomE, email, mdp, telephone, siret);
                 ClientController.getInstance().addEntreprise(entreprise);
-            }catch (SQLException e){
+            } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, "Erreur", e.getMessage(), JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
             }
@@ -273,7 +255,7 @@ public class ClientFormView extends JDialog {
     @Override
     public void dispose() {
         super.dispose();
-        clearForm(nomField, prenomField, ageField, telephoneField, numeroPermisField, birthDateField, numSiret, nomEntrepriseField, ageEntrepriseField);
+        clearForm(nomField, prenomField, telephoneField, numeroPermisField, birthDateField, numSiret, nomEntrepriseField);
     }
 
     // Méthode pour vérifier le format de l'email

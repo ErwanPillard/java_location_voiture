@@ -45,7 +45,6 @@ CREATE TABLE Particulier
     prenom       VARCHAR(255) NOT NULL,
     numeroPermis VARCHAR(255) NOT NULL UNIQUE,
     birthDate    DATE         NOT NULL,
-    age          INT          NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT fk_particulier_user FOREIGN KEY (id) REFERENCES Client (id)
 ) ENGINE = InnoDB;
