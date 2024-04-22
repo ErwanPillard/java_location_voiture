@@ -82,8 +82,7 @@ public class SessionManager {
                         rs.getString("nom"),
                         rs.getString("prenom"),
                         rs.getString("numeroPermis"),
-                        birthDate,
-                        rs.getInt("age")
+                        birthDate
                 );
                 return;
             }
@@ -126,3 +125,22 @@ public class SessionManager {
         this.isLoggedIn = false;
     }
 }
+
+
+
+/*
+Code crée employée :
+-- Ajout dans la table User
+    INSERT INTO User (email, motDePasse) VALUES
+        ('em', "em"),
+        ('em2', "em2");
+
+-- Récupérer les IDs générés pour les nouveaux utilisateurs
+    SET @last_id1 = LAST_INSERT_ID();
+    SET @last_id2 = LAST_INSERT_ID() + 1;
+
+-- Ajout dans la table Employe avec les IDs récupérés
+    INSERT INTO Employe (id, nom, prenom, fonction) VALUES
+        (@last_id1, 'Thomas', 'Pierre-Louis', 'Vendeur'),
+        (@last_id2, 'Niccolini', 'Nina', 'Vendeuse');
+ */

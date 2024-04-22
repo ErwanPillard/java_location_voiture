@@ -12,7 +12,6 @@ public class Particulier extends Client {
     private String prenom;
     private String numeroPermis;
     private LocalDate birthDate;
-    private int age;
 
 /*
     public Particulier(String nom, String prenom, String email, String motDePasse, int age, String telephone, double numeroAdhesion, TypeAdhesion typeAdhesion, String numeroPermis, LocalDate birthDate) {
@@ -24,38 +23,29 @@ public class Particulier extends Client {
         this.age = age;
     }*/
 
-    public Particulier(String nom, String prenom, String email, String motDePasse, int age, String telephone, String numeroPermis, LocalDate birthDate) {
+    public Particulier(String nom, String prenom, String email, String motDePasse, String telephone, String numeroPermis, LocalDate birthDate) {
         super(email, motDePasse, telephone);
         this.nom = nom;
         this.prenom = prenom;
         this.numeroPermis = numeroPermis;
         this.birthDate = birthDate;
-        this.age = age;
     }
 
-    public Particulier(int id, String nom, String prenom, String numeroPermis, LocalDate birthDate, int age) {
+    public Particulier(int id, String nom, String prenom, String numeroPermis, LocalDate birthDate) {
         super(id);
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
         this.numeroPermis = numeroPermis;
         this.birthDate = birthDate;
-        this.age = age;
     }
+
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
     }
 
     public String getNumeroPermis() {

@@ -62,7 +62,7 @@ public class init_bdd {
     }
 
     public static void insertClient(Connection connection) throws SQLException {
-        String clientSql = "INSERT INTO Client (id, age) VALUES (?, ?)";
+        String clientSql = "INSERT INTO Client (id, telephone) VALUES (?, ?)";
         Random rand = new Random(); // generer un nombre aléatoire
 
         try (PreparedStatement stmt = connection.prepareStatement(clientSql)) {

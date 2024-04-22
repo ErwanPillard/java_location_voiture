@@ -20,9 +20,41 @@ public class UserInfo extends JFrame {
         setLocationRelativeTo(null); // Centre la fenêtre
         setLayout(new BorderLayout());
 
+        JPanel panelInfo = new JPanel();
+        panelInfo.setLayout(new GridLayout(5, 1)); // Organise les labels verticalement
+
         SessionManager.getInstance();
         JLabel labelUserType = new JLabel("Type : " + SessionManager.userType()); // Affiche le type d'utilisateur
         JLabel labelEmail = new JLabel("Email : " + SessionManager.getCurrentUser().getEmail());
+
+        panelInfo.add(labelUserType);
+        panelInfo.add(labelEmail);
+
+        if (SessionManager.userType().equals("Particulier")) {
+            JLabel labelNomPart = new JLabel("Nom : " + SessionManager.getCurrentParticulier().getNom());
+            JLabel labelPrenomPart = new JLabel("Prenom : " + SessionManager.getCurrentParticulier().getPrenom());
+            JLabel labelPermisPart = new JLabel("Numéro de permis : " + SessionManager.getCurrentParticulier().getNumeroPermis());
+            JLabel labelBirthDatePart = new JLabel("Date de naissance : " + SessionManager.getCurrentParticulier().getBirthDate());
+
+            panelInfo.add(labelNomPart);
+            panelInfo.add(labelPrenomPart);
+            panelInfo.add(labelPermisPart);
+            panelInfo.add(labelBirthDatePart);
+        } else if (SessionManager.userType().equals("Entreprise")) {
+            JLabel labelNomEntreprise = new JLabel("Nom de l'entreprise : " + SessionManager.getCurrentEntreprise().getNom());
+            JLabel labelNumSiretEntreprise = new JLabel("Numéro siret : " + SessionManager.getCurrentEntreprise().getNumSiret());
+
+            panelInfo.add(labelNomEntreprise);
+            panelInfo.add(labelNumSiretEntreprise);
+        } else if (SessionManager.userType().equals("Employe")) {
+            JLabel labelNomEmploye = new JLabel("Nom : " + SessionManager.getCurrentEmploye().getNom());
+            JLabel labelPrenomEmploye = new JLabel("Prénom : " + SessionManager.getCurrentEmploye().getPrenom());
+            JLabel labelFonctionEmploye = new JLabel("Fonction : " + SessionManager.getCurrentEmploye().getFonction());
+
+            panelInfo.add(labelNomEmploye);
+            panelInfo.add(labelPrenomEmploye);
+            panelInfo.add(labelFonctionEmploye);
+        }
 
         btnLogout = new JButton("Déconnexion");
         btnLogout.addActionListener(new ActionListener() {
@@ -41,13 +73,6 @@ public class UserInfo extends JFrame {
                 new HomePage().setVisible(true); // Rouvre HomePage
             }
         });
-
-        JPanel panelInfo = new JPanel();
-        panelInfo.setLayout(new GridLayout(5, 1)); // Organise les labels verticalement
-        panelInfo.add(labelUserType);
-        //panelInfo.add(labelNom);
-        //panelInfo.add(labelPrenom);
-        panelInfo.add(labelEmail);
 
         JPanel southPanel = new JPanel();
         southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.Y_AXIS));
