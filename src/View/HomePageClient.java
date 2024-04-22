@@ -1,10 +1,18 @@
 package View;
 
+import Model.Voiture;
+
 import javax.swing.*;
 import java.awt.*;
 import javax.imageio.ImageIO;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import Controller.VoitureController;
 
 public class HomePageClient extends JFrame {
     public HomePageClient() {
@@ -57,22 +65,33 @@ public class HomePageClient extends JFrame {
         carPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Marge de 10 pixels autour du panel
 
         // Liste fictive de voitures
-        ArrayList<Car> voitures = new ArrayList<>();
-        voitures.add(new Car("1234 ABC", "01/01/2022", 5000, "Grise", "Modèle A", "/Pictures/Berline.png"));
+        List<Voiture> voitures = new ArrayList<>();
+
+        try{
+            voitures = VoitureController.getInstance().allVoitures();
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+       /* voitures.add(new Car("1234 ABC", "01/01/2022", 5000, "Grise", "Modèle A", "/Pictures/Berline.png"));
         voitures.add(new Car("5678 XYZ", "15/02/2023", 3000, "Noire", "Modèle B", "/Pictures/Citadine.png"));
         voitures.add(new Car("9876 DEF", "10/05/2021", 8000, "Kaki", "Modèle C", "/Pictures/Familliale.png"));
         voitures.add(new Car("1234 XYZ", "15/07/2023", 6000, "Noire", "Modèle B", "/Pictures/SUV.png"));
-        voitures.add(new Car("5854 DEF", "10/10/2021", 9000, "Kaki", "Modèle C", "/Pictures/Utillitaire.png"));
+        voitures.add(new Car("5854 DEF", "10/10/2021", 9000, "Kaki", "Modèle C", "/Pictures/Utillitaire.png"));*/
 
         // Affichage des voitures
-        for (Car voiture : voitures) {
+        for (Voiture voiture : voitures) {
             JPanel carInfoPanel = new JPanel(new BorderLayout());
             carInfoPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+            byte[] image = Voiture.getImageByImmatriculation(voiture.getImmatriculation());
 
             // Chargement de l'image de la voiture
             ImageIcon carImage = null;
             try {
-                Image img = ImageIO.read(getClass().getResource(voiture.getImagePath()));
+                ByteArrayInputStream bais = new ByteArrayInputStream(image);
+                Image img = ImageIO.read(bais);
                 carImage = new ImageIcon(img.getScaledInstance(150, 100, Image.SCALE_SMOOTH));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -81,13 +100,14 @@ public class HomePageClient extends JFrame {
             JLabel carImageLabel = new JLabel(carImage);
             carInfoPanel.add(carImageLabel, BorderLayout.NORTH);
 
+
             // Ajout des autres informations de la voiture
             JPanel carDetailsPanel = new JPanel(new GridLayout(0, 1));
             carDetailsPanel.add(new JLabel("Immatriculation: " + voiture.getImmatriculation()));
-            carDetailsPanel.add(new JLabel("Date de mise en circulation: " + voiture.getDateMiseEnCirculation()));
-            carDetailsPanel.add(new JLabel("Kilométrage: " + voiture.getKilometrage()));
+            carDetailsPanel.add(new JLabel("Date de mise en circulation: " + voiture.getDateMiseCirculation()));
+            carDetailsPanel.add(new JLabel("Kilométrage: " + voiture.getNbKilometre()));
             carDetailsPanel.add(new JLabel("Couleur: " + voiture.getCouleur()));
-            carDetailsPanel.add(new JLabel("Modèle: " + voiture.getModele()));
+            carDetailsPanel.add(new JLabel("Modèle: " + voiture.getModele_id()));
 
             carInfoPanel.add(carDetailsPanel, BorderLayout.CENTER);
 
@@ -130,6 +150,7 @@ public class HomePageClient extends JFrame {
 
         return searchPanel;
     }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(HomePageClient::new);

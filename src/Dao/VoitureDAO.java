@@ -18,4 +18,6 @@ public interface VoitureDAO {
     int delete(Voiture voiture) throws SQLException;
 
     void update(Voiture voiture) throws SQLException;
+
+    byte[] getImageByImmatriculation(String immatriculation);
 }

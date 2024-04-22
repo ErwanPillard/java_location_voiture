@@ -120,4 +120,9 @@ public class Voiture {
         return voitureDAO.findByImmat(immatriculation);
     }
 
+    public static byte[] getImageByImmatriculation(String immatriculation){
+        VoitureDAO voitureDAO = new VoitureDAOImpl();
+        return voitureDAO.getImageByImmatriculation(immatriculation);
+    }
+
 }
