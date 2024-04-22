@@ -57,13 +57,15 @@ public class HomePageClient extends JFrame {
         carPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Marge de 10 pixels autour du panel
 
         // Liste fictive de voitures
-        ArrayList<Voiture> voitures = new ArrayList<>();
-        voitures.add(new Voiture("1234 ABC", "01/01/2022", 5000, "Grise", "Modèle A", "/Pictures/Berline.png"));
-        voitures.add(new Voiture("5678 XYZ", "15/02/2023", 3000, "Noire", "Modèle B", "/Pictures/Citadine.png"));
-        voitures.add(new Voiture("9876 DEF", "10/05/2021", 8000, "Kaki", "Modèle C", "/Pictures/Familliale.png"));
+        ArrayList<Car> voitures = new ArrayList<>();
+        voitures.add(new Car("1234 ABC", "01/01/2022", 5000, "Grise", "Modèle A", "/Pictures/Berline.png"));
+        voitures.add(new Car("5678 XYZ", "15/02/2023", 3000, "Noire", "Modèle B", "/Pictures/Citadine.png"));
+        voitures.add(new Car("9876 DEF", "10/05/2021", 8000, "Kaki", "Modèle C", "/Pictures/Familliale.png"));
+        voitures.add(new Car("1234 XYZ", "15/07/2023", 6000, "Noire", "Modèle B", "/Pictures/SUV.png"));
+        voitures.add(new Car("5854 DEF", "10/10/2021", 9000, "Kaki", "Modèle C", "/Pictures/Utillitaire.png"));
 
         // Affichage des voitures
-        for (Voiture voiture : voitures) {
+        for (Car voiture : voitures) {
             JPanel carInfoPanel = new JPanel(new BorderLayout());
             carInfoPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
@@ -131,47 +133,5 @@ public class HomePageClient extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(HomePageClient::new);
-    }
-}
-
-class Voiture {
-    private String immatriculation;
-    private String dateMiseEnCirculation;
-    private int kilometrage;
-    private String couleur;
-    private String modele;
-    private String imagePath;
-
-    public Voiture(String immatriculation, String dateMiseEnCirculation, int kilometrage, String couleur, String modele, String imagePath) {
-        this.immatriculation = immatriculation;
-        this.dateMiseEnCirculation = dateMiseEnCirculation;
-        this.kilometrage = kilometrage;
-        this.couleur = couleur;
-        this.modele = modele;
-        this.imagePath = imagePath;
-    }
-
-    public String getImmatriculation() {
-        return immatriculation;
-    }
-
-    public String getDateMiseEnCirculation() {
-        return dateMiseEnCirculation;
-    }
-
-    public int getKilometrage() {
-        return kilometrage;
-    }
-
-    public String getCouleur() {
-        return couleur;
-    }
-
-    public String getModele() {
-        return modele;
-    }
-
-    public String getImagePath() {
-        return imagePath;
     }
 }

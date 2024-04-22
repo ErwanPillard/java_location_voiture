@@ -8,15 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserConnectionImpl implements UserConnection {
-    public UserConnectionImpl() {
-        try {
-            // Assure-toi que le pilote JDBC est chargé
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public User connect(String email, String password) {
         String query = "SELECT id, nom, prenom, email FROM User WHERE email = ? AND motDePasse = ?";
