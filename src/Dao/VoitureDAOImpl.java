@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VoitureDAOImpl implements VoitureDAO {
+
     public void add(Voiture voiture) throws SQLException {
         String query = "INSERT INTO Voiture(immatriculation, dateMiseEnCirculation, nbKilometre, couleur, modele_id) VALUES(?,?,?,?,?)";
 
@@ -33,6 +34,23 @@ public class VoitureDAOImpl implements VoitureDAO {
 
         Connection c = DatabaseManager.getConnection();
         PreparedStatement pstmt = c.prepareStatement("SELECT * FROM Voiture");
+
+        ResultSet rset = pstmt.executeQuery();
+        while (rset.next()) {
+            voitures.add(createVoiture(rset));
+        }
+
+        pstmt.close();
+        c.close();
+
+        return voitures;
+    }
+
+    public List<Voiture> allFiltredCategorie(String query) throws SQLException{
+        ArrayList<Voiture> voitures = new ArrayList<>();
+
+        Connection c = DatabaseManager.getConnection();
+        PreparedStatement pstmt = c.prepareStatement(query);
 
         ResultSet rset = pstmt.executeQuery();
         while (rset.next()) {

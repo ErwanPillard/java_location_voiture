@@ -54,6 +54,10 @@ public class VoitureController {
         return Voiture.all();
     }
 
+    public List<Voiture> allFiltredCategorie(String categorie) throws SQLException{
+        return Voiture.allFiltredCategorie(categorie);
+    }
+
     public boolean immatExists(String immat)throws SQLException {return Voiture.immatExists(immat);}
 
     public synchronized void addUserListener(VoitureListener l) {

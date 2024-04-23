@@ -10,6 +10,9 @@ import java.util.List;
 public interface VoitureDAO {
     void add(Voiture voiture) throws SQLException;
     List<Voiture> all() throws SQLException;
+
+    List<Voiture> allFiltredCategorie(String query) throws SQLException;
+
     Voiture createVoiture(ResultSet rset) throws SQLException;
 
     boolean immatExists(String immatriculation) throws SQLException;

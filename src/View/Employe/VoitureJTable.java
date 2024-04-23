@@ -15,7 +15,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class VoitureJTable extends JTable implements VoitureListener, EventListener {
     private TableModel model = new TableModel();
@@ -27,9 +30,41 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
         this.setModel(model);
         this.getTableHeader().setReorderingAllowed(false);
         VoitureController.getInstance().addUserListener(this);
-        loadVoitures();
+        //loadVoitures();
+        updateTableWithCategory(loadAll());
         cellEdit();
         imageSelector();
+    }
+
+    void updateTableWithCategory(ArrayList<Voiture> voitures) {
+        // Effacez le contenu actuel de votre JTable
+        clearTable();
+
+        // Ajoutez les nouvelles voitures à votre JTable
+        for (Voiture voiture : voitures) {
+            model.insertRow(0, voiture.toArray());
+        }
+
+        DefaultTableModel model = (DefaultTableModel) getModel();
+        model.fireTableDataChanged();
+    }
+
+    private void clearTable() {
+        DefaultTableModel model = (DefaultTableModel) getModel();
+        model.setRowCount(0); // Effacer toutes les lignes du modèle
+    }
+
+
+    public ArrayList<Voiture> loadAll(){
+        ArrayList<Voiture> voitures = new ArrayList<>();
+        try {
+            voitures = (ArrayList<Voiture>) VoitureController.getInstance().allVoitures();
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Erreur", e.getMessage(), JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+        return voitures;
     }
 
     public void loadVoitures() {
@@ -51,7 +86,7 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
         private static final long serialVersionUID = 1L;
 
         public TableModel() {
-            super(new Object[][]{}, new String[]{"Immatriculation", "Mise en circulation", "Kilometrage", "Couleur", "Modele"});
+            super(new Object[][]{}, new String[]{"Immatriculation", "Mise en circulation", "Kilometrage", "Couleur", "Modele", ""});
         }
 
         @Override
@@ -143,7 +178,6 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
     }
 
     public void imageSelector() {
-        model.addColumn("");
         // Associez l'éditeur de cellules personnalisé à la colonne où vous souhaitez afficher le bouton
         TableColumn column = getColumnModel().getColumn(5); // Remplacez 5 par l'indice de la colonne où vous souhaitez afficher le bouton
         column.setCellRenderer(new CustomButtonRenderer());

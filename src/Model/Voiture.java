@@ -101,6 +101,11 @@ public class Voiture {
         return voitureDAO.all();
     }
 
+    public static List<Voiture> allFiltredCategorie(String categorie) throws SQLException {
+        VoitureDAO voitureDAO = new VoitureDAOImpl();
+        return voitureDAO.allFiltredCategorie(categorie);
+    }
+
     public static boolean immatExists(String immatriculation) throws SQLException{
         VoitureDAO voitureDAO = new VoitureDAOImpl();
         return voitureDAO.immatExists(immatriculation);

@@ -60,16 +60,13 @@ public class CustomButtonEditor extends AbstractCellEditor implements TableCellE
 
                     try {
                         Voiture.addImage(immat, selectedFile);
-                        System.out.println("Voiture ajouté.");
+                        frame.dispose();
+                        showImageJFrame(immat); // Réouvrir la frame avec la nouvelle image
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     }
 
-                } else {
-                    System.out.println("L'utilisateur a annulé la sélection.");
                 }
-
-                frame.dispose();
             }
         });
 
@@ -81,6 +78,7 @@ public class CustomButtonEditor extends AbstractCellEditor implements TableCellE
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
+
 
 
     @Override
