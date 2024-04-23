@@ -11,35 +11,30 @@ import java.util.Random;
 public class init_bdd {
 
     public static void main(String[] args) {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            try (Connection connection = DatabaseManager.getConnection()) {
-                // Insérer 60 utilisateurs
-                insertUsers(connection);
+        try (Connection connection = DatabaseManager.getConnection()) {
+            // Insérer 60 utilisateurs
+            insertUsers(connection);
 
-                // Insérer 40 clients (particuliers et entreprises)
-                insertClient(connection);
+            // Insérer 40 clients (particuliers et entreprises)
+            insertClient(connection);
 
-                // Insérer les détails de 20 particuliers
-                insertParticuliers(connection);
+            // Insérer les détails de 20 particuliers
+            insertParticuliers(connection);
 
-                // Insérer les détails de 20 entreprises
-                insertEntreprises(connection);
+            // Insérer les détails de 20 entreprises
+            insertEntreprises(connection);
 
-                // Insérer 20 employés
-                insertEmployes(connection);
+            // Insérer 20 employés
+            insertEmployes(connection);
 
-                // Insérer 50 voitures
-                insertVoitures(connection);
+            // Insérer 50 voitures
+            insertVoitures(connection);
 
-                // Insérer 10 modèles
-                insertModeles(connection);
+            // Insérer 10 modèles
+            insertModeles(connection);
 
-                System.out.println("La base de données a été initialisée avec succès !");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        } catch (ClassNotFoundException e) {
+            System.out.println("La base de données a été initialisée avec succès !");
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -49,6 +44,7 @@ public class init_bdd {
         String userSql = "INSERT INTO User (id, email, motDePasse) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(userSql)) {
             for (int i = 1; i <= 60; i++) {
+                stmt.setInt(1, i); // id
                 stmt.setString(2, "" + i); // Email
                 stmt.setString(3, "" + i); // Mot de passe
                 stmt.executeUpdate();
@@ -61,6 +57,7 @@ public class init_bdd {
 
         try (PreparedStatement stmt = connection.prepareStatement(clientSql)) {
             for (int i = 1; i <= 40; i++) {
+                stmt.setInt(1, i); // id
                 stmt.setString(2, "06112233" + i); // telephone
                 stmt.executeUpdate();
             }
@@ -72,6 +69,7 @@ public class init_bdd {
         String particulierSql = "INSERT INTO Particulier (id, nom, prenom, numeroPermis, birthDate) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(particulierSql)) {
             for (int i = 1; i <= 20; i++) {
+                stmt.setInt(1, i); // id
                 stmt.setString(2, "nom" + i); // nom
                 stmt.setString(3, "prenom" + i); // prenom
                 stmt.setString(4, "Permis" + i); // numero de permis
@@ -85,8 +83,9 @@ public class init_bdd {
         String entrepriseSql = "INSERT INTO Entreprise (id, nom, numeroSiret) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(entrepriseSql)) {
             for (int i = 21; i <= 40; i++) {
+                stmt.setInt(1, i); // id
                 stmt.setString(2, "nom" + i); // nom
-                stmt.setString(2, "Siret" + i); // numero de siret
+                stmt.setString(3, "Siret" + i); // numero de siret
                 stmt.executeUpdate();
             }
         }
@@ -96,6 +95,7 @@ public class init_bdd {
         String employeSql = "INSERT INTO Employe (id, nom, prenom, fonction) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(employeSql)) {
             for (int i = 41; i <= 60; i++) {
+                stmt.setInt(1, i); // id
                 stmt.setString(2, "nom" + i); // nom
                 stmt.setString(3, "prenom" + i); // prenom
                 stmt.setString(4, "Fonction" + i); // fonction
@@ -108,7 +108,11 @@ public class init_bdd {
         String voitureSql = "INSERT INTO Voiture (immatriculation, dateMiseEnCirculation, nbKilometre, couleur, modele_id) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(voitureSql)) {
             for (int i = 1; i <= 50; i++) {
-                stmt.setString(1, "Immat" + i); // immatriculation
+                if (i < 10) {
+                    stmt.setString(1, "AA-00" + i + "AA"); // immatriculation
+                } else {
+                    stmt.setString(1, "AA-0" + i + "AA"); // immatriculation
+                }
                 stmt.setDate(2, new java.sql.Date(new java.util.Date().getTime())); // date de mise en circulation
                 stmt.setDouble(3, i); // nombre de kilomètres
                 stmt.setString(4, "Couleur" + i); // couleur
@@ -119,7 +123,7 @@ public class init_bdd {
     }
 
     public static void insertModeles(Connection connection) throws SQLException {
-        String modeleSql = "INSERT INTO Modele (nom, nbPlaces, nbPortes, tailleCoffre, caracteristique, prixJournalier, noteSatisfaction, categorie, attelage) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String modeleSql = "INSERT INTO Modele (id, marque, nom, nbPLaces, nbPortes, tailleCoffre, caracteristique, prixJournalier, noteSatisfaction, categorie, attelage, boiteVitesse) VALUES (? ,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Random rand = new Random();
         String[] categories = {"Citadine", "Berline", "SUV", "Familiale", "Utilitaire"};
 
@@ -133,19 +137,22 @@ public class init_bdd {
                 String categorie = categories[rand.nextInt(categories.length)]; // Aléatoire parmi 'Citadine', 'Berline', 'SUV', 'Familiale', 'Utilitaire'
                 String attelage = rand.nextBoolean() ? "Oui" : "Non"; // Aléatoire entre 'Oui' et 'Non'
 
-                stmt.setString(1, "Modele" + i); // nom
-                stmt.setInt(2, nbPlaces); // nombre de places
-                stmt.setInt(3, nbPortes); // nombre de portes
-                stmt.setFloat(4, tailleCoffre); // taille du coffre en litres
-                stmt.setString(5, "Caracteristique" + i);
-                stmt.setInt(6, prixJournalier); // prix journalier
+                stmt.setInt(1, i); // id
+                stmt.setString(2, "Marque" + i); // Marque
+                stmt.setString(3, "nom" + i); // nom
+                stmt.setInt(4, nbPlaces); // nombre de places
+                stmt.setInt(5, nbPortes); // nombre de portes
+                stmt.setFloat(6, tailleCoffre); // taille du coffre en litres
+                stmt.setString(7, "Caracteristique" + i); // caractéristique
+                stmt.setInt(8, prixJournalier); // prix journalier
                 if (noteSatisfaction != null) {
-                    stmt.setInt(7, noteSatisfaction); // note de satisfaction
+                    stmt.setInt(9, noteSatisfaction); // note de satisfaction
                 } else {
-                    stmt.setNull(7, Types.INTEGER); // Si noteSatisfaction est null, on insère un NULL dans la base de données
+                    stmt.setNull(9, Types.INTEGER); // Si noteSatisfaction est null, on insère un NULL dans la base de données
                 }
-                stmt.setString(8, categorie); // catégorie
-                stmt.setString(9, attelage); // attelage
+                stmt.setString(10, categorie); // catégorie
+                stmt.setString(11, attelage); // attelage
+                stmt.setString(12, "Automatique"); // boite de vitesse
                 stmt.executeUpdate();
             }
         }
