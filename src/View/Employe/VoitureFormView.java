@@ -2,6 +2,9 @@ package View.Employe;
 
 import Controller.ModeleController;
 import Controller.VoitureController;
+import Model.BoiteVitesse;
+import Model.Categorie;
+import Model.Modele;
 import Model.Voiture;
 
 import javax.swing.*;
@@ -13,6 +16,8 @@ import java.io.File;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Random;
+
 import static utils.Util.addFormField;
 import static utils.Util.clearForm;
 
@@ -174,11 +179,6 @@ public class VoitureFormView extends JDialog {
         dispose();
     }
 
-
-    @Override
-    public void dispose() {
-        super.dispose();
-    }
     public static void toggle() {
         instance.setVisible(!instance.isVisible());
     }

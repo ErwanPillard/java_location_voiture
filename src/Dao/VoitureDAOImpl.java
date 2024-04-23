@@ -183,23 +183,23 @@ public class VoitureDAOImpl implements VoitureDAO {
 
                 InputStream inputStream = rs.getBinaryStream("image");
 
+                if (inputStream != null) {
+                    // Convertir l'InputStream en tableau de bytes
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
+                    byte[] buffer = new byte[4096];
 
-                // Convertir l'InputStream en tableau de bytes
+                    int bytesRead;
 
-                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    while ((bytesRead = inputStream.read(buffer)) != -1) {
 
-                byte[] buffer = new byte[4096];
+                        outputStream.write(buffer, 0, bytesRead);
 
-                int bytesRead;
+                    }
 
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-
-                    outputStream.write(buffer, 0, bytesRead);
-
+                    imageBytes = outputStream.toByteArray();
                 }
 
-                imageBytes = outputStream.toByteArray();
 
             }
 

@@ -36,28 +36,29 @@ public class CustomButtonEditor extends AbstractCellEditor implements TableCellE
 
         byte[] image = Voiture.getImageByImmatriculation(immat);
 
-        JButton editButton = new JButton("Change image");
+        if (image != null) { // Vérifier si le tableau de bytes n'est pas null
+            ImageIcon carImage = null;
+            try {
+                ByteArrayInputStream bais = new ByteArrayInputStream(image);
+                Image img = ImageIO.read(bais);
+                carImage = new ImageIcon(img.getScaledInstance(150, 100, Image.SCALE_SMOOTH));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-        // Chargement de l'image de la voiture
-        ImageIcon carImage = null;
-        try {
-            ByteArrayInputStream bais = new ByteArrayInputStream(image);
-            Image img = ImageIO.read(bais);
-            carImage = new ImageIcon(img.getScaledInstance(150, 100, Image.SCALE_SMOOTH));
-        } catch (IOException e) {
-            e.printStackTrace();
+            JLabel carImageLabel = new JLabel(carImage);
+            frame.add(carImageLabel, BorderLayout.NORTH);
+        } else {
+            JLabel noImageLabel = new JLabel("No image available");
+            frame.add(noImageLabel, BorderLayout.NORTH);
         }
 
-        JLabel carImageLabel = new JLabel(carImage);
-        frame.add(carImageLabel, BorderLayout.NORTH);
-
+        JButton editButton = new JButton("Change image");
         editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 File selectedFile = VoitureFormView.getInstance().selectImage();
                 if (selectedFile != null) {
-
-
                     try {
                         Voiture.addImage(immat, selectedFile);
                         frame.dispose();
@@ -65,7 +66,6 @@ public class CustomButtonEditor extends AbstractCellEditor implements TableCellE
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     }
-
                 }
             }
         });
@@ -78,6 +78,7 @@ public class CustomButtonEditor extends AbstractCellEditor implements TableCellE
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
+
 
 
 
