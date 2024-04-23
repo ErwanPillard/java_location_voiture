@@ -61,6 +61,7 @@ public class Voiture {
         return modele_id;
     }
 
+
     public void setModele_id(int modele_id) {
         this.modele_id = modele_id;
     }

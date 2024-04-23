@@ -1,7 +1,6 @@
 package Dao;
 
-import Model.Modele;
-import Model.Particulier;
+import Model.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -113,6 +112,55 @@ public class ModeleDAOImpl implements ModeleDAO{
 
         // Retourner l'ID du modèle
         return nom;
+    }
+
+    public Modele createModele(ResultSet rset) throws SQLException {
+        String categorieValue = rset.getString("categorie");
+        Categorie categorie = Categorie.valueOf(categorieValue.toUpperCase());
+
+        String attelageValue = rset.getString("attelage");
+        boolean attelage = "Oui".equalsIgnoreCase(attelageValue);
+
+        String boiteVitesseValue = rset.getString("boiteVitesse");
+        BoiteVitesse boiteVitesse = BoiteVitesse.valueOf(boiteVitesseValue.toUpperCase());
+
+        Modele modele = new Modele(
+                rset.getString("marque"),
+                rset.getString("nom"),
+                rset.getInt("nbPlaces"),
+                rset.getInt("nbPortes"),
+                rset.getFloat("tailleCoffre"),
+                rset.getString("caracteristique"),
+                rset.getInt("prixJournalier"),
+                rset.getFloat("noteSatisfaction"),
+                categorie,
+                attelage,
+                boiteVitesse
+        );
+        return modele;
+    }
+
+
+
+
+
+    public Modele getModeleById(int id) throws SQLException{
+        Connection c = DatabaseManager.getConnection();
+
+        PreparedStatement pstmt = c.prepareStatement("SELECT * FROM Modele WHERE id = ?");
+        pstmt.setString(1, String.valueOf(id));
+
+        Modele modele = null;
+        ResultSet rset = pstmt.executeQuery();
+
+        while (rset.next()) {
+            modele = createModele(rset);
+        }
+
+        pstmt.close();
+        c.close();
+
+        return modele;
     }
 
 

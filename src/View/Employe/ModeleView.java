@@ -56,7 +56,7 @@ public class ModeleView extends JDialog {
 
         Integer[]choixNbPlace={2,4,5,7,8,9};
         Integer[]choixNbPorte={2,3,5,7};
-        Model.BoiteVitesse[] choixBoiteVitesse={Model.BoiteVitesse.AUTOMATIC, Model.BoiteVitesse.MANUEL};
+        Model.BoiteVitesse[] choixBoiteVitesse={BoiteVitesse.AUTOMATIQUE, Model.BoiteVitesse.MANUEL};
         Model.Categorie[] choixCategorieVehicule={Categorie.BERLINE,Categorie.FAMILIALE,Categorie.SUV, Categorie.UTILITAIRE, Categorie.CITADINE};
 
         JComboBox<Integer> comboBox1 = new JComboBox<>(choixNbPlace);

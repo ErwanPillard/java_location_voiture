@@ -109,6 +109,11 @@ public class Modele {
         return modeleDAO.getNameById(id);
     }
 
+    public static Modele getModeleById(int id) throws SQLException{
+        ModeleDAO modeleDAO = new ModeleDAOImpl();
+        return modeleDAO.getModeleById(id);
+    }
+
     /**
      * Méthode pour ajouter modèle
      */
