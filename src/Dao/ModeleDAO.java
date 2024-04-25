@@ -1,6 +1,8 @@
 package Dao;
 
 import Model.Modele;
+
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public interface ModeleDAO {
@@ -13,4 +15,8 @@ public interface ModeleDAO {
     int getIdByName(String modelName) throws SQLException;
 
     String getNameById(int id) throws SQLException;
+
+    Modele createModele(ResultSet rset) throws SQLException;
+
+    void update(Modele modele) throws SQLException;
 }

@@ -2,6 +2,9 @@ package Controller;
 
 import Controller.listeners.MailEvent;
 import Controller.listeners.VoitureListener;
+import Model.BoiteVitesse;
+import Model.Categorie;
+import Model.Modele;
 import Model.Voiture;
 
 import java.sql.SQLException;
@@ -34,19 +37,6 @@ public class VoitureController {
     }
 
     public void update(Voiture voiture) throws SQLException{
-        voiture.update(voiture);
-    }
-
-    public void update(int column, Object value,String immat) throws SQLException{
-        Voiture voiture = Voiture.findByImmat(immat);
-        switch (column){
-            case 2:
-                voiture.setNbKilometre((Double) value);
-                break;
-            case 3:
-                voiture.setCouleur((String) value);
-                break;
-        }
         voiture.update(voiture);
     }
 

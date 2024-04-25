@@ -66,14 +66,14 @@ public class Voiture {
         this.modele_id = modele_id;
     }
 
-    public String[] toArray() {
-        String modeleName;
+    public Object[] toArray() {
+        Modele modele;
         try {
-            modeleName = Modele.getNameById(modele_id);
+            modele = Modele.getModeleById(modele_id);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return new String[] {this.immatriculation, this.dateMiseCirculation.toString(), String.valueOf(this.nbKilometre), this.couleur, modeleName};
+        return new Object[] {this.immatriculation, this.dateMiseCirculation.toString(), this.nbKilometre, this.couleur, modele.getMarque(), modele.getNom(), modele.getNbPlace(), modele.getNbPorte(), modele.getTailleCoffre(), modele.getCaracteristiques(), modele.getPrixJournalier(), modele.getNoteSatisfaction(), modele.getCategorie(), modele.isAttelage() ? "Oui" : "Non", modele.getBoiteVitesse()};
     }
 
     @Override

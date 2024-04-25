@@ -26,7 +26,7 @@ import java.util.Random;
 
 public class VoitureJTable extends JTable implements VoitureListener, EventListener {
     private TableModel model = new TableModel();
-    private TableRowSorter<TableModel> sorter;
+    private static TableRowSorter<TableModel> sorter;
 
     private Object originalValue;
 
@@ -34,7 +34,7 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
         this.setModel(model);
         this.getTableHeader().setReorderingAllowed(false);
         VoitureController.getInstance().addUserListener(this);
-        updateTableWithCategory(loadAll());
+        updateTable(loadAll());
         cellEdit();
         imageSelector();
 
@@ -43,23 +43,27 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
         setRowSorter(sorter); // Assignez le TableRowSorter à la JTable
     }
 
-    void updateTableWithCategory(ArrayList<Voiture> voitures){
+    void updateTable(ArrayList<Voiture> voitures){
         // Effacez le contenu actuel de votre JTable
         clearTable();
-
         // Ajoutez les nouvelles voitures à votre JTable
         for (Voiture voiture : voitures) {
-            //model.insertRow(0, voiture.toArray());
-            try {
-                Modele modele = ModeleController.getModeleById(voiture.getModele_id());
-                model.insertRow(0, new Object[]{voiture.getImmatriculation(), voiture.getDateMiseCirculation(), voiture.getNbKilometre(), voiture.getCouleur(), modele.getMarque(), modele.getNom(), modele.getNbPlace(), modele.getNbPorte(), modele.getTailleCoffre(), modele.getCaracteristiques(), modele.getPrixJournalier(), modele.getNoteSatisfaction(), modele.getCategorie(), modele.isAttelage() ? "Oui" : "Non", modele.getBoiteVitesse()});
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            model.insertRow(0, voiture.toArray());
         }
-
         DefaultTableModel model = (DefaultTableModel) getModel();
         model.fireTableDataChanged();
+    }
+
+    static void search(String searchText) {
+        System.out.println(searchText);
+        RowFilter<VoitureJTable.TableModel, Object> rf = null;
+        try {
+            // Créez un filtre en fonction de la chaîne de recherche
+            rf = RowFilter.regexFilter("(?i)" + searchText); // (?i) pour ignorer la casse
+        } catch (java.util.regex.PatternSyntaxException e) {
+            return;
+        }
+        sorter.setRowFilter(rf); // Appliquez le filtre au TableRowSorter
     }
 
     private void clearTable() {
@@ -85,8 +89,8 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
         private static final long serialVersionUID = 1L;
 
         public TableModel() {
-            //super(new Object[][]{}, new String[]{"Immatriculation", "Mise en circulation", "Kilometrage", "Couleur", "Modele", ""});
-            super(new Object[][]{}, new String[]{"Immatriculation", "Mise en circulation", "Kilometrage", "Couleur", "Marque", "Nom", "Nb Places", "Nb Portes", "Taille Coffre", "Caracteristique", "Prix Journalier", "Note Satisfaction", "Categorie", "Attelage", "Boite Vitesse", ""});
+            super(new Object[][]{}, new String[]{"Immatriculation", "Mise en circulation", "Kilometrage", "Couleur", "Modele", ""});
+            //super(new Object[][]{}, new String[]{"Immatriculation", "Mise en circulation", "Kilometrage", "Couleur", "Marque", "Nom", "Nb Places", "Nb Portes", "Taille Coffre", "Caracteristique", "Prix Journalier", "Note Satisfaction", "Categorie", "Attelage", "Boite Vitesse", ""});
         }
 
         @Override
@@ -173,6 +177,14 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
                     int column = getSelectedColumn();
                     if (row != -1 && column != -1) {
                         originalValue = getValueAt(row, column);
+                        try {
+                            Voiture voiture = VoitureController.getInstance().findByImmat((String) getValueAt(row, 0));
+                            Modele modele = ModeleController.getModeleById(voiture.getModele_id());
+                            ParkAutoView.displayImageVoiture(voiture.getImmatriculation());
+                            ParkAutoView.displayModele(modele);
+                        } catch (SQLException ex) {
+                            throw new RuntimeException(ex);
+                        }
                     }
                 }
             }
@@ -188,15 +200,7 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
                 String immatriculation = (String) getValueAt(row, 0);
                 if (!newValue.equals(originalValue)) {
                     try {
-                        switch (column) {
-                            case 2:
-                                newValue = Double.parseDouble((String) newValue);
-                                break;
-                            case 3:
-                                newValue = String.valueOf(newValue);
-                                break;
-                        }
-                        VoitureController.getInstance().update(column, newValue, immatriculation);
+                        update(column, newValue, immatriculation);
                         System.out.println("La cellule à la ligne " + row + ", colonne " + column + " a été modifiée.");
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
@@ -234,8 +238,7 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
     public void voitureadd(MailEvent<Voiture> event) {model.insertRow(0, event.getSource().toArray());}
 
     public void imageSelector() {
-        // Associez l'éditeur de cellules personnalisé à la colonne où vous souhaitez afficher le bouton
-        TableColumn column = getColumnModel().getColumn(15); // Remplacez 5 par l'indice de la colonne où vous souhaitez afficher le bouton
+        TableColumn column = getColumnModel().getColumn(5);
         column.setCellRenderer(new CustomButtonRenderer());
         column.setCellEditor(new CustomButtonEditor(null));
     }
@@ -248,6 +251,21 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
             return customEditor.getTableCellEditorComponent(this, getValueAt(row, column), true, row, column);
         }
         return c;
+    }
+
+
+
+    public void update(int column, Object value, String immat) throws SQLException {
+        Voiture voiture = Voiture.findByImmat(immat);
+        switch (column) {
+            case 2:
+                voiture.setNbKilometre(Double.parseDouble((String) value));
+                break;
+            case 3:
+                voiture.setCouleur((String) value);
+                break;
+        }
+        VoitureController.getInstance().update(voiture);
     }
 
 }

@@ -109,7 +109,6 @@ public class ModeleDAOImpl implements ModeleDAO{
                 }
             }
         }
-
         // Retourner l'ID du modèle
         return nom;
     }
@@ -125,6 +124,7 @@ public class ModeleDAOImpl implements ModeleDAO{
         BoiteVitesse boiteVitesse = BoiteVitesse.valueOf(boiteVitesseValue.toUpperCase());
 
         Modele modele = new Modele(
+                rset.getInt("id"),
                 rset.getString("marque"),
                 rset.getString("nom"),
                 rset.getInt("nbPlaces"),
@@ -140,7 +140,33 @@ public class ModeleDAOImpl implements ModeleDAO{
         return modele;
     }
 
+    public void update(Modele modele) throws SQLException {
+        String query = "UPDATE Modele SET marque = ?, nom = ?, nbPlaces = ?, nbPortes = ?, tailleCoffre = ?, caracteristique = ?, prixJournalier = ?, noteSatisfaction = ?, categorie = ?, attelage = ?, boiteVitesse = ? WHERE id = ?";
 
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+            // Mettre à jour les valeurs des champs
+            pstmt.setString(1, modele.getMarque());
+            pstmt.setString(2, modele.getNom());
+            pstmt.setInt(3, modele.getNbPlace());
+            pstmt.setInt(4, modele.getNbPorte());
+            pstmt.setFloat(5, modele.getTailleCoffre());
+            pstmt.setString(6, modele.getCaracteristiques());
+            pstmt.setInt(7, modele.getPrixJournalier());
+            pstmt.setFloat(8, modele.getNoteSatisfaction());
+            pstmt.setString(9, modele.getCategorie().toString());
+            pstmt.setString(10, modele.isAttelage() ? "Oui" : "Non");
+            pstmt.setString(11, modele.getBoiteVitesse().toString());
+            pstmt.setInt(12, modele.getId()); // Assurez-vous d'avoir l'ID du modèle à mettre à jour
+
+            // Exécuter la requête SQL
+            pstmt.executeUpdate();
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 
 
 

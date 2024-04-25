@@ -41,4 +41,8 @@ public class ModeleController {
     public String getNameById(int id) throws SQLException{
         return Modele.getNameById(id);
     }
+
+    public void upate(Modele modele) throws SQLException{
+        Modele.update(modele);
+    }
 }

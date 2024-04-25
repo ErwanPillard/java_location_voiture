@@ -34,7 +34,7 @@ public class Options extends JPanel{
     }
 
     private void configure(){
-        jtbOptions = new JToolBar("Barra De Opções");
+        jtbOptions = new JToolBar("Barre des tâches");
 
         jbAdd = createButton("Adicionar", "add_obj");
         jbEdit = createButton("Editar", "edit");

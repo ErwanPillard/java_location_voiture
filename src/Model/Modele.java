@@ -34,6 +34,21 @@ public class Modele {
         this.categorie = categorie;
     }
 
+    public Modele(int id, String marque,String nom, int nbPlace, int nbPorte, float tailleCoffre, String caracteristiques, int prixJournalier, float noteSatisfaction, Categorie  categorie, boolean attelage, BoiteVitesse boiteVitesse) {
+        this.id = id;
+        this.marque = marque;
+        this.nom = nom;
+        this.nbPlace = nbPlace;
+        this.nbPorte = nbPorte;
+        this.tailleCoffre = tailleCoffre;
+        this.caracteristiques = caracteristiques;
+        this.prixJournalier = prixJournalier;
+        this.attelage = attelage;
+        this.noteSatisfaction = noteSatisfaction;
+        this.boiteVitesse = boiteVitesse;
+        this.categorie = categorie;
+    }
+
     public int getId() {
         return id;
     }
@@ -42,12 +57,12 @@ public class Modele {
         this.id = id;
     }
 
-    public String getNom() {
-        return nom;
+    public String getMarque() {
+        return marque;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public String getNom() {
+        return nom;
     }
 
     public int getNbPlace() {
@@ -78,12 +93,56 @@ public class Modele {
         return noteSatisfaction;
     }
 
+    public BoiteVitesse getBoiteVitesse() {
+        return boiteVitesse;
+    }
+
     public Categorie getCategorie() {
         return categorie;
     }
 
-    public BoiteVitesse getBoiteVitesse(){
-        return boiteVitesse;
+    public void setMarque(String marque) {
+        this.marque = marque;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public void setNbPlace(int nbPlace) {
+        this.nbPlace = nbPlace;
+    }
+
+    public void setNbPorte(int nbPorte) {
+        this.nbPorte = nbPorte;
+    }
+
+    public void setTailleCoffre(float tailleCoffre) {
+        this.tailleCoffre = tailleCoffre;
+    }
+
+    public void setCaracteristiques(String caracteristiques) {
+        this.caracteristiques = caracteristiques;
+    }
+
+    public void setPrixJournalier(int prixJournalier) {
+        this.prixJournalier = prixJournalier;
+    }
+
+    public void setAttelage(boolean attelage) {
+        this.attelage = attelage;
+    }
+
+    public void setNoteSatisfaction(float noteSatisfaction) {
+        this.noteSatisfaction = noteSatisfaction;
+    }
+
+    public void setBoiteVitesse(BoiteVitesse boiteVitesse) {
+        this.boiteVitesse = boiteVitesse;
+    }
+
+    public void setCategorie(Categorie categorie) {
+        this.categorie = categorie;
     }
 
     /**
@@ -122,8 +181,10 @@ public class Modele {
         modeleDAO.add(modele);
     }
 
-    public String getMarque() {
-        return marque;
+    public static void update(Modele modele) throws SQLException {
+        ModeleDAO modeleDAO = new ModeleDAOImpl();
+        modeleDAO.update(modele);
     }
+
 }
 
