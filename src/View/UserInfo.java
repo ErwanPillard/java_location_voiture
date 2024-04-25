@@ -1,5 +1,6 @@
 package View;
 
+import Controller.UserInfoController;
 import Model.SessionManager;
 
 import javax.swing.*;
@@ -50,7 +51,9 @@ public class UserInfo extends JFrame {
         btnFacture.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // faire le code
+                dispose();
+                UserInfoController userInfoController = new UserInfoController(UserInfo.this);
+                userInfoController.showUserInvoices();
             }
         });
         btnReservations = new JButton("Afficher toutes mes réservations");
@@ -208,5 +211,9 @@ public class UserInfo extends JFrame {
 
     public JButton getBtnLogout() {
         return btnLogout;
+    }
+
+    public AbstractButton getBtnFacture() {
+        return btnFacture;
     }
 }
