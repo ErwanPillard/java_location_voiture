@@ -9,6 +9,18 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class init_bdd_graphique extends JFrame {
+
+    static init_bdd_graphique init_bdd_graphique;
+
+    static {
+        try {
+            init_bdd_graphique = new init_bdd_graphique();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private final Connection connection;
     private final JButton btnNettoyer;
     private final JButton btnAjouterUsers;
     private final JButton btnAjouterEmployes;
@@ -18,10 +30,12 @@ public class init_bdd_graphique extends JFrame {
     private final JButton btnAjouterVoiture;
     private final JButton btnAjouterModele;
 
-    private final Connection connection;
+    /*public init_bdd_graphique() {
+        createButtons();
+        configure();
+    }*/
 
     public init_bdd_graphique() throws SQLException {
-        super("Test BDD avec GUI");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(400, 250);
         setLocationRelativeTo(null);
@@ -48,6 +62,33 @@ public class init_bdd_graphique extends JFrame {
         add(btnAjouterVoiture);
 
         setupButtonActions();
+    }
+
+    /*private void createButtons() {
+        JPanel jpButtons = new JPanel();
+
+        jpButtons.add(btnNettoyer = new JButton("Nettoyer la BDD"));
+        jpButtons.add(btnAjouterUsers = new JButton("1. Ajouter Utilisateurs"));
+        jpButtons.add(btnAjouterEmployes = new JButton("2. Ajouter Employés"));
+        jpButtons.add(btnAjouterClients = new JButton("3. Ajouter Clients"));
+        jpButtons.add(btnAjouterParticulier = new JButton("4. Ajouter Particuliers"));
+        jpButtons.add(btnAjouterEntreprise = new JButton("5. Ajouter Entreprise"));
+        jpButtons.add(btnAjouterModele = new JButton("6. Ajouter Modele"));
+        jpButtons.add(btnAjouterVoiture = new JButton("7. Ajouter Voiture"));
+
+        this.add(jpButtons, BorderLayout.SOUTH);
+    }
+
+    private void configure() {
+        setTitle("Init BDD graphique");
+        this.setResizable(true);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.pack();
+        this.setLocationRelativeTo(this.getRootPane());
+    }*/
+
+    public static void toggle() {
+        init_bdd_graphique.setVisible(!init_bdd_graphique.isVisible());
     }
 
     public static void main(String[] args) {

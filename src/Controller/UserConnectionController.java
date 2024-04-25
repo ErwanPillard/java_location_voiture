@@ -47,11 +47,9 @@ public class UserConnectionController {
         User user = userConnectionDao.connect(username, password);
         if (user != null) {
             SessionManager.getInstance().logIn(user);
-            homePage.setUserLoggedIn(true);
             loginDialog.dispose();
         } else {
             JOptionPane.showMessageDialog(null, "Échec de la connexion. Veuillez vérifier vos identifiants.", "Erreur", JOptionPane.ERROR_MESSAGE);
-            homePage.setUserLoggedIn(false);
         }
     }
 }

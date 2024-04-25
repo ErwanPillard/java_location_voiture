@@ -43,10 +43,8 @@ public class HomeController {
         User user = userConnexion.connect(username, password);
         if (user != null) {
             SessionManager.getInstance().logIn(user);
-            homePage.setUserLoggedIn(true);
         } else {
             SessionManager.getInstance().logOut();
-            homePage.setUserLoggedIn(false);
         }
     }
 }
