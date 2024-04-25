@@ -15,6 +15,7 @@ public class SessionManager {
     private static Particulier currentParticulier;
     private static Employe currentEmploye;
     private static Entreprise currentEntreprise;
+    private static Client currentClient;
     private static String userType;
     private boolean isLoggedIn;
 
@@ -30,6 +31,10 @@ public class SessionManager {
 
     public static User getCurrentUser() {
         return currentUser;
+    }
+
+    public static Client getCurrentClient() {
+        return currentClient;
     }
 
     public static Particulier getCurrentParticulier() {
@@ -62,21 +67,16 @@ public class SessionManager {
                 return;
             }
 
-            // Essayer de récupérer le Particulier
             stmt = connection.prepareStatement("SELECT * FROM Particulier WHERE id = ?");
             stmt.setInt(1, userId);
             rs = stmt.executeQuery();
             if (rs.next()) {
                 userType = "Particulier";
 
-                // Extraire la date depuis le ResultSet et la convertir en String
                 String birthDateStr = rs.getDate("birthDate").toString();
-                // Définir le format de la date
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Assure-toi que le format correspond à celui retourné par .toString()
-                // Parser la chaîne de caractères en LocalDate
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 LocalDate birthDate = LocalDate.parse(birthDateStr, formatter);
 
-                // Maintenant, tu peux utiliser la variable birthDate lors de la création de l'instance de Particulier
                 currentParticulier = new Particulier(
                         rs.getInt("id"),
                         rs.getString("nom"),
@@ -84,10 +84,17 @@ public class SessionManager {
                         rs.getString("numeroPermis"),
                         birthDate
                 );
-                return;
+                stmt = connection.prepareStatement("SELECT * FROM Client WHERE id = ?");
+                stmt.setInt(1, userId);
+                rs = stmt.executeQuery();
+                if (rs.next()) {
+                    currentClient = new Client(
+                            rs.getInt("id"),
+                            rs.getString("telephone")
+                    );
+                }
             }
 
-            // Essayer de récupérer l'Entreprise
             stmt = connection.prepareStatement("SELECT * FROM Entreprise WHERE id = ?");
             stmt.setInt(1, userId);
             rs = stmt.executeQuery();
@@ -98,6 +105,15 @@ public class SessionManager {
                         rs.getString("nom"),
                         rs.getString("numeroSiret")
                 );
+                stmt = connection.prepareStatement("SELECT * FROM Client WHERE id = ?");
+                stmt.setInt(1, userId);
+                rs = stmt.executeQuery();
+                if (rs.next()) {
+                    currentClient = new Client(
+                            rs.getInt("id"),
+                            rs.getString("telephone")
+                    );
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

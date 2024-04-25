@@ -1,6 +1,5 @@
 package Model;
 
-import Controller.ClientController;
 import Dao.ClientDAO;
 import Dao.ClientDAOImpl;
 
@@ -21,6 +20,12 @@ public class Client extends User {
     public Client(int id) { //Client non adhérant
         super(id);
         this.id = id;
+    }
+
+    public Client(int id, String telephone) { //Client non adhérant
+        super(id);
+        this.id = id;
+        this.telephone = telephone;
     }
 
     public String getTelephone() {

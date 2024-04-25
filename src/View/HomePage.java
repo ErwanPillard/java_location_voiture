@@ -8,14 +8,12 @@ import Model.SessionManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class HomePage extends JFrame {
-    private JButton btnLogin;
+
+    private JButton btnLogin, btnCreateAccount, btnInitDB;
     private JTextField tfLocation, tfPickUpDate, tfDropOffDate;
     private JButton btnSearch;
-    private JLabel loginStatusLabel;
     private JButton btnClientForm;
 
     public HomePage() {
@@ -46,14 +44,14 @@ public class HomePage extends JFrame {
         appTitle.setFont(new Font("Arial", Font.BOLD, 40));
         appTitle.setForeground(new Color(0, 128, 0));
 
-        loginStatusLabel = new JLabel("Non connecté");
-        loginStatusLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        appTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         btnLogin = new JButton(new ImageIcon(getClass().getResource("/Pictures/AccountPicture.png")));
         btnLogin.setBorderPainted(false);
         btnLogin.setContentAreaFilled(false);
         btnLogin.setFocusPainted(false);
         btnLogin.setOpaque(false);
+        btnLogin.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         btnLogin.addActionListener(e -> {
             if (SessionManager.getInstance().isLoggedIn()) {
@@ -68,42 +66,45 @@ public class HomePage extends JFrame {
             }
         });
 
+        // Panneau pour les boutons sous le titre
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        btnCreateAccount = new JButton("Créer Compte");
+        btnCreateAccount.addActionListener(e -> {
+            ClientFormView.toggle();
+        });
+        btnCreateAccount.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        btnInitDB = new JButton("Init BDD Graphique");
+        btnInitDB.addActionListener(e -> {
+            init_bdd_graphique.toggle();
+        });
+        btnInitDB.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         titlePanel.add(appTitle);
 
         JPanel loginPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         loginPanel.add(btnLogin);
 
+        buttonPanel.add(btnCreateAccount);
+        buttonPanel.add(btnInitDB);
+
         northPanel.add(titlePanel, BorderLayout.CENTER);
         northPanel.add(loginPanel, BorderLayout.EAST);
-        if (SessionManager.getInstance().isLoggedIn()) {
-            loginStatusLabel.setText("Connecté");
-        } else {
-            loginStatusLabel.setText("Non connecté");
-        }
-        northPanel.add(loginStatusLabel, BorderLayout.SOUTH);
 
-        btnClientForm = new JButton("Crée un compte");
-        btnClientForm.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                ClientFormView.toggle();
-                init_bdd_graphique.main(new String[]{});
-            }
-        });
-        btnClientForm.setAlignmentX(Component.CENTER_ALIGNMENT);
-        northPanel.add(btnClientForm, BorderLayout.WEST);
+        northPanel.add(buttonPanel, BorderLayout.SOUTH);
+        //northPanel.add(loginStatusLabel, BorderLayout.SOUTH);
 
         // Ajoute le northPanel au mainPanel
         mainPanel.add(northPanel, BorderLayout.NORTH);
 
-        // Centre de la page : Contenu principal
+        // Centre de la page
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
 
         JScrollPane scrollPane = new JScrollPane(centerPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
-
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
         // Configuration finale de la fenêtre
@@ -131,10 +132,6 @@ public class HomePage extends JFrame {
 
     public JButton getBtnSearch() {
         return btnSearch;
-    }
-
-    public void setUserLoggedIn(boolean isLoggedIn) {
-        loginStatusLabel.setText(isLoggedIn ? "Connecté" : "Non connecté");
     }
 
     private void showUserConnectionDialog() {
