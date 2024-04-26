@@ -11,7 +11,7 @@ import java.awt.*;
 
 public class HomePage extends JFrame {
 
-    private JButton btnLogin, btnCreateAccount, btnInitDB;
+    private JButton btnLogin, btnCreateAccount, btnInitDB, btnEmployeInterface;
     private JTextField tfLocation, tfPickUpDate, tfDropOffDate;
     private JButton btnSearch;
     private JButton btnClientForm;
@@ -66,8 +66,18 @@ public class HomePage extends JFrame {
             }
         });
 
-        // Panneau pour les boutons sous le titre
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        if ("Employe".equals(SessionManager.userType())) {
+            btnEmployeInterface = new JButton("interface employé");
+            btnEmployeInterface.addActionListener(e -> {
+                View.MainJFrame.employeInterface();
+            });
+            btnEmployeInterface.setAlignmentX(Component.CENTER_ALIGNMENT);
+            buttonPanel.add(btnEmployeInterface);
+        }
+
+        // Panneau pour les boutons sous le titre
         btnCreateAccount = new JButton("Créer Compte");
         btnCreateAccount.addActionListener(e -> {
             ClientFormView.toggle();
