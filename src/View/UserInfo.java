@@ -26,7 +26,7 @@ public class UserInfo extends JFrame {
     public UserInfo() {
         setTitle("Informations de l'utilisateur");
         //setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setSize(500, 300);
+        setSize(700, 500);
         setLocationRelativeTo(null); // Centre la fenêtre
         setLayout(new BorderLayout());
 
