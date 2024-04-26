@@ -80,7 +80,6 @@ public class HomePage extends JFrame {
                 buttonPanel.add(btnEmployeInterface);
             }
         } else if (!SessionManager.isLoggedIn()) {
-            getContentPane().removeAll();
             buttonPanel.remove(btnEmployeInterface);
         }
 
@@ -110,7 +109,6 @@ public class HomePage extends JFrame {
         northPanel.add(loginPanel, BorderLayout.EAST);
 
         northPanel.add(buttonPanel, BorderLayout.SOUTH);
-        //northPanel.add(loginStatusLabel, BorderLayout.SOUTH);
 
         // Ajoute le northPanel au mainPanel
         mainPanel.add(northPanel, BorderLayout.NORTH);
@@ -126,7 +124,7 @@ public class HomePage extends JFrame {
 
         // Configuration finale de la fenêtre
         setContentPane(mainPanel);
-        pack(); // Ajuste la taille de la fenêtre aux composants
+        pack();
         setVisible(true);
     }
 

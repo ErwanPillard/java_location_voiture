@@ -88,7 +88,7 @@ public class UserInfo extends JFrame {
         btnModifMdp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // faire le code
+                changePasswordDialog();
             }
         });
         btnModifTel = new JButton("Modifier le numéro de téléphone");
@@ -215,5 +215,59 @@ public class UserInfo extends JFrame {
 
     public AbstractButton getBtnFacture() {
         return btnFacture;
+    }
+
+    private void changePasswordDialog() {
+        // Création d'une boîte de dialogue pour la saisie du mot de passe
+        JDialog dialog = new JDialog(this, "Changer le mot de passe", true);
+        dialog.setLayout(new GridLayout(4, 2, 10, 10));
+
+        // Champ pour l'ancien mot de passe
+        JLabel labelOldPassword = new JLabel("Ancien mot de passe :");
+        JPasswordField oldPasswordField = new JPasswordField();
+        dialog.add(labelOldPassword);
+        dialog.add(oldPasswordField);
+
+        // Champ pour le nouveau mot de passe
+        JLabel labelNewPassword = new JLabel("Nouveau mot de passe :");
+        JPasswordField newPasswordField = new JPasswordField();
+        dialog.add(labelNewPassword);
+        dialog.add(newPasswordField);
+
+        // Champ pour la confirmation du nouveau mot de passe
+        JLabel labelConfirmPassword = new JLabel("Confirmer nouveau mot de passe :");
+        JPasswordField confirmPasswordField = new JPasswordField();
+        dialog.add(labelConfirmPassword);
+        dialog.add(confirmPasswordField);
+
+        // Bouton pour valider la modification
+        JButton btnChangePassword = new JButton("Changer");
+        btnChangePassword.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String oldPassword = new String(oldPasswordField.getPassword());
+                String newPassword = new String(newPasswordField.getPassword());
+                String confirmPassword = new String(confirmPasswordField.getPassword());
+
+                if (!newPassword.equals(confirmPassword)) {
+                    JOptionPane.showMessageDialog(dialog, "Les mots de passe ne correspondent pas !");
+                    return;
+                }
+
+                // Ici, tu pourrais appeler une méthode de ton modèle pour changer le mot de passe
+                // Assure-toi que l'ancien mot de passe est correct avant de le changer
+                if (SessionManager.changePassword(oldPassword, newPassword)) {
+                    JOptionPane.showMessageDialog(dialog, "Mot de passe modifié avec succès !");
+                    dialog.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(dialog, "Erreur : l'ancien mot de passe est incorrect !");
+                }
+            }
+        });
+        dialog.add(new JLabel()); // Placeholder pour alignement
+        dialog.add(btnChangePassword);
+
+        dialog.setSize(400, 200);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
     }
 }
