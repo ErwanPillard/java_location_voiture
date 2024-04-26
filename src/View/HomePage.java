@@ -8,6 +8,7 @@ import Model.SessionManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 
 public class HomePage extends JFrame {
 
@@ -18,9 +19,6 @@ public class HomePage extends JFrame {
 
     public HomePage() {
         initUI();
-
-        //ModeleView.toggle();
-        //VoitureFormView.toggle();
     }
 
     public static void main(String[] args) {
@@ -31,7 +29,8 @@ public class HomePage extends JFrame {
         });
     }
 
-    private void initUI() {
+    public void initUI() {
+        getContentPane().removeAll();
         setTitle("Carece - Page d'Accueil");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -54,7 +53,8 @@ public class HomePage extends JFrame {
         btnLogin.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         btnLogin.addActionListener(e -> {
-            if (SessionManager.getInstance().isLoggedIn()) {
+            SessionManager.getInstance();
+            if (SessionManager.isLoggedIn()) {
                 this.setVisible(false); // Cache HomePage
                 new UserInfo().setVisible(true); // Affiche UserInfo
             } else {
@@ -62,19 +62,26 @@ public class HomePage extends JFrame {
                 this.setVisible(false);
                 UserConnectionController controller = new UserConnectionController(this, new ConnexionUtilisateur(), new UserConnectionImpl());
                 controller.showLoginDialog(this); // 'this' réfère à la JFrame HomePage
-                this.setVisible(true);
+                new HomePage().setVisible(true); // Rouvre HomePage
             }
         });
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
+        JButton btnEmployeInterface = new JButton("interface employé");
+        btnEmployeInterface.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnEmployeInterface.addActionListener(e -> {
+            View.MainJFrame.employeInterface();
+        });
+
         if ("Employe".equals(SessionManager.userType())) {
-            btnEmployeInterface = new JButton("interface employé");
-            btnEmployeInterface.addActionListener(e -> {
-                View.MainJFrame.employeInterface();
-            });
-            btnEmployeInterface.setAlignmentX(Component.CENTER_ALIGNMENT);
-            buttonPanel.add(btnEmployeInterface);
+            // Ajoute le bouton seulement s'il n'est pas déjà présent pour éviter des doublons
+            if (!Arrays.asList(buttonPanel.getComponents()).contains(btnEmployeInterface)) {
+                buttonPanel.add(btnEmployeInterface);
+            }
+        } else if (!SessionManager.isLoggedIn()) {
+            getContentPane().removeAll();
+            buttonPanel.remove(btnEmployeInterface);
         }
 
         // Panneau pour les boutons sous le titre

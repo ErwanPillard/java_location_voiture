@@ -17,7 +17,7 @@ public class SessionManager {
     private static Entreprise currentEntreprise;
     private static Client currentClient;
     private static String userType;
-    private boolean isLoggedIn;
+    private static boolean isLoggedIn;
 
     private SessionManager() {
     }
@@ -125,20 +125,20 @@ public class SessionManager {
         return userType;
     }
 
-    public boolean isLoggedIn() {
+    public static boolean isLoggedIn() {
         return isLoggedIn;
     }
 
     public void logIn(User user) throws SQLException {
         currentUser = user;
-        this.isLoggedIn = true;
+        isLoggedIn = true;
         Connection connection = DatabaseManager.getConnection(); // Assure-toi d'avoir cette connexion disponible
         getUserInfo(user.getId(), connection);
     }
 
     public void logOut() {
         currentUser = null;
-        this.isLoggedIn = false;
+        isLoggedIn = false;
     }
 }
 
