@@ -28,6 +28,7 @@ public class ParkAutoView{
     private JComboBox<String> filterBoiteVitesseComboBox;
     private PlaceholderTextField searchField;
     private static JLabel imageLabel;
+    private static JButton editButton;
 
     private VoitureJTable jTableList;
 
@@ -144,6 +145,23 @@ public class ParkAutoView{
                 System.out.println("imageLabel is null"); // Déboguer si imageLabel est null
             }
         }
+
+        editButton.setText("Change Image");
+
+        editButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                File selectedFile = VoitureFormView.getInstance().selectImage();
+                if (selectedFile != null) {
+                    try {
+                        Voiture.addImage(immat, selectedFile);
+                        //displayImageVoiture(immat); // Réouvrir la frame avec la nouvelle image
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+        });
     }
 
 
@@ -254,6 +272,7 @@ public class ParkAutoView{
         });
 
         topRightPanel.add(imageLabel);
+        topRightPanel.add(editButton);
 
         // Ajoutez le JPanel rightPanel à droite dans le JPanel principal avec des contraintes de position
         GridBagConstraints gbcRightPanel = new GridBagConstraints();
@@ -294,6 +313,7 @@ public class ParkAutoView{
     public void createView(JPanel jpBody) {
         // Créez une instance de JLabel pour l'image
         imageLabel = new JLabel();
+        editButton = new JButton();
 
         // Créez un JPanel pour contenir le tableau et le JPanel rightPanel
         JPanel mainPanel = new JPanel();
@@ -312,6 +332,7 @@ public class ParkAutoView{
 
         topRightPanel(mainPanel);
         rightPanel(mainPanel);
+
 
         // Ajoutez le JPanel principal à jpBody
         jpBody.removeAll(); // Supprimer tous les composants existants de jpBody

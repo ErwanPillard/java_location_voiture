@@ -36,7 +36,7 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
         VoitureController.getInstance().addUserListener(this);
         updateTable(loadAll());
         cellEdit();
-        imageSelector();
+        //imageSelector();
 
         // Création du TableRowSorter et association avec le modèle de tableau
         sorter = new TableRowSorter<>(model);
@@ -89,7 +89,7 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
         private static final long serialVersionUID = 1L;
 
         public TableModel() {
-            super(new Object[][]{}, new String[]{"Immatriculation", "Mise en circulation", "Kilometrage", "Couleur", "Modele", ""});
+            super(new Object[][]{}, new String[]{"Immatriculation", "Mise en circulation", "Kilometrage", "Couleur", "Modele"});
             //super(new Object[][]{}, new String[]{"Immatriculation", "Mise en circulation", "Kilometrage", "Couleur", "Marque", "Nom", "Nb Places", "Nb Portes", "Taille Coffre", "Caracteristique", "Prix Journalier", "Note Satisfaction", "Categorie", "Attelage", "Boite Vitesse", ""});
         }
 

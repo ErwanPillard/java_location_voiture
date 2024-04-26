@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.*;
 
+import View.Employe.ClientBaseView;
 import View.Employe.ModeleView;
 import View.Employe.ParkAutoView;
 import View.listeners.EventListener;
@@ -22,6 +23,7 @@ public class MenuOver extends JMenuBar {
     private JMenuItem jmiExit;
     private JMenuItem jmiModele;
     private JMenuItem jmiVoiture;
+    private JMenuItem jmiClient;
 
 
     private JMenu jmEdit;
@@ -51,7 +53,10 @@ public class MenuOver extends JMenuBar {
         jmHelp = createMenu("Aide", 'H');
 
         jmiVoiture = createMenuItem(jmFile, "Park auto", 'S', "details",
-                KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.ALT_MASK));
+                KeyStroke.getKeyStroke(KeyEvent.VK_F2, InputEvent.ALT_MASK));
+
+        jmiClient = createMenuItem(jmFile, "Base Client", 'S', "details",
+                KeyStroke.getKeyStroke(KeyEvent.VK_F3, InputEvent.ALT_MASK));
 
         jmiExit = createMenuItem(jmFile, "Quitter", 'S', "close_view",
                 KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.ALT_MASK));
@@ -103,6 +108,12 @@ public class MenuOver extends JMenuBar {
         jmiVoiture.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 new ParkAutoView(jpBody);
+            }
+        });
+
+        jmiClient.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                new ClientBaseView(jpBody);
             }
         });
 
