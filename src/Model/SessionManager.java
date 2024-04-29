@@ -1,6 +1,7 @@
 package Model;
 
 import Dao.DatabaseManager;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -130,6 +131,8 @@ public class SessionManager {
     }
 
     public static boolean changePassword(String oldPassword, String newPassword) {
+        System.out.println(oldPassword);
+        System.out.println(newPassword);
         if (currentUser == null) {
             return false; // Aucun utilisateur connecté
         }
@@ -141,16 +144,44 @@ public class SessionManager {
         return false; // Ancien mot de passe incorrect
     }
 
-    private static boolean verifyPassword(User user, String password) {
-        return hashPassword(password).equals(user.getMotDePasse());
-    }
 
     private static String hashPassword(String password) {
-        return Integer.toString(password.hashCode());
+        return BCrypt.hashpw(password, BCrypt.gensalt());
+    }
+
+    private static boolean verifyPassword(User user, String password) {
+        String query = "SELECT id, email, motDePasse FROM User WHERE email = ?";
+        try (Connection conn = DatabaseManager.getConnection(); // Utilise la connexion unique gérée par DatabaseManager
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setString(1, user.getEmail());
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    String hashedPassword = rs.getString("motDePasse");
+                    if (BCrypt.checkpw(password, hashedPassword)) {
+                        return true;
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false; // retourne null si la connexion a échoué ou si le mot de passe est incorrect.
     }
 
     private static boolean updatePasswordInDatabase(int userId, String newHashedPassword) {
-        return true;
+        String sql = "UPDATE User SET motDePasse = ? WHERE id = ?";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, newHashedPassword);
+            pstmt.setInt(2, userId);
+            int updatedRows = pstmt.executeUpdate();
+            return updatedRows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public void logIn(User user) throws SQLException {

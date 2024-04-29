@@ -255,6 +255,8 @@ public class UserInfo extends JFrame {
 
                 // Ici, tu pourrais appeler une méthode de ton modèle pour changer le mot de passe
                 // Assure-toi que l'ancien mot de passe est correct avant de le changer
+                System.out.println(oldPassword);
+                System.out.println(newPassword);
                 if (SessionManager.changePassword(oldPassword, newPassword)) {
                     JOptionPane.showMessageDialog(dialog, "Mot de passe modifié avec succès !");
                     dialog.dispose();
