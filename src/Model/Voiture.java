@@ -73,7 +73,8 @@ public class Voiture {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return new Object[] {this.immatriculation, this.dateMiseCirculation.toString(), this.nbKilometre, this.couleur, modele.getMarque(), modele.getNom(), modele.getNbPlace(), modele.getNbPorte(), modele.getTailleCoffre(), modele.getCaracteristiques(), modele.getPrixJournalier(), modele.getNoteSatisfaction(), modele.getCategorie(), modele.isAttelage() ? "Oui" : "Non", modele.getBoiteVitesse()};
+        //return new Object[] {this.immatriculation, this.dateMiseCirculation.toString(), this.nbKilometre, this.couleur, modele.getMarque(), modele.getNom(), modele.getNbPlace(), modele.getNbPorte(), modele.getTailleCoffre(), modele.getCaracteristiques(), modele.getPrixJournalier(), modele.getNoteSatisfaction(), modele.getCategorie(), modele.isAttelage() ? "Oui" : "Non", modele.getBoiteVitesse()};
+        return new Object[] {this.immatriculation, this.dateMiseCirculation.toString(), this.nbKilometre, this.couleur};
     }
 
     @Override

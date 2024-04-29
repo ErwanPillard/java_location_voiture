@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import static utils.Util.addFormField;
+
 public class ParkAutoView{
 
     private JComboBox<String> filterCategorieComboBox;
@@ -201,7 +203,11 @@ public class ParkAutoView{
     public void rightPanel(JPanel mainPanel) {
         // Créez un nouveau JPanel pour contenir les composants de droite
         JPanel rightPanel = new JPanel();
-        rightPanel.setLayout(new GridLayout(16, 1)); // 2 lignes, 1 colonne
+        rightPanel.setLayout(new GridLayout(20, 1)); // 2 lignes, 1 colonne
+
+        JLabel labelTriezParCategorie = new JLabel("Triez par catégorie");
+        JLabel labelTriezParBoiteVitesse = new JLabel("Auto / Manuelle ?");
+
 
         String[] categories1 = new String[Categorie.values().length + 1];
         categories1[0] = "--Non spécifié--"; // Texte par défaut
@@ -226,7 +232,9 @@ public class ParkAutoView{
                 BorderFactory.createEmptyBorder(0, 5, 0, 5))); // Ajout d'un petit espacement à gauche et à droite du champ de recherche
 
         rightPanel.add(searchField);
+        rightPanel.add(labelTriezParCategorie);
         rightPanel.add(filterCategorieComboBox);
+        rightPanel.add(labelTriezParBoiteVitesse);
         rightPanel.add(filterBoiteVitesseComboBox);
 
         // Ajoutez les JLabels au JPanel rightPanel
@@ -246,44 +254,14 @@ public class ParkAutoView{
 
         // Ajoutez le JPanel rightPanel à droite dans le JPanel principal avec des contraintes de position
         GridBagConstraints gbcRightPanel = new GridBagConstraints();
+
         gbcRightPanel.gridx = 1; // Colonne 1
         gbcRightPanel.gridy = 1; // Ligne 0
         gbcRightPanel.weightx = 0.1; // Poids horizontal (pour réduire la largeur)
-        gbcRightPanel.weighty = 0.4; // Poids vertical (pour occuper l'espace disponible)
+        gbcRightPanel.weighty = 0.5; // Poids vertical (pour occuper l'espace disponible)
         gbcRightPanel.fill = GridBagConstraints.BOTH; // Remplissage dans les deux sens
         mainPanel.add(rightPanel, gbcRightPanel);
     }
-
-    public void topRightPanel(JPanel mainPanel) {
-        // Créez un nouveau JPanel pour contenir les composants de droite
-        JPanel topRightPanel = new JPanel();
-        topRightPanel.setLayout(new GridBagLayout()); // Utilisation du GridBagLayout
-
-        // Définissez les marges internes du GridBagLayout sur 0
-        ((GridBagLayout)topRightPanel.getLayout()).setConstraints(imageLabel, new GridBagConstraints() {
-            {
-                gridx = 0; // Colonne 0
-                gridy = 0; // Ligne 0
-                weightx = 1.0; // Poids horizontal (pour occuper l'espace disponible)
-                weighty = 1.0; // Poids vertical (pour occuper l'espace disponible)
-                fill = GridBagConstraints.BOTH; // Remplissage dans les deux sens
-                insets = new Insets(0, 0, 0, 0); // Marges internes (haut, gauche, bas, droite)
-            }
-        });
-
-        topRightPanel.add(imageLabel);
-        topRightPanel.add(editButton);
-
-        // Ajoutez le JPanel rightPanel à droite dans le JPanel principal avec des contraintes de position
-        GridBagConstraints gbcRightPanel = new GridBagConstraints();
-        gbcRightPanel.gridx = 1; // Colonne 1
-        gbcRightPanel.gridy = 0; // Ligne 0
-        gbcRightPanel.weightx = 0.1; // Poids horizontal (pour réduire la largeur)
-        gbcRightPanel.weighty = 0.4; // Poids vertical (pour occuper l'espace disponible)
-        gbcRightPanel.fill = GridBagConstraints.BOTH; // Remplissage dans les deux sens
-        mainPanel.add(topRightPanel, gbcRightPanel);
-    }
-
 
     public void leftPanel(JPanel mainPanel) {
         // Créez un nouveau JPanel pour contenir les composants de gauche
@@ -330,9 +308,7 @@ public class ParkAutoView{
         gbcTable.weighty = 1.0; // Poids vertical (pour occuper l'espace disponible)
         gbcTable.fill = GridBagConstraints.BOTH; // Remplissage dans les deux sens
 
-        topRightPanel(mainPanel);
         rightPanel(mainPanel);
-
 
         // Ajoutez le JPanel principal à jpBody
         jpBody.removeAll(); // Supprimer tous les composants existants de jpBody

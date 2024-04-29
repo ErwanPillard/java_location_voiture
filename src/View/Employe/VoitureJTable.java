@@ -36,7 +36,7 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
         VoitureController.getInstance().addUserListener(this);
         updateTable(loadAll());
         cellEdit();
-        //imageSelector();
+        imageSelector();
 
         // Création du TableRowSorter et association avec le modèle de tableau
         sorter = new TableRowSorter<>(model);
@@ -89,13 +89,13 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
         private static final long serialVersionUID = 1L;
 
         public TableModel() {
-            super(new Object[][]{}, new String[]{"Immatriculation", "Mise en circulation", "Kilometrage", "Couleur", "Modele"});
+            super(new Object[][]{}, new String[]{"Immatriculation", "Mise en circulation", "Kilometrage", "Couleur", ""});
             //super(new Object[][]{}, new String[]{"Immatriculation", "Mise en circulation", "Kilometrage", "Couleur", "Marque", "Nom", "Nb Places", "Nb Portes", "Taille Coffre", "Caracteristique", "Prix Journalier", "Note Satisfaction", "Categorie", "Attelage", "Boite Vitesse", ""});
         }
 
         @Override
         public boolean isCellEditable(int row, int column) {
-            if (column == 0 || column == 1 || column == 4 || column == 5 || column == 6 || column == 7 || column == 12 || column == 14) {
+            if (column == 0 || column == 1 || column == 5 || column == 6 || column == 7 || column == 12 || column == 14) {
                 return false;
             }
             return true;
@@ -238,7 +238,7 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
     public void voitureadd(MailEvent<Voiture> event) {model.insertRow(0, event.getSource().toArray());}
 
     public void imageSelector() {
-        TableColumn column = getColumnModel().getColumn(5);
+        TableColumn column = getColumnModel().getColumn(4);
         column.setCellRenderer(new CustomButtonRenderer());
         column.setCellEditor(new CustomButtonEditor(null));
     }

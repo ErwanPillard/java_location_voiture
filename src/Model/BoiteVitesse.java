@@ -2,7 +2,7 @@ package Model;
 
 public enum BoiteVitesse {
     AUTOMATIQUE("automatique"),
-    MANUEL("manuel");
+    MANUELLE("manuelle");
     private final String typeBoite;
 
     BoiteVitesse(String typeBoite) {

@@ -89,6 +89,16 @@ classDiagram
         OR
     }
     
+    class OffreReduction{
+    - id : int
+    - nom : String
+    - description : String
+    - dateDebut : LocalDate
+    - dateFin : LocalDate
+    - pourcentageReduction : float
+    - TypeAdhesion : String
+}
+    
     Reservation "0..1" --> "1" Voiture
     Reservation "1" --> "1" Facture
     Reservation "0..*" -- "1" Client
