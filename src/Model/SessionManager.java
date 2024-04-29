@@ -142,7 +142,6 @@ public class SessionManager {
         return false; // Ancien mot de passe incorrect
     }
 
-
     private static String hashPassword(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
     }
@@ -196,6 +195,13 @@ public class SessionManager {
         }
     }
 
+    public static Object[][] fetchReservationsData(int clientId) {
+        return new Object[][]{
+                {1, "2023-01-10", "2023-01-15", 100.0, "Confirmée"},
+                {2, "2023-02-20", "2023-02-25", 150.0, "Annulée"}
+        };
+    }
+
     public void logIn(User user) throws SQLException {
         currentUser = user;
         isLoggedIn = true;
@@ -208,22 +214,3 @@ public class SessionManager {
         isLoggedIn = false;
     }
 }
-
-
-
-/*
-Code crée employée :
--- Ajout dans la table User
-    INSERT INTO User (email, motDePasse) VALUES
-        ('em', "em"),
-        ('em2', "em2");
-
--- Récupérer les IDs générés pour les nouveaux utilisateurs
-    SET @last_id1 = LAST_INSERT_ID();
-    SET @last_id2 = LAST_INSERT_ID() + 1;
-
--- Ajout dans la table Employe avec les IDs récupérés
-    INSERT INTO Employe (id, nom, prenom, fonction) VALUES
-        (@last_id1, 'Thomas', 'Pierre-Louis', 'Vendeur'),
-        (@last_id2, 'Niccolini', 'Nina', 'Vendeuse');
- */

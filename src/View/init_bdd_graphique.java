@@ -29,6 +29,8 @@ public class init_bdd_graphique extends JFrame {
     private final JButton btnAjouterEntreprise;
     private final JButton btnAjouterVoiture;
     private final JButton btnAjouterModele;
+    private final JButton btnAjouterReservation;
+    private final JButton btnAjouterFacture;
 
     /*public init_bdd_graphique() {
         createButtons();
@@ -36,7 +38,6 @@ public class init_bdd_graphique extends JFrame {
     }*/
 
     public init_bdd_graphique() throws SQLException {
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(400, 250);
         setLocationRelativeTo(null);
         setLayout(new FlowLayout());
@@ -51,6 +52,8 @@ public class init_bdd_graphique extends JFrame {
         btnAjouterEntreprise = new JButton("5. Ajouter Entreprise");
         btnAjouterModele = new JButton("6. Ajouter Modele");
         btnAjouterVoiture = new JButton("7. Ajouter Voiture");
+        btnAjouterReservation = new JButton("8. Ajouter des Reservation");
+        btnAjouterFacture = new JButton("9. Ajouter des Factures");
 
         add(btnNettoyer);
         add(btnAjouterUsers);
@@ -60,6 +63,8 @@ public class init_bdd_graphique extends JFrame {
         add(btnAjouterEntreprise);
         add(btnAjouterModele);
         add(btnAjouterVoiture);
+        add(btnAjouterReservation);
+        add(btnAjouterFacture);
 
         setupButtonActions();
     }
@@ -164,6 +169,22 @@ public class init_bdd_graphique extends JFrame {
                 JOptionPane.showMessageDialog(this, "Modele ajoutés", "Succès", JOptionPane.INFORMATION_MESSAGE);
             } catch (SQLException throwables) {
                 JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout des modeles", "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        btnAjouterReservation.addActionListener(e -> {
+            try {
+                init_bdd.insertReservation(connection);
+                JOptionPane.showMessageDialog(this, "Reservations ajoutés", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            } catch (SQLException throwables) {
+                JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout des reservations", "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        btnAjouterFacture.addActionListener(e -> {
+            try {
+                init_bdd.insertFacture(connection);
+                JOptionPane.showMessageDialog(this, "Factures ajoutés", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            } catch (SQLException throwables) {
+                JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout des factures", "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         });
     }
