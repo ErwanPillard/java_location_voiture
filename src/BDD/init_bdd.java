@@ -3,10 +3,7 @@ package BDD;
 import Dao.DatabaseManager;
 import org.mindrot.jbcrypt.BCrypt;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 import java.util.Random;
 
 public class init_bdd {
@@ -160,12 +157,97 @@ public class init_bdd {
         }
     }
 
+    public static void insertReservation(Connection connection) throws SQLException {
+        Random rand = new Random();
+
+        String fetchVoituresANDModeleSql = "SELECT v.immatriculation, m.prixJournalier FROM Voiture v JOIN Modele m ON v.modele_id = m.id ORDER BY RAND() LIMIT 60";
+
+        String fetchFactureANDReservationSql = "SELECT f.dateDebutReservation, f.dateFinReservation, f.montant, f.etat, " +
+                "f.voiture_immatriculation, f.id_client FROM Facture f JOIN Reservation r ON f.dateDebutReservation = r.dateDebutReservation " +
+                "and f.dateFinReservation = r.dateFinReservation and f.montant = r.montant and f.etat = r.etat and " +
+                "f.voiture_immatriculation = r.voiture_immatriculation and f.id_client = r.id_client LIMIT 60";
+
+        String reservationSql = "INSERT INTO Reservation (numReservation, dateDebutReservation, dateFinReservation, montant, etat, voiture_immatriculation, id_client) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        int i = 1;
+        try (
+                Statement fetchStmt = connection.createStatement();
+                ResultSet rs = fetchStmt.executeQuery(fetchVoituresANDModeleSql);
+                PreparedStatement insertStmt = connection.prepareStatement(reservationSql)
+        ) {
+            while (rs.next()) {
+                String immatriculation = rs.getString("immatriculation");
+                int prixJournalier = rs.getInt("prixJournalier");
+
+                // Définir les paramètres pour chaque réservation
+                insertStmt.setInt(1, i); // numReservation
+                insertStmt.setString(2, "27-04-2024"); // dateDebutReservation
+                insertStmt.setString(3, "29-04-2024"); // dateFinReservation
+                insertStmt.setInt(4, prixJournalier * 2); // montant
+                String etat = rand.nextBoolean() ? "Confirmée" : "Non-confirmée"; // Aléatoire entre 'Confirmée' et 'Non-confirmée'
+                insertStmt.setString(5, etat); // etat
+                insertStmt.setString(6, immatriculation); // immatriculation
+                insertStmt.setInt(7, i); // id_client
+
+                try (
+                        ResultSet rs2 = fetchStmt.executeQuery(fetchFactureANDReservationSql)
+                ) {
+                    // Parcourir les résultats pour créer des réservations
+                    while (rs2.next()) {
+                        int id_client = rs.getInt("id_client");
+
+                        insertStmt.setInt(7, id_client); // numéro de facture
+
+                        insertStmt.executeUpdate();
+                    }
+                }
+                insertStmt.executeUpdate();
+                i++;
+            }
+        }
+    }
+
+    public static void insertFacture(Connection connection) throws SQLException {
+        Random rand = new Random();
+
+        String fetchVoituresANDModeleSql = "SELECT v.immatriculation, m.prixJournalier FROM Voiture v JOIN Modele m ON v.modele_id = m.id ORDER BY RAND() LIMIT 60";
+
+        String factureSql = "INSERT INTO Facture (numeroFacture, dateEmission, dateDebutReservation, dateFinReservation, montant, etat, " +
+                "voiture_immatriculation, id_client) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        int i = 1;
+        try (
+                Statement fetchStmt = connection.createStatement();
+                ResultSet rs = fetchStmt.executeQuery(fetchVoituresANDModeleSql);
+                PreparedStatement insertStmt = connection.prepareStatement(factureSql)
+        ) {
+            while (rs.next()) {
+                String immatriculation = rs.getString("immatriculation");
+                int prixJournalier = rs.getInt("prixJournalier");
+
+                // Définir les paramètres pour chaque réservation
+                insertStmt.setInt(1, i); // numeroFacture
+                insertStmt.setString(2, "29-04-2024"); // dateEmission
+                insertStmt.setString(3, "27-04-2024"); // dateDebutReservation
+                insertStmt.setString(4, "29-04-2024"); // dateFinReservation
+                insertStmt.setInt(5, prixJournalier * 2); // montant
+                String etat = rand.nextBoolean() ? "Payé" : "Non-payé"; // Aléatoire entre 'Payé' et 'Non-payé'
+                insertStmt.setString(6, etat); // etat
+                insertStmt.setString(7, immatriculation); // immatriculation
+                insertStmt.setInt(8, i); // id_client
+
+                insertStmt.executeUpdate();
+                i++;
+            }
+        }
+    }
+
     public static void clearData(Connection connection) throws SQLException {
         connection.prepareStatement("DELETE FROM Particulier").executeUpdate();
         connection.prepareStatement("DELETE FROM Entreprise").executeUpdate();
         connection.prepareStatement("DELETE FROM Employe").executeUpdate();
         connection.prepareStatement("DELETE FROM Voiture").executeUpdate();
         connection.prepareStatement("DELETE FROM Modele").executeUpdate();
+        connection.prepareStatement("DELETE FROM Facture").executeUpdate();
+        connection.prepareStatement("DELETE FROM Reservation").executeUpdate();
         //connection.prepareStatement("DELETE FROM User").executeUpdate(); // Fais attention avec cette ligne
     }
 }

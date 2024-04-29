@@ -71,7 +71,7 @@ public class UserInfo extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 /*
-               ModifParcDialog();
+               modifParcDialog();
                  */
             }
         });
@@ -265,6 +265,64 @@ public class UserInfo extends JFrame {
     }
 
     private void changeTelephoneDialog() {
+        // Création d'une boîte de dialogue pour la saisie du mot de passe
+        JDialog dialog = new JDialog(this, "Changer le telephone", true);
+        dialog.setLayout(new GridLayout(2, 2, 10, 10));
+
+        // Champ pour le nouveau telephone
+        JLabel labelNewTelephone = new JLabel("Nouveau telephone :");
+        JTextField newTelephoneField = new JTextField();
+        dialog.add(labelNewTelephone);
+        dialog.add(newTelephoneField);
+
+        JButton btnChangeTelephone = new JButton("Changer");
+        btnChangeTelephone.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String newTelephone = newTelephoneField.getText();
+
+                if (updateTelephoneInDatabase(SessionManager.getCurrentUser().getId(), newTelephone)) {
+                    JOptionPane.showMessageDialog(dialog, "Telephone modifié avec succès !");
+                    dialog.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(dialog, "Erreur dans la modification du telephone !");
+                    dialog.dispose();
+                }
+            }
+        });
+        dialog.add(new JLabel()); // Placeholder pour alignement
+        dialog.add(btnChangeTelephone);
+
+        dialog.setSize(400, 200);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+    }
+
+    private void afficherReservationsDialog(int clientId) {
+        // Création d'une boîte de dialogue pour afficher les réservations
+        JDialog dialog = new JDialog(this, "Liste des réservations", true);
+        dialog.setLayout(new BorderLayout());
+
+        // Récupération des données de réservation depuis la base de données
+        Object[][] data = SessionManager.fetchReservationsData(clientId);
+        String[] columnNames = {"numReservation", "dateDebutReservation", "dateFinReservation", "tarif", "etat", "voiture_immatriculation", "facture_numeroFacture"};
+
+        // Création du tableau pour afficher les données
+        JTable table = new JTable(data, columnNames);
+        JScrollPane scrollPane = new JScrollPane(table);
+        dialog.add(scrollPane, BorderLayout.CENTER);
+
+        // Bouton de fermeture
+        JButton btnClose = new JButton("Fermer");
+        btnClose.addActionListener(e -> dialog.dispose());
+        dialog.add(btnClose, BorderLayout.SOUTH);
+
+        // Configuration et affichage de la boîte de dialogue
+        dialog.setSize(500, 400);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+    }
+
+    private void modifParcDialog() {
         // Création d'une boîte de dialogue pour la saisie du mot de passe
         JDialog dialog = new JDialog(this, "Changer le telephone", true);
         dialog.setLayout(new GridLayout(4, 2, 10, 10));
