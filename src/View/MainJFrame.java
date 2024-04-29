@@ -6,6 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MainJFrame extends JFrame {
+    //TEST pour interface employe
+    public static final Dimension PREFERREDSIZE = new Dimension(600, 500);
+
     public MainJFrame() {
         JPanel jpBody = new JPanel();
         jpBody.setLayout(new BorderLayout());
@@ -14,12 +17,9 @@ public class MainJFrame extends JFrame {
         this.setContentPane(jpBody);
     }
 
-    //TEST pour interface employe
-    public static final Dimension PREFERREDSIZE = new Dimension(600,500);
     public static void employeInterface() {
         //Create and set up the window.
         JFrame frame = new MainJFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setMinimumSize(PREFERREDSIZE);
         frame.setPreferredSize(PREFERREDSIZE);
 

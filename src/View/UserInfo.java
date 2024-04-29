@@ -18,7 +18,7 @@ public class UserInfo extends JFrame {
     private final JButton btnFacture;
     private final JButton btnReservations;
     private final JButton btnModifierVehicule;
-    private final JButton btnAddModele;
+    private final JButton btnInterfaceEmploye;
 
     private final JButton btnModifMdp;
     private final JButton btnModifTel;
@@ -61,21 +61,26 @@ public class UserInfo extends JFrame {
         btnReservations.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // faire le code
+                /*
+                afficherReservationDialog();
+                 */
             }
         });
         btnModifierVehicule = new JButton("Modifier le parc de véhicule");
         btnModifierVehicule.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // faire le code
+                /*
+               ModifParcDialog();
+                 */
             }
         });
-        btnAddModele = new JButton("Ajouter un modèle de véhicule");
-        btnAddModele.addActionListener(new ActionListener() {
+        btnInterfaceEmploye = new JButton("Afficher l'interface employée");
+        btnInterfaceEmploye.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnInterfaceEmploye.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // faire le code
+                View.MainJFrame.employeInterface();
             }
         });
         btnModifMdp = new JButton("Modifier le mot de passe");
@@ -102,20 +107,23 @@ public class UserInfo extends JFrame {
         // Création des onglets
         JTabbedPane tabbedPane = new JTabbedPane();
 
+        SessionManager.getInstance();
+
         // Onglet des informations personnelles
         JPanel personalInfoPanel = new JPanel(new GridLayout(0, 2, 10, 10));
-
-        // Onglet des factures
-        JPanel invoicesPanel = new JPanel(new BorderLayout());
-
-        // Onglet des réservations
-        JPanel reservationsPanel = new JPanel(new BorderLayout());
-
         tabbedPane.addTab("Informations Personnelles", personalInfoPanel);
-        tabbedPane.addTab("Factures", invoicesPanel);
-        tabbedPane.addTab("Autre", reservationsPanel);
+        JPanel invoicesPanel = null;
+        JPanel employeePanel = null;
+        if ((SessionManager.userType().equals("Particulier")) || SessionManager.userType().equals("Entreprise")) {
+            // Onglet des factures pour les particuliers et les entreprises
+            invoicesPanel = new JPanel(new BorderLayout());
+            tabbedPane.addTab("Factures", invoicesPanel);
+        } else {
+            // Onglet des employés
+            employeePanel = new JPanel(new BorderLayout());
+            tabbedPane.addTab("Interface employée", employeePanel);
+        }
 
-        SessionManager.getInstance();
         JLabel labelUserType = new JLabel("Type : " + SessionManager.userType()); // Affiche le type d'utilisateur
         JLabel labelEmail = new JLabel("Email : " + SessionManager.getCurrentUser().getEmail());
 
@@ -166,10 +174,8 @@ public class UserInfo extends JFrame {
             personalInfoPanel.add(labelPrenomEmploye);
             personalInfoPanel.add(labelFonctionEmploye);
 
-            invoicesPanel.add(btnModifierVehicule);
-            invoicesPanel.add(btnAddModele);
-            btnModifierVehicule.setAlignmentX(Component.CENTER_ALIGNMENT);
-            btnAddModele.setAlignmentX(Component.CENTER_ALIGNMENT);
+            employeePanel.add(btnInterfaceEmploye);
+            btnInterfaceEmploye.setAlignmentX(Component.CENTER_ALIGNMENT);
         }
         mainPanel.add(tabbedPane);
 

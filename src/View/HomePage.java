@@ -8,11 +8,10 @@ import Model.SessionManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
 
 public class HomePage extends JFrame {
 
-    private JButton btnLogin, btnCreateAccount, btnInitDB, btnEmployeInterface;
+    private JButton btnLogin, btnCreateAccount, btnInitDB;
     private JTextField tfLocation, tfPickUpDate, tfDropOffDate;
     private JButton btnSearch;
     private JButton btnClientForm;
@@ -67,21 +66,6 @@ public class HomePage extends JFrame {
         });
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-
-        JButton btnEmployeInterface = new JButton("interface employé");
-        btnEmployeInterface.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnEmployeInterface.addActionListener(e -> {
-            View.MainJFrame.employeInterface();
-        });
-
-        if ("Employe".equals(SessionManager.userType())) {
-            // Ajoute le bouton seulement s'il n'est pas déjà présent pour éviter des doublons
-            if (!Arrays.asList(buttonPanel.getComponents()).contains(btnEmployeInterface)) {
-                buttonPanel.add(btnEmployeInterface);
-            }
-        } else if (!SessionManager.isLoggedIn()) {
-            buttonPanel.remove(btnEmployeInterface);
-        }
 
         // Panneau pour les boutons sous le titre
         btnCreateAccount = new JButton("Créer Compte");
