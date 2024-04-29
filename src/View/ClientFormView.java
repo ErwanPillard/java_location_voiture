@@ -3,6 +3,7 @@ package View;
 import Controller.ClientController;
 import Model.Entreprise;
 import Model.Particulier;
+import org.mindrot.jbcrypt.BCrypt;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
@@ -197,6 +198,7 @@ public class ClientFormView extends JDialog {
             }
 
             String mdp = String.valueOf(mdpField.getPassword());
+            String hashed = BCrypt.hashpw(mdp, BCrypt.gensalt(12)); // Hashage du mot de passe
             String telephone = telephoneField.getText();
             String numeroPermis = numeroPermisField.getText();
             String dateString = birthDateField.getText();
@@ -214,7 +216,7 @@ public class ClientFormView extends JDialog {
             }
 
             try {
-                Particulier particulier = new Particulier(nom, prenom, email, mdp, telephone, numeroPermis, birthDate);
+                Particulier particulier = new Particulier(nom, prenom, email, hashed, telephone, numeroPermis, birthDate);
                 ClientController.getInstance().addParticulier(particulier);
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout du particulier: " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -236,11 +238,12 @@ public class ClientFormView extends JDialog {
             }
 
             String mdp = String.valueOf(mdpField.getPassword());
+            String hashed = BCrypt.hashpw(mdp, BCrypt.gensalt(12)); // Hashage du mot de passe
             String telephone = telephoneField.getText();
             String siret = numSiret.getText();
 
             try {
-                Entreprise entreprise = new Entreprise(nomE, email, mdp, telephone, siret);
+                Entreprise entreprise = new Entreprise(nomE, email, hashed, telephone, siret);
                 ClientController.getInstance().addEntreprise(entreprise);
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this, "Erreur", e.getMessage(), JOptionPane.ERROR_MESSAGE);

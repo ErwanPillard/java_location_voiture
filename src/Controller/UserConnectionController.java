@@ -41,10 +41,10 @@ public class UserConnectionController {
     }
 
     private void attemptLogin() throws SQLException {
-        String username = connexionUtilisateurView.getUsername();
+        String email = connexionUtilisateurView.getUsername(); // Assure-toi que cette méthode renvoie bien le courriel de l'utilisateur.
         String password = connexionUtilisateurView.getPassword();
 
-        User user = userConnectionDao.connect(username, password);
+        User user = userConnectionDao.connect(email, password);
         if (user != null) {
             SessionManager.getInstance().logIn(user);
             loginDialog.dispose();

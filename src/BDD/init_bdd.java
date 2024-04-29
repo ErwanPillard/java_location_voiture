@@ -1,6 +1,7 @@
 package BDD;
 
 import Dao.DatabaseManager;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -44,9 +45,10 @@ public class init_bdd {
         String userSql = "INSERT INTO User (id, email, motDePasse) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(userSql)) {
             for (int i = 1; i <= 60; i++) {
+                String hashed = BCrypt.hashpw(String.valueOf(i), BCrypt.gensalt(12)); // Hashage du mot de passe
                 stmt.setInt(1, i); // id
                 stmt.setString(2, "" + i); // Email
-                stmt.setString(3, "" + i); // Mot de passe
+                stmt.setString(3, hashed); // Mot de passe
                 stmt.executeUpdate();
             }
         }

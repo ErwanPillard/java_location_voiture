@@ -19,13 +19,6 @@ public class SessionManager {
     private static String userType;
     private static boolean isLoggedIn;
 
-    /*
-     * Change le mot de passe de l'utilisateur actuellement connecté.
-     * @param oldPassword L'ancien mot de passe pour vérification.
-     * @param newPassword Le nouveau mot de passe à définir.
-     * @return true si le changement est réussi, false sinon.
-     */
-
     private SessionManager() {
     }
 
@@ -136,20 +129,20 @@ public class SessionManager {
         return isLoggedIn;
     }
 
-    /*public static boolean changePassword(String oldPassword, String newPassword) {
+    public static boolean changePassword(String oldPassword, String newPassword) {
         if (currentUser == null) {
             return false; // Aucun utilisateur connecté
         }
         if (verifyPassword(currentUser, oldPassword)) {
             String hashedNewPassword = hashPassword(newPassword);
-            currentUser.setPassword(hashedNewPassword);
+            currentUser.setMotDePasse(hashedNewPassword);
             return updatePasswordInDatabase(currentUser.getId(), hashedNewPassword);
         }
         return false; // Ancien mot de passe incorrect
     }
 
     private static boolean verifyPassword(User user, String password) {
-        return hashPassword(password).equals(user.getPassword());
+        return hashPassword(password).equals(user.getMotDePasse());
     }
 
     private static String hashPassword(String password) {
@@ -158,7 +151,7 @@ public class SessionManager {
 
     private static boolean updatePasswordInDatabase(int userId, String newHashedPassword) {
         return true;
-    }*/
+    }
 
     public void logIn(User user) throws SQLException {
         currentUser = user;
