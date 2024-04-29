@@ -10,6 +10,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import static Model.SessionManager.updateTelephoneInDatabase;
+
 public class UserInfo extends JFrame {
     private final JButton btnLogout;
     private final JButton btnRetour;
@@ -18,7 +20,6 @@ public class UserInfo extends JFrame {
     private final JButton btnModifierVehicule;
     private final JButton btnAddModele;
 
-    private final JButton btnModifEmail;
     private final JButton btnModifMdp;
     private final JButton btnModifTel;
     //private final JButton btn;
@@ -77,13 +78,6 @@ public class UserInfo extends JFrame {
                 // faire le code
             }
         });
-        btnModifEmail = new JButton("Modifier l'email");
-        btnModifEmail.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // faire le code
-            }
-        });
         btnModifMdp = new JButton("Modifier le mot de passe");
         btnModifMdp.addActionListener(new ActionListener() {
             @Override
@@ -95,7 +89,7 @@ public class UserInfo extends JFrame {
         btnModifTel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // faire le code
+                changeTelephoneDialog();
             }
         });
 
@@ -110,15 +104,12 @@ public class UserInfo extends JFrame {
 
         // Onglet des informations personnelles
         JPanel personalInfoPanel = new JPanel(new GridLayout(0, 2, 10, 10));
-        // Ajoute des éléments au personalInfoPanel... personalInfoPanel.add()
 
         // Onglet des factures
         JPanel invoicesPanel = new JPanel(new BorderLayout());
-        // Ajoute des éléments au invoicesPanel... invoicesPanel.add()
 
         // Onglet des réservations
         JPanel reservationsPanel = new JPanel(new BorderLayout());
-        // Ajoute des éléments au reservationsPanel... reservationsPanel.add()
 
         tabbedPane.addTab("Informations Personnelles", personalInfoPanel);
         tabbedPane.addTab("Factures", invoicesPanel);
@@ -130,7 +121,6 @@ public class UserInfo extends JFrame {
 
         personalInfoPanel.add(labelUserType);
         personalInfoPanel.add(labelEmail);
-        personalInfoPanel.add(btnModifEmail);
         personalInfoPanel.add(btnModifMdp);
 
         if (SessionManager.userType().equals("Particulier")) {
@@ -196,7 +186,6 @@ public class UserInfo extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                // Ceci est appelé lorsque l'utilisateur clique sur la croix pour fermer la fenêtre
                 ouvrirHomePage();
             }
         });
@@ -253,10 +242,6 @@ public class UserInfo extends JFrame {
                     return;
                 }
 
-                // Ici, tu pourrais appeler une méthode de ton modèle pour changer le mot de passe
-                // Assure-toi que l'ancien mot de passe est correct avant de le changer
-                System.out.println(oldPassword);
-                System.out.println(newPassword);
                 if (SessionManager.changePassword(oldPassword, newPassword)) {
                     JOptionPane.showMessageDialog(dialog, "Mot de passe modifié avec succès !");
                     dialog.dispose();
@@ -267,6 +252,39 @@ public class UserInfo extends JFrame {
         });
         dialog.add(new JLabel()); // Placeholder pour alignement
         dialog.add(btnChangePassword);
+
+        dialog.setSize(400, 200);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+    }
+
+    private void changeTelephoneDialog() {
+        // Création d'une boîte de dialogue pour la saisie du mot de passe
+        JDialog dialog = new JDialog(this, "Changer le telephone", true);
+        dialog.setLayout(new GridLayout(4, 2, 10, 10));
+
+        // Champ pour le nouveau telephone
+        JLabel labelNewTelephone = new JLabel("Nouveau telephone :");
+        JTextField newTelephoneField = new JTextField();
+        dialog.add(labelNewTelephone);
+        dialog.add(newTelephoneField);
+
+        JButton btnChangeTelephone = new JButton("Changer");
+        btnChangeTelephone.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String newTelephone = newTelephoneField.getText();
+
+                if (updateTelephoneInDatabase(SessionManager.getCurrentUser().getId(), newTelephone)) {
+                    JOptionPane.showMessageDialog(dialog, "Telephone modifié avec succès !");
+                    dialog.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(dialog, "Erreur dans la modification du telephone !");
+                    dialog.dispose();
+                }
+            }
+        });
+        dialog.add(new JLabel()); // Placeholder pour alignement
+        dialog.add(btnChangeTelephone);
 
         dialog.setSize(400, 200);
         dialog.setLocationRelativeTo(this);

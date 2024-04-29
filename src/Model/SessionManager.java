@@ -131,8 +131,6 @@ public class SessionManager {
     }
 
     public static boolean changePassword(String oldPassword, String newPassword) {
-        System.out.println(oldPassword);
-        System.out.println(newPassword);
         if (currentUser == null) {
             return false; // Aucun utilisateur connecté
         }
@@ -175,6 +173,20 @@ public class SessionManager {
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, newHashedPassword);
+            pstmt.setInt(2, userId);
+            int updatedRows = pstmt.executeUpdate();
+            return updatedRows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean updateTelephoneInDatabase(int userId, String telephone) {
+        String sql = "UPDATE Client SET telephone = ? WHERE id = ?";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, telephone);
             pstmt.setInt(2, userId);
             int updatedRows = pstmt.executeUpdate();
             return updatedRows > 0;
