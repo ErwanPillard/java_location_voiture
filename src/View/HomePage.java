@@ -11,7 +11,7 @@ import java.awt.*;
 
 public class HomePage extends JFrame {
 
-    private JButton btnLogin, btnCreateAccount, btnInitDB;
+    private JButton btnLogin, btnCreateAccount, btnHomePageClient, btnInitDB;
     private JTextField tfLocation, tfPickUpDate, tfDropOffDate;
     private JButton btnSearch;
     private JButton btnClientForm;
@@ -74,6 +74,13 @@ public class HomePage extends JFrame {
         });
         btnCreateAccount.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        // Panneau pour la HomePageClient
+        btnHomePageClient = new JButton("HomePageClient");
+        btnHomePageClient.addActionListener(e -> {
+            HomePageClient.toggle();
+        });
+        btnHomePageClient.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         btnInitDB = new JButton("Init BDD Graphique");
         btnInitDB.addActionListener(e -> {
             init_bdd_graphique.toggle();
@@ -88,6 +95,7 @@ public class HomePage extends JFrame {
 
         buttonPanel.add(btnCreateAccount);
         buttonPanel.add(btnInitDB);
+        buttonPanel.add(btnHomePageClient);
 
         northPanel.add(titlePanel, BorderLayout.CENTER);
         northPanel.add(loginPanel, BorderLayout.EAST);

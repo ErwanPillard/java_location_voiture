@@ -1,23 +1,23 @@
 package View;
 
+import Controller.VoitureController;
 import Model.Voiture;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import javax.imageio.ImageIO;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import Controller.VoitureController;
-
 public class HomePageClient extends JFrame {
+    static HomePageClient homePageClient = new HomePageClient();
+
     public HomePageClient() {
         super("Page de location");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
@@ -60,6 +60,10 @@ public class HomePageClient extends JFrame {
         setVisible(true);
     }
 
+    public static void toggle() {
+        homePageClient.setVisible(!homePageClient.isVisible());
+    }
+
     private JPanel createCarPanel() {
         JPanel carPanel = new JPanel(new GridLayout(0, 3, 10, 10)); // 3 voitures par ligne, espacement de 10 pixels
         carPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Marge de 10 pixels autour du panel
@@ -67,10 +71,10 @@ public class HomePageClient extends JFrame {
         // Liste fictive de voitures
         List<Voiture> voitures = new ArrayList<>();
 
-        try{
+        try {
             voitures = VoitureController.getInstance().allVoitures();
 
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -118,6 +122,10 @@ public class HomePageClient extends JFrame {
     }
 
 
+    /*public static void main(String[] args) {
+        SwingUtilities.invokeLater(HomePageClient::new);
+    }*/
+
     private JPanel createSearchPanel() {
         // Panel de recherche
         JPanel searchPanel = new JPanel();
@@ -149,10 +157,5 @@ public class HomePageClient extends JFrame {
         add(searchPanel, BorderLayout.NORTH);
 
         return searchPanel;
-    }
-
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(HomePageClient::new);
     }
 }

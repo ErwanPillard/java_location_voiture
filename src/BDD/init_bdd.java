@@ -41,7 +41,7 @@ public class init_bdd {
     public static void insertUsers(Connection connection) throws SQLException {
         String userSql = "INSERT INTO User (id, email, motDePasse) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(userSql)) {
-            for (int i = 1; i <= 60; i++) {
+            for (int i = 1; i <= 30; i++) {
                 String hashed = BCrypt.hashpw(String.valueOf(i), BCrypt.gensalt(12)); // Hashage du mot de passe
                 stmt.setInt(1, i); // id
                 stmt.setString(2, "" + i); // Email
@@ -159,52 +159,45 @@ public class init_bdd {
 
     public static void insertReservation(Connection connection) throws SQLException {
         Random rand = new Random();
+        String fetchClientSql = "SELECT id FROM Client ORDER BY RAND(1) LIMIT 60";
 
         String fetchVoituresANDModeleSql = "SELECT v.immatriculation, m.prixJournalier FROM Voiture v JOIN Modele m ON v.modele_id = m.id ORDER BY RAND() LIMIT 60";
 
-        String fetchFactureANDReservationSql = "SELECT f.dateDebutReservation, f.dateFinReservation, f.montant, f.etat, " +
-                "f.voiture_immatriculation, f.id_client FROM Facture f JOIN Reservation r ON f.dateDebutReservation = r.dateDebutReservation " +
-                "and f.dateFinReservation = r.dateFinReservation and f.montant = r.montant and f.etat = r.etat and " +
-                "f.voiture_immatriculation = r.voiture_immatriculation and f.id_client = r.id_client LIMIT 60";
+        String reservationSql = "INSERT INTO Reservation (numReservation, dateDebutReservation, dateFinReservation, montant, etat, voiture_immatriculation, id_client) VALUES (?, ?, ?, ?, ?, ?, ?)"; // numReservation est auto-incrémenté, pas besoin de le spécifier
 
-        String reservationSql = "INSERT INTO Reservation (numReservation, dateDebutReservation, dateFinReservation, montant, etat, voiture_immatriculation, id_client) VALUES (?, ?, ?, ?, ?, ?, ?)";
         int i = 1;
         try (
-                Statement fetchStmt = connection.createStatement();
-                ResultSet rs = fetchStmt.executeQuery(fetchVoituresANDModeleSql);
-                PreparedStatement insertStmt = connection.prepareStatement(reservationSql)
-        ) {
-            while (rs.next()) {
-                String immatriculation = rs.getString("immatriculation");
-                int prixJournalier = rs.getInt("prixJournalier");
+                Statement fetchVoituresStmt = connection.createStatement();
+                ResultSet rsVoitures = fetchVoituresStmt.executeQuery(fetchVoituresANDModeleSql);
+                PreparedStatement insertStmt = connection.prepareStatement(reservationSql);
 
-                // Définir les paramètres pour chaque réservation
+                Statement fetchClientStmt = connection.createStatement();
+                ResultSet rsClients = fetchClientStmt.executeQuery(fetchClientSql)
+        ) {
+            while (rsVoitures.next() && rsClients.next()) {
+                String immatriculation = rsVoitures.getString("immatriculation");
+                int prixJournalier = rsVoitures.getInt("prixJournalier");
+                int idClient = rsClients.getInt("id");
+
                 insertStmt.setInt(1, i); // numReservation
                 insertStmt.setString(2, "27-04-2024"); // dateDebutReservation
                 insertStmt.setString(3, "29-04-2024"); // dateFinReservation
                 insertStmt.setInt(4, prixJournalier * 2); // montant
-                String etat = rand.nextBoolean() ? "Confirmée" : "Non-confirmée"; // Aléatoire entre 'Confirmée' et 'Non-confirmée'
-                insertStmt.setString(5, etat); // etat
+                String etat = rand.nextBoolean() ? "Confirmée" : "Non-confirmée"; // état
+                insertStmt.setString(5, etat);
                 insertStmt.setString(6, immatriculation); // immatriculation
+                //insertStmt.setInt(7, idClient); // id_client
                 insertStmt.setInt(7, i); // id_client
-
-                try (
-                        ResultSet rs2 = fetchStmt.executeQuery(fetchFactureANDReservationSql)
-                ) {
-                    // Parcourir les résultats pour créer des réservations
-                    while (rs2.next()) {
-                        int id_client = rs.getInt("id_client");
-
-                        insertStmt.setInt(7, id_client); // numéro de facture
-
-                        insertStmt.executeUpdate();
-                    }
-                }
-                insertStmt.executeUpdate();
                 i++;
+
+                insertStmt.executeUpdate(); // Exécute la requête d'insertion
             }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Imprime l'erreur SQL si elle se produit
+            throw e; // Relance l'exception pour la gérer plus haut dans la pile d'appels
         }
     }
+
 
     public static void insertFacture(Connection connection) throws SQLException {
         Random rand = new Random();
