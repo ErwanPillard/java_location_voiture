@@ -93,15 +93,13 @@ CREATE TABLE Facture
 -- Création de la table Model.Reservation
 CREATE TABLE Reservation
 (
-    numReservation          INT AUTO_INCREMENT NOT NULL,
-    dateDebutReservation    DATE               NOT NULL,
-    dateFinReservation      DATE               NOT NULL,
-    tarif                   FLOAT              NOT NULL,
-    etat                    VARCHAR(255)       NOT NULL,
-    voiture_immatriculation VARCHAR(255)       NOT NULL,
-    facture_numeroFacture   INT,
+    numReservation        INT AUTO_INCREMENT NOT NULL,
+    dateDebutReservation  DATE               NOT NULL,
+    dateFinReservation    DATE               NOT NULL,
+    montant               FLOAT              NOT NULL,
+    etat                  VARCHAR(255)       NOT NULL,
+    facture_numeroFacture INT,
     PRIMARY KEY (numReservation),
-    CONSTRAINT fk_reservation_voiture FOREIGN KEY (voiture_immatriculation) REFERENCES Voiture (immatriculation),
     CONSTRAINT fk_reservation_facture FOREIGN KEY (facture_numeroFacture) REFERENCES Facture (numeroFacture)
 ) ENGINE = InnoDB;
 
