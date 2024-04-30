@@ -19,6 +19,8 @@ public class HomePageClient extends JFrame {
         super("Page de location");
         //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setLocationRelativeTo(null); // Centre la fenêtre
+        setLayout(new BorderLayout());
 
         JPanel mainPanel = new JPanel(new BorderLayout());
 
@@ -91,19 +93,20 @@ public class HomePageClient extends JFrame {
 
             byte[] image = Voiture.getImageByImmatriculation(voiture.getImmatriculation());
 
-            // Chargement de l'image de la voiture
-            ImageIcon carImage = null;
-            try {
-                ByteArrayInputStream bais = new ByteArrayInputStream(image);
-                Image img = ImageIO.read(bais);
-                carImage = new ImageIcon(img.getScaledInstance(150, 100, Image.SCALE_SMOOTH));
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (image != null) {
+                // Chargement de l'image de la voiture
+                ImageIcon carImage = null;
+                try {
+                    ByteArrayInputStream bais = new ByteArrayInputStream(image);
+                    Image img = ImageIO.read(bais);
+                    carImage = new ImageIcon(img.getScaledInstance(150, 100, Image.SCALE_SMOOTH));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                JLabel carImageLabel = new JLabel(carImage);
+                carInfoPanel.add(carImageLabel, BorderLayout.NORTH);
             }
-
-            JLabel carImageLabel = new JLabel(carImage);
-            carInfoPanel.add(carImageLabel, BorderLayout.NORTH);
-
 
             // Ajout des autres informations de la voiture
             JPanel carDetailsPanel = new JPanel(new GridLayout(0, 1));
@@ -120,11 +123,6 @@ public class HomePageClient extends JFrame {
 
         return carPanel;
     }
-
-
-    /*public static void main(String[] args) {
-        SwingUtilities.invokeLater(HomePageClient::new);
-    }*/
 
     private JPanel createSearchPanel() {
         // Panel de recherche

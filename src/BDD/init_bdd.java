@@ -3,6 +3,11 @@ package BDD;
 import Dao.DatabaseManager;
 import org.mindrot.jbcrypt.BCrypt;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.sql.*;
 import java.util.Random;
 
@@ -41,7 +46,7 @@ public class init_bdd {
     public static void insertUsers(Connection connection) throws SQLException {
         String userSql = "INSERT INTO User (id, email, motDePasse) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(userSql)) {
-            for (int i = 1; i <= 30; i++) {
+            for (int i = 1; i <= 60; i++) {
                 String hashed = BCrypt.hashpw(String.valueOf(i), BCrypt.gensalt(12)); // Hashage du mot de passe
                 stmt.setInt(1, i); // id
                 stmt.setString(2, "" + i); // Email
@@ -104,7 +109,7 @@ public class init_bdd {
     }
 
     public static void insertVoitures(Connection connection) throws SQLException {
-        String voitureSql = "INSERT INTO Voiture (immatriculation, dateMiseEnCirculation, nbKilometre, couleur, modele_id) VALUES (?, ?, ?, ?, ?)";
+        String voitureSql = "INSERT INTO Voiture (immatriculation, dateMiseEnCirculation, nbKilometre, couleur, modele_id, image) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(voitureSql)) {
             for (int i = 1; i <= 50; i++) {
                 if (i < 10) {
@@ -116,6 +121,24 @@ public class init_bdd {
                 stmt.setDouble(3, i); // nombre de kilomètres
                 stmt.setString(4, "Couleur" + i); // couleur
                 stmt.setInt(5, (i % 10) + 1); // modèle_id
+
+                // set les autres paramètres ici
+                if (((i % 10) + 1) == 1) {
+                    byte[] imageData = getImageData("src/Pictures/Citadine.png");
+                    stmt.setBytes(6, imageData);
+                } else if (((i % 10) + 1) == 2) {
+                    byte[] imageData = getImageData("src/Pictures/Familliale.png");
+                    stmt.setBytes(6, imageData);
+                } else if (((i % 10) + 1) == 3) {
+                    byte[] imageData = getImageData("src/Pictures/Utillitaire.png");
+                    stmt.setBytes(6, imageData);
+                } else if (((i % 10) + 1) == 4) {
+                    byte[] imageData = getImageData("src/Pictures/Berline.png");
+                    stmt.setBytes(6, imageData);
+                } else if (((i % 10) + 1) == 5) {
+                    byte[] imageData = getImageData("src/Pictures/SUV.png");
+                    stmt.setBytes(6, imageData);
+                }
                 stmt.executeUpdate();
             }
         }
@@ -127,7 +150,7 @@ public class init_bdd {
         String[] categories = {"Citadine", "Berline", "SUV", "Familiale", "Utilitaire"};
 
         try (PreparedStatement stmt = connection.prepareStatement(modeleSql)) {
-            for (int i = 1; i <= 10; i++) {
+            for (int i = 1; i <= 5; i++) {
                 int nbPlaces = 4 + rand.nextInt(2); // Aléatoire entre 4 et 5
                 int nbPortes = 3 + rand.nextInt(3); // Aléatoire entre 3 et 5
                 float tailleCoffre = 300.0f + rand.nextFloat() * (500.0f - 300.0f); // Aléatoire entre 300.0 et 500.0
@@ -138,7 +161,17 @@ public class init_bdd {
 
                 stmt.setInt(1, i); // id
                 stmt.setString(2, "Marque" + i); // Marque
-                stmt.setString(3, "nom" + i); // nom
+                if (i == 1) {
+                    stmt.setString(3, "Citadine"); // nom
+                } else if (i == 2) {
+                    stmt.setString(3, "Familliale"); // nom
+                } else if (i == 3) {
+                    stmt.setString(3, "Utilitaire"); // nom
+                } else if (i == 4) {
+                    stmt.setString(3, "Berline"); // nom
+                } else if (i == 5) {
+                    stmt.setString(3, "SUV"); // nom
+                }
                 stmt.setInt(4, nbPlaces); // nombre de places
                 stmt.setInt(5, nbPortes); // nombre de portes
                 stmt.setFloat(6, tailleCoffre); // taille du coffre en litres
@@ -242,5 +275,20 @@ public class init_bdd {
         connection.prepareStatement("DELETE FROM Facture").executeUpdate();
         connection.prepareStatement("DELETE FROM Reservation").executeUpdate();
         //connection.prepareStatement("DELETE FROM User").executeUpdate(); // Fais attention avec cette ligne
+    }
+
+    public static byte[] getImageData(String filePath) {
+        try {
+            // Chargement de l'image
+            BufferedImage bImage = ImageIO.read(new File(filePath));
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+            // Convertis l'image en bytes
+            ImageIO.write(bImage, "png", bos);
+            return bos.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

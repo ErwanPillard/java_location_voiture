@@ -67,7 +67,7 @@ public class HomePage extends JFrame {
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-        // Panneau pour les boutons sous le titre
+        // Panneau pour crée compte
         btnCreateAccount = new JButton("Créer Compte");
         btnCreateAccount.addActionListener(e -> {
             ClientFormView.toggle();
@@ -81,6 +81,7 @@ public class HomePage extends JFrame {
         });
         btnHomePageClient.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        // Panneau pour init bdd graphique
         btnInitDB = new JButton("Init BDD Graphique");
         btnInitDB.addActionListener(e -> {
             init_bdd_graphique.toggle();
