@@ -12,39 +12,10 @@ import java.sql.*;
 import java.util.Random;
 
 public class init_bdd {
-
-    public static void main(String[] args) {
-        try (Connection connection = DatabaseManager.getConnection()) {
-            // Insérer 60 utilisateurs
-            insertUsers(connection);
-
-            // Insérer 40 clients (particuliers et entreprises)
-            insertClient(connection);
-
-            // Insérer les détails de 20 particuliers
-            insertParticuliers(connection);
-
-            // Insérer les détails de 20 entreprises
-            insertEntreprises(connection);
-
-            // Insérer 20 employés
-            insertEmployes(connection);
-
-
-            // Insérer 10 modèles
-            insertModeles(connection);
-
-            System.out.println("La base de données a été initialisée avec succès !");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-
     public static void insertUsers(Connection connection) throws SQLException {
         String userSql = "INSERT INTO User (id, email, motDePasse) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(userSql)) {
-            for (int i = 1; i <= 60; i++) {
+            for (int i = 1; i <= 30; i++) {
                 String hashed = BCrypt.hashpw(String.valueOf(i), BCrypt.gensalt(12)); // Hashage du mot de passe
                 stmt.setInt(1, i); // id
                 stmt.setString(2, "" + i); // Email
@@ -58,7 +29,7 @@ public class init_bdd {
         String clientSql = "INSERT INTO Client (id, telephone) VALUES (?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(clientSql)) {
-            for (int i = 1; i <= 40; i++) {
+            for (int i = 1; i <= 20; i++) {
                 stmt.setInt(1, i); // id
                 stmt.setString(2, "06112233" + i); // telephone
                 stmt.executeUpdate();
@@ -66,11 +37,10 @@ public class init_bdd {
         }
     }
 
-
     public static void insertParticuliers(Connection connection) throws SQLException {
         String particulierSql = "INSERT INTO Particulier (id, nom, prenom, numeroPermis, birthDate) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(particulierSql)) {
-            for (int i = 1; i <= 20; i++) {
+            for (int i = 1; i <= 10; i++) {
                 stmt.setInt(1, i); // id
                 stmt.setString(2, "nom" + i); // nom
                 stmt.setString(3, "prenom" + i); // prenom
@@ -84,7 +54,7 @@ public class init_bdd {
     public static void insertEntreprises(Connection connection) throws SQLException {
         String entrepriseSql = "INSERT INTO Entreprise (id, nom, numeroSiret) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(entrepriseSql)) {
-            for (int i = 21; i <= 40; i++) {
+            for (int i = 11; i <= 20; i++) {
                 stmt.setInt(1, i); // id
                 stmt.setString(2, "nom" + i); // nom
                 stmt.setString(3, "Siret" + i); // numero de siret
@@ -96,7 +66,7 @@ public class init_bdd {
     public static void insertEmployes(Connection connection) throws SQLException {
         String employeSql = "INSERT INTO Employe (id, nom, prenom, fonction) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(employeSql)) {
-            for (int i = 41; i <= 60; i++) {
+            for (int i = 21; i <= 30; i++) {
                 stmt.setInt(1, i); // id
                 stmt.setString(2, "nom" + i); // nom
                 stmt.setString(3, "prenom" + i); // prenom
@@ -154,42 +124,43 @@ public class init_bdd {
 
     public static void insertReservation(Connection connection) throws SQLException {
         Random rand = new Random();
-        String fetchClientSql = "SELECT id FROM Client ORDER BY RAND(1) LIMIT 60";
 
-        String fetchVoituresANDModeleSql = "SELECT v.immatriculation, m.prixJournalier FROM Voiture v JOIN Modele m ON v.modele_id = m.id ORDER BY RAND() LIMIT 60";
+        // Utilisation de PreparedStatement pour les requêtes nécessitant des fonctions RAND
+        PreparedStatement fetchClientStmt = connection.prepareStatement("SELECT id FROM Client ORDER BY RAND() LIMIT 60");
+        PreparedStatement fetchVoituresStmt = connection.prepareStatement("SELECT v.immatriculation, m.prixJournalier FROM Voiture v JOIN Modele m ON v.modele_id = m.id ORDER BY RAND() LIMIT 60");
 
-        String reservationSql = "INSERT INTO Reservation (numReservation, dateDebutReservation, dateFinReservation, montant, etat, voiture_immatriculation, id_client) VALUES (?, ?, ?, ?, ?, ?, ?)"; // numReservation est auto-incrémenté, pas besoin de le spécifier
+        String reservationSql = "INSERT INTO Reservation (dateDebutReservation, dateFinReservation, montant, etat, voiture_immatriculation, id_client) VALUES (?, ?, ?, ?, ?, ?)";
 
-        int i = 1;
+        // Démarre explicitement une transaction
+        connection.setAutoCommit(false);
+
         try (
-                Statement fetchVoituresStmt = connection.createStatement();
-                ResultSet rsVoitures = fetchVoituresStmt.executeQuery(fetchVoituresANDModeleSql);
-                PreparedStatement insertStmt = connection.prepareStatement(reservationSql);
-
-                Statement fetchClientStmt = connection.createStatement();
-                ResultSet rsClients = fetchClientStmt.executeQuery(fetchClientSql)
+                ResultSet rsVoitures = fetchVoituresStmt.executeQuery();
+                ResultSet rsClients = fetchClientStmt.executeQuery();
+                PreparedStatement insertStmt = connection.prepareStatement(reservationSql)
         ) {
             while (rsVoitures.next() && rsClients.next()) {
                 String immatriculation = rsVoitures.getString("immatriculation");
                 int prixJournalier = rsVoitures.getInt("prixJournalier");
                 int idClient = rsClients.getInt("id");
 
-                insertStmt.setInt(1, i); // numReservation
-                insertStmt.setString(2, "27-04-2024"); // dateDebutReservation
-                insertStmt.setString(3, "29-04-2024"); // dateFinReservation
-                insertStmt.setInt(4, prixJournalier * 2); // montant
+                insertStmt.setDate(1, java.sql.Date.valueOf("2024-04-27")); // dateDebutReservation
+                insertStmt.setDate(2, java.sql.Date.valueOf("2024-04-29")); // dateFinReservation
+                insertStmt.setFloat(3, prixJournalier * 2); // montant
                 String etat = rand.nextBoolean() ? "Confirmée" : "Non-confirmée"; // état
-                insertStmt.setString(5, etat);
-                insertStmt.setString(6, immatriculation); // immatriculation
-                //insertStmt.setInt(7, idClient); // id_client
-                insertStmt.setInt(7, i); // id_client
-                i++;
+                insertStmt.setString(4, etat);
+                insertStmt.setString(5, immatriculation); // immatriculation
+                insertStmt.setInt(6, idClient); // id_client
 
                 insertStmt.executeUpdate(); // Exécute la requête d'insertion
             }
+            connection.commit(); // Valide les modifications
         } catch (SQLException e) {
-            e.printStackTrace(); // Imprime l'erreur SQL si elle se produit
-            throw e; // Relance l'exception pour la gérer plus haut dans la pile d'appels
+            connection.rollback(); // Annule la transaction en cas d'erreur
+            e.printStackTrace(); // Imprime l'erreur SQL
+            throw e; // Relance l'exception
+        } finally {
+            connection.setAutoCommit(true); // Rétablit le mode auto-commit
         }
     }
 
@@ -225,6 +196,10 @@ public class init_bdd {
                 insertStmt.executeUpdate();
                 i++;
             }
+        } catch (SQLException e) {
+            connection.rollback(); // Annule la transaction en cas d'erreur
+            e.printStackTrace(); // Imprime l'erreur SQL
+            throw e; // Relance l'exception
         }
     }
 
@@ -237,20 +212,5 @@ public class init_bdd {
         connection.prepareStatement("DELETE FROM Facture").executeUpdate();
         connection.prepareStatement("DELETE FROM Reservation").executeUpdate();
         //connection.prepareStatement("DELETE FROM User").executeUpdate(); // Fais attention avec cette ligne
-    }
-
-    public static byte[] getImageData(String filePath) {
-        try {
-            // Chargement de l'image
-            BufferedImage bImage = ImageIO.read(new File(filePath));
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-
-            // Convertis l'image en bytes
-            ImageIO.write(bImage, "png", bos);
-            return bos.toByteArray();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 }

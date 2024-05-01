@@ -105,8 +105,10 @@ CREATE TABLE Reservation
     voiture_immatriculation VARCHAR(255) NOT NULL,
     id_client               INT          NOT NULL,
     PRIMARY KEY (numReservation),
-    CONSTRAINT fk_reservation_voiture FOREIGN KEY (voiture_immatriculation) REFERENCES Voiture (immatriculation)
+    CONSTRAINT fk_reservation_voiture FOREIGN KEY (voiture_immatriculation) REFERENCES Voiture (immatriculation),
+    CONSTRAINT fk_reservation_client FOREIGN KEY (id_client) REFERENCES Client (id)
 ) ENGINE = InnoDB;
+
 
 -- Création de la table Model.OffreReduction
 CREATE TABLE OffreReduction
