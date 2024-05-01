@@ -168,38 +168,51 @@ public class init_bdd {
     public static void insertFacture(Connection connection) throws SQLException {
         Random rand = new Random();
 
+        // Requête pour récupérer des données aléatoires de voitures et modèles
         String fetchVoituresANDModeleSql = "SELECT v.immatriculation, m.prixJournalier FROM Voiture v JOIN Modele m ON v.modele_id = m.id ORDER BY RAND() LIMIT 60";
+        String factureSql = "INSERT INTO Facture (dateEmission, dateDebutReservation, dateFinReservation, montant, etat, voiture_immatriculation, id_client) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        String factureSql = "INSERT INTO Facture (numeroFacture, dateEmission, dateDebutReservation, dateFinReservation, montant, etat, " +
-                "voiture_immatriculation, id_client) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        int i = 1;
-        try (
-                Statement fetchStmt = connection.createStatement();
-                ResultSet rs = fetchStmt.executeQuery(fetchVoituresANDModeleSql);
-                PreparedStatement insertStmt = connection.prepareStatement(factureSql)
-        ) {
-            while (rs.next()) {
-                String immatriculation = rs.getString("immatriculation");
-                int prixJournalier = rs.getInt("prixJournalier");
+        try {
+            connection.setAutoCommit(false); // Désactiver l'auto-commit pour gérer manuellement la transaction
 
-                // Définir les paramètres pour chaque réservation
-                insertStmt.setInt(1, i); // numeroFacture
-                insertStmt.setString(2, "29-04-2024"); // dateEmission
-                insertStmt.setString(3, "27-04-2024"); // dateDebutReservation
-                insertStmt.setString(4, "29-04-2024"); // dateFinReservation
-                insertStmt.setInt(5, prixJournalier * 2); // montant
-                String etat = rand.nextBoolean() ? "Payé" : "Non-payé"; // Aléatoire entre 'Payé' et 'Non-payé'
-                insertStmt.setString(6, etat); // etat
-                insertStmt.setString(7, immatriculation); // immatriculation
-                insertStmt.setInt(8, i); // id_client
+            try (Statement fetchStmt = connection.createStatement();
+                 ResultSet rs = fetchStmt.executeQuery(fetchVoituresANDModeleSql);
+                 PreparedStatement insertStmt = connection.prepareStatement(factureSql, Statement.RETURN_GENERATED_KEYS)) {
 
-                insertStmt.executeUpdate();
-                i++;
+                while (rs.next()) {
+                    String immatriculation = rs.getString("immatriculation");
+                    int prixJournalier = rs.getInt("prixJournalier");
+                    int idClient = rand.nextInt(100) + 1;  // Exemple d'ID client généré aléatoirement pour la démo
+
+                    insertStmt.setDate(1, Date.valueOf("2024-04-29")); // dateEmission
+                    insertStmt.setDate(2, Date.valueOf("2024-04-27")); // dateDebutReservation
+                    insertStmt.setDate(3, Date.valueOf("2024-04-29")); // dateFinReservation
+                    insertStmt.setInt(4, prixJournalier * 2); // montant
+                    String etat = rand.nextBoolean() ? "Payé" : "Non-payé"; // état aléatoire
+                    insertStmt.setString(5, etat);
+                    insertStmt.setString(6, immatriculation);
+                    insertStmt.setInt(7, idClient); // Simulé ici; idéalement, récupérer depuis une source valide
+
+                    insertStmt.executeUpdate();
+
+                    ResultSet generatedKeys = insertStmt.getGeneratedKeys();
+                    if (generatedKeys.next()) {
+                        long factureId = generatedKeys.getLong(1);
+                        System.out.println("Facture ajoutée avec succès, ID: " + factureId);
+                    }
+                }
+                connection.commit(); // Commit de la transaction si tout est correct
+                System.out.println("Toutes les factures ont été ajoutées avec succès.");
+            } catch (SQLException e) {
+                System.err.println("Erreur lors de l'exécution de la requête : " + e.getMessage());
+                connection.rollback(); // Rollback en cas d'erreur
+                throw e; // Relancer l'exception pour informer d'une erreur
+            } finally {
+                connection.setAutoCommit(true); // Réactiver l'auto-commit
             }
         } catch (SQLException e) {
-            connection.rollback(); // Annule la transaction en cas d'erreur
-            e.printStackTrace(); // Imprime l'erreur SQL
-            throw e; // Relance l'exception
+            System.err.println("Problème de connexion ou de transaction : " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
