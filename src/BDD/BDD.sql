@@ -90,6 +90,7 @@ CREATE TABLE Facture
     dateFinReservation      DATE         NOT NULL,
     montant                 FLOAT        NOT NULL,
     voiture_immatriculation VARCHAR(255) NOT NULL,
+    id_client               INT          NOT NULL,
     PRIMARY KEY (numeroFacture)
 ) ENGINE = InnoDB;
 

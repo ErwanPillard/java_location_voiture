@@ -101,7 +101,7 @@ public class HomePageClient extends JFrame {
                     Image img = ImageIO.read(bais);
                     carImage = new ImageIcon(img.getScaledInstance(150, 100, Image.SCALE_SMOOTH));
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
 
                 JLabel carImageLabel = new JLabel(carImage);
