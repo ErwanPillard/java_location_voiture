@@ -85,10 +85,10 @@ CREATE TABLE Facture
 (
     numeroFacture           INT AUTO_INCREMENT NOT NULL,
     dateEmission            DATE         NOT NULL,
-    etat                    ENUM ('Paye', 'Pas paye') NOT NULL,
     dateDebutReservation    DATE         NOT NULL,
     dateFinReservation      DATE         NOT NULL,
     montant                 FLOAT        NOT NULL,
+    etat                    VARCHAR(255) NOT NULL,
     voiture_immatriculation VARCHAR(255) NOT NULL,
     id_client               INT          NOT NULL,
     PRIMARY KEY (numeroFacture)
