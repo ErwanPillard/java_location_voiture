@@ -56,7 +56,7 @@ public class VoitureFormView extends JDialog {
         gbcForm.insets = new Insets(5, 5, 5, 5);
 
         addFormField(jpForm, gbcForm, "Immatriculation",immatriculationField = new JTextField(20));
-        addFormField(jpForm, gbcForm, "Date de mise en circulation (yyyy-MM-dd)",dateMiseEnCirculationField = new JTextField(20));
+        addFormField(jpForm, gbcForm, "Date de mise en circulation (dd-MM-yyyy)",dateMiseEnCirculationField = new JTextField(20));
         addFormField(jpForm, gbcForm, "Kilométrage",nbKilometreField = new JTextField(20));
         addFormField(jpForm, gbcForm, "Couleur",couleurField = new JTextField(20));
 

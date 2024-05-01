@@ -16,5 +16,7 @@
     <orderEntry type="library" name="Apache Pivot (" level="project" />
     <orderEntry type="library" name="javafx-sdk-22" level="project" />
     <orderEntry type="library" name="jBCrypt-0.4.1" level="project" />
+    <orderEntry type="library" name="jBCrypt-0.4.1" level="project" />
+    <orderEntry type="library" name="mysql-connector-j-8.3" level="project" />
   </component>
 </module>
