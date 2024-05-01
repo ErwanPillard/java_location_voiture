@@ -63,6 +63,7 @@ CREATE TABLE Modele
     noteSatisfaction INT,
     categorie        ENUM ('Citadine', 'Berline', 'SUV', 'Familiale', 'Utilitaire') NOT NULL,
     attelage         ENUM ('Oui', 'Non')                                            NOT NULL,
+    boiteVitesse     ENUM ('automatique', 'manuelle')                                 NOT NULL,
     boiteVitesse     ENUM ('automatique', 'manuelle')                               NOT NULL,
     PRIMARY KEY (id)
 ) ENGINE = InnoDB;
@@ -87,31 +88,35 @@ CREATE TABLE Facture
     dateEmission  DATE                      NOT NULL,
     montant       DOUBLE                    NOT NULL,
     etat          ENUM ('Paye', 'Pas paye') NOT NULL,
+    dateDebutReservation    DATE               NOT NULL,
+    dateFinReservation      DATE               NOT NULL,
+    montant                   FLOAT              NOT NULL,
+    etat                    VARCHAR(255)       NOT NULL,
+    voiture_immatriculation VARCHAR(255)       NOT NULL,
     PRIMARY KEY (numeroFacture)
 ) ENGINE = InnoDB;
 
 -- Création de la table Model.Reservation
 CREATE TABLE Reservation
 (
-    numReservation        INT AUTO_INCREMENT NOT NULL,
-    dateDebutReservation  DATE               NOT NULL,
-    dateFinReservation    DATE               NOT NULL,
-    montant               FLOAT              NOT NULL,
-    etat                  VARCHAR(255)       NOT NULL,
-    facture_numeroFacture INT,
+    numReservation          INT AUTO_INCREMENT NOT NULL,
+    dateDebutReservation    DATE               NOT NULL,
+    dateFinReservation      DATE               NOT NULL,
+    montant                   FLOAT              NOT NULL,
+    etat                    VARCHAR(255)       NOT NULL,
+    voiture_immatriculation VARCHAR(255)       NOT NULL,
     PRIMARY KEY (numReservation),
-    CONSTRAINT fk_reservation_facture FOREIGN KEY (facture_numeroFacture) REFERENCES Facture (numeroFacture)
+    CONSTRAINT fk_reservation_voiture FOREIGN KEY (voiture_immatriculation) REFERENCES Voiture (immatriculation),
 ) ENGINE = InnoDB;
 
 -- Création de la table Model.OffreReduction
 CREATE TABLE OffreReduction
 (
-    id                   INT AUTO_INCREMENT PRIMARY KEY,
-    nom                  VARCHAR(255)                    NOT NULL,
-    description          TEXT,
-    dateDebut            DATE                            NOT NULL,
-    dateFin              DATE                            NOT NULL,
-    pourcentageReduction FLOAT                           NOT NULL,
-    typeAdhesion         ENUM ('BRONZE', 'ARGENT', 'OR') NOT NULL
-) ENGINE = InnoDB;
-
+    id                                              INT AUTO_INCREMENT PRIMARY KEY,
+    nom                                             VARCHAR(255) NOT NULL,
+    description                                     TEXT,
+    dateDebut                                       DATE NOT NULL,
+    dateFin                                         DATE NOT NULL,
+    pourcentageReduction                            FLOAT NOT NULL,
+    typeAdhesion ENUM('BRONZE', 'ARGENT', 'OR')     NOT NULL
+)ENGINE = InnoDB;

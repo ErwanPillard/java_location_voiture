@@ -30,8 +30,6 @@ public class init_bdd {
             // Insérer 20 employés
             insertEmployes(connection);
 
-            // Insérer 50 voitures
-            insertVoitures(connection);
 
             // Insérer 10 modèles
             insertModeles(connection);
@@ -103,42 +101,6 @@ public class init_bdd {
                 stmt.setString(2, "nom" + i); // nom
                 stmt.setString(3, "prenom" + i); // prenom
                 stmt.setString(4, "Fonction" + i); // fonction
-                stmt.executeUpdate();
-            }
-        }
-    }
-
-    public static void insertVoitures(Connection connection) throws SQLException {
-        String voitureSql = "INSERT INTO Voiture (immatriculation, dateMiseEnCirculation, nbKilometre, couleur, modele_id, image) VALUES (?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(voitureSql)) {
-            for (int i = 1; i <= 50; i++) {
-                if (i < 10) {
-                    stmt.setString(1, "AA-00" + i + "AA"); // immatriculation
-                } else {
-                    stmt.setString(1, "AA-0" + i + "AA"); // immatriculation
-                }
-                stmt.setDate(2, new java.sql.Date(new java.util.Date().getTime())); // date de mise en circulation
-                stmt.setDouble(3, i); // nombre de kilomètres
-                stmt.setString(4, "Couleur" + i); // couleur
-                stmt.setInt(5, (i % 10) + 1); // modèle_id
-
-                // set les autres paramètres ici
-                if (((i % 10) + 1) == 1) {
-                    byte[] imageData = getImageData("src/Pictures/Citadine.png");
-                    stmt.setBytes(6, imageData);
-                } else if (((i % 10) + 1) == 2) {
-                    byte[] imageData = getImageData("src/Pictures/Familliale.png");
-                    stmt.setBytes(6, imageData);
-                } else if (((i % 10) + 1) == 3) {
-                    byte[] imageData = getImageData("src/Pictures/Utillitaire.png");
-                    stmt.setBytes(6, imageData);
-                } else if (((i % 10) + 1) == 4) {
-                    byte[] imageData = getImageData("src/Pictures/Berline.png");
-                    stmt.setBytes(6, imageData);
-                } else if (((i % 10) + 1) == 5) {
-                    byte[] imageData = getImageData("src/Pictures/SUV.png");
-                    stmt.setBytes(6, imageData);
-                }
                 stmt.executeUpdate();
             }
         }

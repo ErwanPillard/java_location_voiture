@@ -27,7 +27,6 @@ public class init_bdd_graphique extends JFrame {
     private final JButton btnAjouterClients;
     private final JButton btnAjouterParticulier;
     private final JButton btnAjouterEntreprise;
-    private final JButton btnAjouterVoiture;
     private final JButton btnAjouterModele;
     private final JButton btnAjouterReservation;
     private final JButton btnAjouterFacture;
@@ -51,7 +50,6 @@ public class init_bdd_graphique extends JFrame {
         btnAjouterParticulier = new JButton("4. Ajouter Particuliers");
         btnAjouterEntreprise = new JButton("5. Ajouter Entreprise");
         btnAjouterModele = new JButton("6. Ajouter Modele");
-        btnAjouterVoiture = new JButton("7. Ajouter Voiture");
         btnAjouterReservation = new JButton("8. Ajouter des Reservation");
         btnAjouterFacture = new JButton("9. Ajouter des Factures");
 
@@ -62,7 +60,6 @@ public class init_bdd_graphique extends JFrame {
         add(btnAjouterParticulier);
         add(btnAjouterEntreprise);
         add(btnAjouterModele);
-        add(btnAjouterVoiture);
         add(btnAjouterReservation);
         add(btnAjouterFacture);
 
@@ -153,14 +150,6 @@ public class init_bdd_graphique extends JFrame {
                 JOptionPane.showMessageDialog(this, "Entreprise ajoutés", "Succès", JOptionPane.INFORMATION_MESSAGE);
             } catch (SQLException throwables) {
                 JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout des Entreprise", "Erreur", JOptionPane.ERROR_MESSAGE);
-            }
-        });
-        btnAjouterVoiture.addActionListener(e -> {
-            try {
-                init_bdd.insertVoitures(connection);
-                JOptionPane.showMessageDialog(this, "Voiture ajoutés", "Succès", JOptionPane.INFORMATION_MESSAGE);
-            } catch (SQLException throwables) {
-                JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout des voitures", "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         });
         btnAjouterModele.addActionListener(e -> {
