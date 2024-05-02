@@ -61,9 +61,7 @@ public class UserInfo extends JFrame {
         btnReservations.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                /*
-                afficherReservationDialog();
-                 */
+                afficherReservationsDialog(SessionManager.getCurrentUser().getId());
             }
         });
         btnModifierVehicule = new JButton("Modifier le parc de véhicule");
@@ -304,7 +302,7 @@ public class UserInfo extends JFrame {
 
         // Récupération des données de réservation depuis la base de données
         Object[][] data = SessionManager.fetchReservationsData(clientId);
-        String[] columnNames = {"numReservation", "dateDebutReservation", "dateFinReservation", "tarif", "etat", "voiture_immatriculation", "facture_numeroFacture"};
+        String[] columnNames = {"numReservation", "dateDebutReservation", "dateFinReservation", "montant", "etat", "voiture_immatriculation"};
 
         // Création du tableau pour afficher les données
         JTable table = new JTable(data, columnNames);
