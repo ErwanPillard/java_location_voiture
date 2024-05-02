@@ -4,6 +4,7 @@ import Controller.ModeleController;
 import Controller.VoitureController;
 import Controller.listeners.MailEvent;
 import Controller.listeners.VoitureListener;
+import Dao.DatabaseManager;
 import Model.BoiteVitesse;
 import Model.Categorie;
 import Model.Modele;
@@ -19,6 +20,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.*;
 import java.awt.*;
+import java.sql.*;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -167,6 +169,7 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
     }
 
     public void cellEdit() {
+
         // Ajouter un écouteur pour détecter la sélection de cellule
         this.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -242,7 +245,6 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
         }
     }
 
-
     @Override
     public void cmdAdd() {
         VoitureFormView.toggle();
@@ -267,6 +269,8 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
         return c;
     }
 
+
+
     public void update(int column, Object value, String immat) throws SQLException {
         Voiture voiture = Voiture.findByImmat(immat);
         switch (column) {
@@ -279,4 +283,33 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
         }
         VoitureController.getInstance().update(voiture);
     }
+
+    public void LoadResaNonConfirmée() {
+        String query = "SELECT * FROM Reservation WHERE etat = 'non-confirmée'";
+        try (Connection conn = DatabaseManager.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            DefaultTableModel model = (DefaultTableModel) this.getModel();
+            model.setRowCount(0); // Effacer les données existantes
+
+            while (rs.next()) {
+                // Assumer que tu as des colonnes comme id, dateDebutReservation, etc.
+                Object[] row = new Object[]{
+                        rs.getInt("numReservation"),
+                        rs.getDate("dateDebutReservation"),
+                        rs.getDate("dateFinReservation"),
+                        rs.getFloat("montant"),
+                        rs.getString("etat"),
+                        // Ajouter d'autres colonnes selon la structure de ta table
+                };
+                model.addRow(row);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erreur lors du chargement des réservations", "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+
 }
