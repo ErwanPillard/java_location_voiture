@@ -91,6 +91,13 @@ public class HomePage extends JFrame {
         });
         btnCreateAccount.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        btnCreateAccount.setBackground(new Color(0x377e21)); // Couleur Verte
+        btnCreateAccount.setFont(new Font("Arial", Font.BOLD, 16)); // Police en gras
+        btnCreateAccount.setForeground(Color.WHITE);
+        btnCreateAccount.setFocusPainted(false);
+        btnCreateAccount.setBorderPainted(false);
+        btnCreateAccount.setOpaque(true);
+
         // Panneau pour init bdd graphique
         btnInitDB = new JButton("Init BDD Graphique");
         btnInitDB.addActionListener(e -> {
@@ -120,14 +127,25 @@ public class HomePage extends JFrame {
         northPanel.add(titlePanel, BorderLayout.CENTER);
         northPanel.add(loginPanel, BorderLayout.EAST);
 
+        // Ajouter le JScrollPane
+        JScrollPane scrollPane = new JScrollPane(carPanel);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setPreferredSize(new Dimension(800, 600)); // Tu peux ajuster la taille selon tes besoins
+
+        // Le JPanel retourné devrait être le JScrollPane pour intégrer le défilement
+        JPanel panelWithScroll = new JPanel(new BorderLayout());
+        panelWithScroll.add(scrollPane, BorderLayout.CENTER);
+
         // Panneau central pour contenir le titre et la barre de recherche
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.add(searchPanel, BorderLayout.CENTER);
-        centerPanel.add(carPanel, BorderLayout.SOUTH);
+        centerPanel.add(panelWithScroll, BorderLayout.SOUTH);
 
         mainPanel.add(northPanel, BorderLayout.NORTH);
         mainPanel.add(centerPanel, BorderLayout.CENTER);
+
 
         // Configuration finale de la fenêtre
         getContentPane().add(mainPanel);
@@ -180,7 +198,6 @@ public class HomePage extends JFrame {
 
         try {
             voitures = VoitureController.getInstance().allVoitures();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -225,22 +242,27 @@ public class HomePage extends JFrame {
 
     private JPanel createSearchPanel() {
         // Panel de recherche
-        JPanel searchPanel = new JPanel();
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         searchPanel.setBackground(new Color(0xF8F8F8)); // Couleur de fond gris clair
         searchPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        //searchPanel.setBackground(Color.GRAY); // Assure que le fond est blanc
         searchPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        searchPanel.setMaximumSize(new Dimension(10000, 80));
 
         // Composants de la barre de recherche
         JTextField tfPickUpDate = new JTextField("30-01-2024", 15);
         JTextField tfDropOffDate = new JTextField("02-02-2024", 15);
         JButton btnSearch = new JButton("Rechercher");
+        btnSearch = new JButton("Rechercher");
+        btnSearch.addActionListener(e -> {
+            init_bdd_graphique.toggle();
+        });
 
         // Personnalisation des composants
         tfPickUpDate.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY, 1), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         tfDropOffDate.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY, 1), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         btnSearch.setBackground(new Color(0xFF5733)); // Couleur rouge/orange
         btnSearch.setForeground(Color.WHITE);
+        btnSearch.setFont(new Font("Arial", Font.BOLD, 16)); // Police en gras
         btnSearch.setFocusPainted(false);
         btnSearch.setBorderPainted(false);
         btnSearch.setOpaque(true);
@@ -261,7 +283,6 @@ public class HomePage extends JFrame {
 
         return searchPanel;
     }
-
 }
 
 
