@@ -63,7 +63,7 @@ public class HomePageClient extends JFrame {
     }
 
     public static void toggle() {
-        homePageClient.setVisible(!homePageClient.isVisible());
+        homePageClient.setVisible(homePageClient.isVisible());
     }
 
     private JPanel createCarPanel() {
