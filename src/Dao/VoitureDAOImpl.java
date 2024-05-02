@@ -46,7 +46,7 @@ public class VoitureDAOImpl implements VoitureDAO {
         return voitures;
     }
 
-    public List<Voiture> allFiltredCategorie(String query) throws SQLException{
+    public List<Voiture> allFiltredCategorie(String query) throws SQLException {
         ArrayList<Voiture> voitures = new ArrayList<>();
 
         Connection c = DatabaseManager.getConnection();
@@ -144,93 +144,45 @@ public class VoitureDAOImpl implements VoitureDAO {
     }
 
     public byte[] getImageByImmatriculation(String immatriculation) {
-
         Connection conn = null;
-
         PreparedStatement pstmt = null;
-
         ResultSet rs = null;
-
         byte[] imageBytes = null;
-
-
-
         try {
-
             conn = DatabaseManager.getConnection();
-
-
-
             // Préparer la requête SQL pour récupérer l'image
-
             pstmt = conn.prepareStatement("SELECT image FROM Voiture WHERE immatriculation = ?");
-
             pstmt.setString(1, immatriculation);
-
-
-
             // Exécuter la requête
-
             rs = pstmt.executeQuery();
-
-
-
             // Lire le résultat
-
             if (rs.next()) {
-
                 // Récupérer le BLOB
-
                 InputStream inputStream = rs.getBinaryStream("image");
-
                 if (inputStream != null) {
                     // Convertir l'InputStream en tableau de bytes
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
                     byte[] buffer = new byte[4096];
-
                     int bytesRead;
-
                     while ((bytesRead = inputStream.read(buffer)) != -1) {
-
                         outputStream.write(buffer, 0, bytesRead);
-
                     }
-
                     imageBytes = outputStream.toByteArray();
                 }
-
-
             }
-
         } catch (SQLException | IOException e) {
-
             e.printStackTrace();
-
         } finally {
-
             // Fermer les ressources
-
             try {
-
                 if (rs != null) rs.close();
-
                 if (pstmt != null) pstmt.close();
-
                 if (conn != null) conn.close();
-
             } catch (SQLException e) {
-
                 e.printStackTrace();
-
             }
-
         }
-
-
-
         return imageBytes;
-
     }
 
     public void addImage(String immatriculation, File imageFile) throws SQLException {

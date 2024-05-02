@@ -14,7 +14,6 @@ public class ClientBaseView {
         // Créez un JPanel pour contenir le tableau et le JPanel rightPanel
         JPanel mainPanel = new JPanel();
 
-
         // Ajoutez le JPanel principal à jpBody
         jpBody.removeAll(); // Supprimer tous les composants existants de jpBody
         jpBody.add(mainPanel, BorderLayout.CENTER); // Tableau et composants à droite

@@ -167,7 +167,6 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
     }
 
     public void cellEdit() {
-
         // Ajouter un écouteur pour détecter la sélection de cellule
         this.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -217,17 +216,32 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
 
     @Override
     public void cmdRemove() {
-        if (this.getSelectedRow() != -1) {
-            int row = this.getSelectedRow();
+        int row = this.getSelectedRow();
+        if (row != -1) {
             String immatriculation = (String) this.getValueAt(row, 0);
-            try {
-                VoitureController.getInstance().remove(immatriculation);
-                model.removeRow(row);
-            } catch (SQLException e) {
-                e.printStackTrace();
+
+            // Demander confirmation avant de procéder à la suppression
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "Êtes-vous sûr de vouloir supprimer la voiture avec l'immatriculation " + immatriculation + " ?",
+                    "Confirmer la suppression",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                try {
+                    VoitureController.getInstance().remove(immatriculation);
+                    ((DefaultTableModel) this.getModel()).removeRow(row);
+                    JOptionPane.showMessageDialog(this, "Voiture supprimée avec succès.");
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(this, "Erreur lors de la suppression : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+                    e.printStackTrace();
+                }
             }
+        } else {
+            JOptionPane.showMessageDialog(this, "Aucune voiture sélectionnée pour la suppression.", "Erreur", JOptionPane.ERROR_MESSAGE);
         }
     }
+
 
     @Override
     public void cmdAdd() {
@@ -253,8 +267,6 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
         return c;
     }
 
-
-
     public void update(int column, Object value, String immat) throws SQLException {
         Voiture voiture = Voiture.findByImmat(immat);
         switch (column) {
@@ -267,5 +279,4 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
         }
         VoitureController.getInstance().update(voiture);
     }
-
 }

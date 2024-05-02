@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class MainJFrame extends JFrame {
     //TEST pour interface employe
-    public static final Dimension PREFERREDSIZE = new Dimension(600, 500);
+    public static final Dimension PREFERREDSIZE = new Dimension(900, 500);
 
     public MainJFrame() {
         JPanel jpBody = new JPanel();

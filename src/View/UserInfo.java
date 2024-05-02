@@ -2,6 +2,8 @@ package View;
 
 import Controller.UserInfoController;
 import Model.SessionManager;
+import View.Employe.ModeleView;
+import View.Employe.VoitureFormView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,6 +21,11 @@ public class UserInfo extends JFrame {
     private final JButton btnReservations;
     private final JButton btnModifierVehicule;
     private final JButton btnInterfaceEmploye;
+    private final JButton btnAjouterVoiture;
+    private final JButton btnAjouterModele;
+    private final JButton btnSupprimerVoiture;
+    private final JButton btnSupprimerModele;
+    private final JButton btnConfirmerReservation;
 
     private final JButton btnModifMdp;
     private final JButton btnModifTel;
@@ -81,6 +88,46 @@ public class UserInfo extends JFrame {
                 View.MainJFrame.employeInterface();
             }
         });
+        btnAjouterVoiture = new JButton("Ajouter une voiture");
+        btnAjouterVoiture.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnAjouterVoiture.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                VoitureFormView.toggle();
+            }
+        });
+        btnAjouterModele = new JButton("Ajouter un modèle de voiture");
+        btnAjouterModele.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnAjouterModele.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ModeleView.toggle();
+            }
+        });
+        btnSupprimerVoiture = new JButton("Supprimer une voiture");
+        btnSupprimerVoiture.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnSupprimerVoiture.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                VoitureFormView.toggle();
+            }
+        });
+        btnSupprimerModele = new JButton("Supprimer un modèle de voiture");
+        btnSupprimerModele.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnSupprimerModele.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ModeleView.toggle();
+            }
+        });
+        btnConfirmerReservation = new JButton("Confirmer une réservation");
+        btnConfirmerReservation.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnConfirmerReservation.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ModeleView.toggle();
+            }
+        });
         btnModifMdp = new JButton("Modifier le mot de passe");
         btnModifMdp.addActionListener(new ActionListener() {
             @Override
@@ -119,6 +166,7 @@ public class UserInfo extends JFrame {
         } else {
             // Onglet des employés
             employeePanel = new JPanel(new BorderLayout());
+            employeePanel.setLayout(new BoxLayout(employeePanel, BoxLayout.Y_AXIS));  // Configuration pour aligner verticalement
             tabbedPane.addTab("Interface employée", employeePanel);
         }
 
@@ -173,7 +221,17 @@ public class UserInfo extends JFrame {
             personalInfoPanel.add(labelFonctionEmploye);
 
             employeePanel.add(btnInterfaceEmploye);
+            employeePanel.add(btnAjouterVoiture);
+            employeePanel.add(btnAjouterModele);
+            employeePanel.add(btnSupprimerVoiture);
+            employeePanel.add(btnSupprimerModele);
+            employeePanel.add(btnConfirmerReservation);
             btnInterfaceEmploye.setAlignmentX(Component.CENTER_ALIGNMENT);
+            btnAjouterVoiture.setAlignmentX(Component.CENTER_ALIGNMENT);
+            btnAjouterModele.setAlignmentX(Component.CENTER_ALIGNMENT);
+            btnSupprimerVoiture.setAlignmentX(Component.CENTER_ALIGNMENT);
+            btnSupprimerModele.setAlignmentX(Component.CENTER_ALIGNMENT);
+            btnConfirmerReservation.setAlignmentX(Component.CENTER_ALIGNMENT);
         }
         mainPanel.add(tabbedPane);
 
