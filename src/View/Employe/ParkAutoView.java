@@ -297,6 +297,7 @@ public class ParkAutoView{
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridBagLayout()); // Utilisation du GridBagLayout
 
+
         leftPanel(mainPanel);
 
         // Ajoutez le tableau à gauche dans le JPanel principal avec des contraintes de position

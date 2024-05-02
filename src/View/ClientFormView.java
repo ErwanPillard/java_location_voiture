@@ -29,7 +29,8 @@ public class ClientFormView extends JDialog {
     private JTextField emailField;
     private JPasswordField mdpField;
     private JPasswordField confirmeMdpField;
-    private JTextField telephoneField;
+    private JTextField telephoneEntrepriseField;
+    private JTextField telephoneParticulierField;
     private JTextField numeroPermisField;
     private JTextField birthDateField;
     private JTextField numSiret;
@@ -92,11 +93,11 @@ public class ClientFormView extends JDialog {
                 if (selectedType.equals("Particulier")) {
                     jpParticulierForms.setVisible(true);
                     jpEntrepriseForms.setVisible(false);
-                    clearForm(nomField, prenomField, telephoneField, numeroPermisField, birthDateField, numSiret, nomEntrepriseField);
+                    clearForm(nomField, prenomField, telephoneParticulierField, numeroPermisField, birthDateField, numSiret, nomEntrepriseField);
                 } else if (selectedType.equals("Entreprise")) {
                     jpParticulierForms.setVisible(false);
                     jpEntrepriseForms.setVisible(true);
-                    clearForm(nomField, prenomField, telephoneField, numeroPermisField, birthDateField, numSiret, nomEntrepriseField);
+                    clearForm(nomField, prenomField, telephoneEntrepriseField, numeroPermisField, birthDateField, numSiret, nomEntrepriseField);
                 }
 
                 // Actualiser l'affichage pour refléter les modifications
@@ -133,7 +134,7 @@ public class ClientFormView extends JDialog {
 
         addFormField(jpPersonalInfo, gbcPersonal, "Prénom :", prenomField = new JTextField(20));
         addFormField(jpPersonalInfo, gbcPersonal, "Nom :", nomField = new JTextField(20));
-        addFormField(jpPersonalInfo, gbcPersonal, "Numero de téléphone :", telephoneField = new JTextField(20));
+        addFormField(jpPersonalInfo, gbcPersonal, "Numero de téléphone :", telephoneParticulierField = new JTextField(20));
         addFormField(jpPersonalInfo, gbcPersonal, "Numéro Permis de Conduire :", numeroPermisField = new JTextField(20));
         addFormField(jpPersonalInfo, gbcPersonal, "Date de naissance (dd-MM-yyyy):", birthDateField = new JTextField(20));
 
@@ -149,7 +150,7 @@ public class ClientFormView extends JDialog {
 
         addFormField(jpPersonalInfo, gbcPersonal, "Nom :", nomEntrepriseField = new JTextField(20));
         addFormField(jpPersonalInfo, gbcPersonal, "Siret :", numSiret = new JTextField(20));
-        addFormField(jpPersonalInfo, gbcPersonal, "Numero de téléphone :", telephoneField = new JTextField(20));
+        addFormField(jpPersonalInfo, gbcPersonal, "Numero de téléphone :", telephoneEntrepriseField = new JTextField(20));
 
         return jpPersonalInfo;
     }
@@ -199,7 +200,7 @@ public class ClientFormView extends JDialog {
 
             String mdp = String.valueOf(mdpField.getPassword());
             String hashed = BCrypt.hashpw(mdp, BCrypt.gensalt(12)); // Hashage du mot de passe
-            String telephone = telephoneField.getText();
+            String telephone = telephoneParticulierField.getText();
             String numeroPermis = numeroPermisField.getText();
             String dateString = birthDateField.getText();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -239,7 +240,7 @@ public class ClientFormView extends JDialog {
 
             String mdp = String.valueOf(mdpField.getPassword());
             String hashed = BCrypt.hashpw(mdp, BCrypt.gensalt(12)); // Hashage du mot de passe
-            String telephone = telephoneField.getText();
+            String telephone = telephoneEntrepriseField.getText();
             String siret = numSiret.getText();
 
             try {
@@ -271,7 +272,7 @@ public class ClientFormView extends JDialog {
     @Override
     public void dispose() {
         super.dispose();
-        clearForm(nomField, prenomField, telephoneField, numeroPermisField, birthDateField, numSiret, nomEntrepriseField);
+        clearForm(nomField, prenomField, telephoneEntrepriseField, telephoneParticulierField,  numeroPermisField, birthDateField, numSiret, nomEntrepriseField);
     }
 
     // Méthode pour vérifier le format de l'email
