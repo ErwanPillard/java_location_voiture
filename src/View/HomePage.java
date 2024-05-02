@@ -7,6 +7,7 @@ import Dao.UserConnection;
 import Dao.UserConnectionImpl;
 import Model.SessionManager;
 import Model.Voiture;
+import View.Employe.ModeleView;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -25,19 +26,15 @@ public class HomePage extends JFrame {
     private JTextField tfLocation, tfPickUpDate, tfDropOffDate;
     private JButton btnSearch;
     private JButton btnClientForm;
-
     private JComboBox<String> typeField;
+    JPanel searchPanel = createSearchPanel();
+    JPanel carPanel = createCarPanel(); // Affichage des voitures
+
 
     public HomePage() {
+        searchPanel = createSearchPanel();
+        carPanel = createCarPanel();
         initUI();
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            HomePage homePage = new HomePage();
-            UserConnection userConnexion = new UserConnectionImpl(); // Assure-toi que cette classe est correctement implémentée.
-            new HomeController(homePage, userConnexion); // Cette ligne connecte la vue et le contrôleur.
-        });
     }
 
     public void initUI() {
@@ -120,9 +117,7 @@ public class HomePage extends JFrame {
         loginPanel.add(btnCreateAccount);
         loginPanel.add(btnInitDB);
 
-        JPanel searchPanel = createSearchPanel();
-
-        JPanel carPanel = createCarPanel(); // Affichage des voitures
+        searchPanel = createSearchPanel();
 
         northPanel.add(titlePanel, BorderLayout.CENTER);
         northPanel.add(loginPanel, BorderLayout.EAST);
@@ -242,19 +237,33 @@ public class HomePage extends JFrame {
 
     private JPanel createSearchPanel() {
         // Panel de recherche
-        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        final JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         searchPanel.setBackground(new Color(0xF8F8F8)); // Couleur de fond gris clair
         searchPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         searchPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         searchPanel.setMaximumSize(new Dimension(10000, 80));
 
+        // Création du JComboBox
+        String[] carTypes = {"Modèle", "Citadine", "Familiale", "Utilitaire", "Berline", "SUV"};
+        JComboBox<String> comboBox = new JComboBox<>(carTypes);
+        comboBox.setSelectedIndex(0);  // Sélection par défaut du premier élément
+
         // Composants de la barre de recherche
         JTextField tfPickUpDate = new JTextField("30-01-2024", 15);
         JTextField tfDropOffDate = new JTextField("02-02-2024", 15);
         JButton btnSearch = new JButton("Rechercher");
-        btnSearch = new JButton("Rechercher");
-        btnSearch.addActionListener(e -> {
-            init_bdd_graphique.toggle();
+        btnSearch.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String model = (String) comboBox.getSelectedItem();
+                try {
+                    List<Voiture> filteredVoiture = VoitureController.getInstance().findVoituresByModel(model);
+                    updateCarPanel(filteredVoiture);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Erreur lors de la récupération des voitures : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            }
         });
 
         // Personnalisation des composants
@@ -267,21 +276,60 @@ public class HomePage extends JFrame {
         btnSearch.setBorderPainted(false);
         btnSearch.setOpaque(true);
 
-        // Création du JComboBox
-        String[] carTypes = {"Citadine", "Utilitaire", "Familiale", "Berline", "SUV"};
-        JComboBox<String> comboBox = new JComboBox<>(carTypes);
-        comboBox.setSelectedIndex(0);  // Sélection par défaut du premier élément
-
         // Ajout des composants au panel
-        searchPanel.add(new JLabel("Quand voulez-vous louer votre voiture ?"));
+        searchPanel.add(new JLabel("Quand voulez-vous louer votre voiture ? Quel modèle ?"));
         searchPanel.add(tfPickUpDate);
         searchPanel.add(tfDropOffDate);
-        searchPanel.add(btnSearch);
         searchPanel.add(comboBox);
+        searchPanel.add(btnSearch);
 
         add(searchPanel, BorderLayout.NORTH);
 
         return searchPanel;
+    }
+
+    private void updateCarPanel(List<Voiture> voitures) {
+        carPanel.removeAll();  // Supprime tous les composants précédents de carPanel
+
+        // Réinitialise le layout et les bordures si nécessaire
+        carPanel.setLayout(new GridLayout(0, 3, 10, 10));
+        carPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        for (Voiture voiture : voitures) {
+            JPanel carInfoPanel = new JPanel(new BorderLayout());
+            carInfoPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+            byte[] image = Voiture.getImageByImmatriculation(voiture.getImmatriculation());
+            if (image != null) {
+                // Chargement de l'image de la voiture
+                ImageIcon carImage = null;
+                try {
+                    ByteArrayInputStream bais = new ByteArrayInputStream(image);
+                    Image img = ImageIO.read(bais);
+                    carImage = new ImageIcon(img.getScaledInstance(150, 100, Image.SCALE_SMOOTH));
+                } catch (IOException e) {
+                    // Handle error
+                }
+
+                JLabel carImageLabel = new JLabel(carImage);
+                carInfoPanel.add(carImageLabel, BorderLayout.NORTH);
+            }
+
+            // Ajout des autres informations de la voiture
+            JPanel carDetailsPanel = new JPanel(new GridLayout(0, 1));
+            carDetailsPanel.add(new JLabel("Immatriculation: " + voiture.getImmatriculation()));
+            carDetailsPanel.add(new JLabel("Date de mise en circulation: " + voiture.getDateMiseCirculation()));
+            carDetailsPanel.add(new JLabel("Kilométrage: " + voiture.getNbKilometre()));
+            carDetailsPanel.add(new JLabel("Couleur: " + voiture.getCouleur()));
+            carDetailsPanel.add(new JLabel("Modèle: " + voiture.getModele_id()));
+
+            carInfoPanel.add(carDetailsPanel, BorderLayout.CENTER);
+
+            carPanel.add(carInfoPanel);
+        }
+
+        carPanel.revalidate();
+        carPanel.repaint();  // Redessine le panel avec les nouvelles voitures
     }
 }
 
