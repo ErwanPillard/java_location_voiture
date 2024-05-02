@@ -1,13 +1,11 @@
 package View;
 
-import Controller.HomeController;
 import Controller.UserConnectionController;
 import Controller.VoitureController;
 import Dao.UserConnection;
 import Dao.UserConnectionImpl;
 import Model.SessionManager;
 import Model.Voiture;
-import View.Employe.ModeleView;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -21,15 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomePage extends JFrame {
-
     private JButton btnLogin, btnCreateAccount, btnInitDB;
-    private JTextField tfLocation, tfPickUpDate, tfDropOffDate;
-    private JButton btnSearch;
-    private JButton btnClientForm;
-    private JComboBox<String> typeField;
     JPanel searchPanel = createSearchPanel();
     JPanel carPanel = createCarPanel(); // Affichage des voitures
-
 
     public HomePage() {
         searchPanel = createSearchPanel();
@@ -154,36 +146,6 @@ public class HomePage extends JFrame {
         return btnLogin;
     }
 
-    public JTextField getTfLocation() {
-        return tfLocation;
-    }
-
-    public JTextField getTfPickUpDate() {
-        return tfPickUpDate;
-    }
-
-    public JTextField getTfDropOffDate() {
-        return tfDropOffDate;
-    }
-
-    public JButton getBtnSearch() {
-        return btnSearch;
-    }
-
-    private void showUserConnectionDialog() {
-        JDialog dialog = new JDialog();
-        ConnexionUtilisateur connexionUtilisateurPanel = new ConnexionUtilisateur();
-        UserConnection userConnexionDao = new UserConnectionImpl(); // Assure-toi que cette implémentation est correcte et complète.
-        new UserConnectionController(this, connexionUtilisateurPanel, userConnexionDao);
-
-        dialog.setTitle("Connexion");
-        dialog.setContentPane(connexionUtilisateurPanel);
-        dialog.setSize(300, 200); // Ajuste la taille selon tes besoins
-        dialog.setModal(true);
-        dialog.setLocationRelativeTo(this); // Centrer par rapport à HomePage
-        dialog.setVisible(true);
-    }
-
     private JPanel createCarPanel() {
         JPanel carPanel = new JPanel(new GridLayout(0, 3, 10, 10)); // 3 voitures par ligne, espacement de 10 pixels
         carPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Marge de 10 pixels autour du panel
@@ -227,12 +189,99 @@ public class HomePage extends JFrame {
             carDetailsPanel.add(new JLabel("Couleur: " + voiture.getCouleur()));
             carDetailsPanel.add(new JLabel("Modèle: " + voiture.getModele_id()));
 
+            JPanel reservation = new JPanel(new BorderLayout());
+            if (SessionManager.isLoggedIn()) {
+                JButton btnReserver = new JButton("Réserver");
+                btnReserver.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // Code pour réserver la voiture
+                    }
+                });
+                btnReserver.setBackground(new Color(0x377e21)); // Couleur Verte
+                btnReserver.setFont(new Font("Arial", Font.BOLD, 14)); // Police en gras
+                btnReserver.setForeground(Color.WHITE);
+                btnReserver.setFocusPainted(false);
+                btnReserver.setBorderPainted(false);
+                btnReserver.setOpaque(true);
+
+                // Créer un panneau pour contenir le bouton avec des marges
+                JPanel buttonPanel = new JPanel(new BorderLayout());
+                buttonPanel.add(btnReserver, BorderLayout.CENTER);
+                buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Ajoute de l'espace autour du bouton
+
+                reservation.add(buttonPanel, BorderLayout.SOUTH);
+            }
+
+            carInfoPanel.add(reservation, BorderLayout.EAST);
             carInfoPanel.add(carDetailsPanel, BorderLayout.CENTER);
 
             carPanel.add(carInfoPanel);
         }
 
         return carPanel;
+    }
+
+    private void updateCarPanel(List<Voiture> voitures) {
+        carPanel.removeAll();  // Supprime tous les composants précédents de carPanel
+
+        // Réinitialise le layout et les bordures si nécessaire
+        carPanel.setLayout(new GridLayout(0, 3, 10, 10));
+        carPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        for (Voiture voiture : voitures) {
+            JPanel carInfoPanel = new JPanel(new BorderLayout());
+            carInfoPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+            byte[] image = Voiture.getImageByImmatriculation(voiture.getImmatriculation());
+            if (image != null) {
+                // Chargement de l'image de la voiture
+                ImageIcon carImage = null;
+                try {
+                    ByteArrayInputStream bais = new ByteArrayInputStream(image);
+                    Image img = ImageIO.read(bais);
+                    carImage = new ImageIcon(img.getScaledInstance(150, 100, Image.SCALE_SMOOTH));
+                } catch (IOException e) {
+                    // Handle error
+                }
+
+                JLabel carImageLabel = new JLabel(carImage);
+                carInfoPanel.add(carImageLabel, BorderLayout.NORTH);
+            }
+
+            // Ajout des autres informations de la voiture
+            JPanel carDetailsPanel = new JPanel(new GridLayout(0, 1));
+            carDetailsPanel.add(new JLabel("Immatriculation: " + voiture.getImmatriculation()));
+            carDetailsPanel.add(new JLabel("Date de mise en circulation: " + voiture.getDateMiseCirculation()));
+            carDetailsPanel.add(new JLabel("Kilométrage: " + voiture.getNbKilometre()));
+            carDetailsPanel.add(new JLabel("Couleur: " + voiture.getCouleur()));
+            carDetailsPanel.add(new JLabel("Modèle: " + voiture.getModele_id()));
+
+            JPanel reservation = new JPanel(new BorderLayout());
+            if (SessionManager.isLoggedIn()) {
+                JButton btnReserver = new JButton("Réserver");
+                btnReserver.setBackground(new Color(0x377e21)); // Couleur Verte
+                btnReserver.setFont(new Font("Arial", Font.BOLD, 14)); // Police en gras
+                btnReserver.setForeground(Color.WHITE);
+                btnReserver.setFocusPainted(false);
+                btnReserver.setBorderPainted(false);
+                btnReserver.setOpaque(true);
+
+                // Créer un panneau pour contenir le bouton avec des marges
+                JPanel buttonPanel = new JPanel(new BorderLayout());
+                buttonPanel.add(btnReserver, BorderLayout.CENTER);
+                buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Ajoute de l'espace autour du bouton
+
+                reservation.add(buttonPanel, BorderLayout.SOUTH);
+            }
+
+            carInfoPanel.add(carDetailsPanel, BorderLayout.CENTER);
+
+            carPanel.add(carInfoPanel);
+        }
+
+        carPanel.revalidate();
+        carPanel.repaint();  // Redessine le panel avec les nouvelles voitures
     }
 
     private JPanel createSearchPanel() {
@@ -286,50 +335,6 @@ public class HomePage extends JFrame {
         add(searchPanel, BorderLayout.NORTH);
 
         return searchPanel;
-    }
-
-    private void updateCarPanel(List<Voiture> voitures) {
-        carPanel.removeAll();  // Supprime tous les composants précédents de carPanel
-
-        // Réinitialise le layout et les bordures si nécessaire
-        carPanel.setLayout(new GridLayout(0, 3, 10, 10));
-        carPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        for (Voiture voiture : voitures) {
-            JPanel carInfoPanel = new JPanel(new BorderLayout());
-            carInfoPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-
-            byte[] image = Voiture.getImageByImmatriculation(voiture.getImmatriculation());
-            if (image != null) {
-                // Chargement de l'image de la voiture
-                ImageIcon carImage = null;
-                try {
-                    ByteArrayInputStream bais = new ByteArrayInputStream(image);
-                    Image img = ImageIO.read(bais);
-                    carImage = new ImageIcon(img.getScaledInstance(150, 100, Image.SCALE_SMOOTH));
-                } catch (IOException e) {
-                    // Handle error
-                }
-
-                JLabel carImageLabel = new JLabel(carImage);
-                carInfoPanel.add(carImageLabel, BorderLayout.NORTH);
-            }
-
-            // Ajout des autres informations de la voiture
-            JPanel carDetailsPanel = new JPanel(new GridLayout(0, 1));
-            carDetailsPanel.add(new JLabel("Immatriculation: " + voiture.getImmatriculation()));
-            carDetailsPanel.add(new JLabel("Date de mise en circulation: " + voiture.getDateMiseCirculation()));
-            carDetailsPanel.add(new JLabel("Kilométrage: " + voiture.getNbKilometre()));
-            carDetailsPanel.add(new JLabel("Couleur: " + voiture.getCouleur()));
-            carDetailsPanel.add(new JLabel("Modèle: " + voiture.getModele_id()));
-
-            carInfoPanel.add(carDetailsPanel, BorderLayout.CENTER);
-
-            carPanel.add(carInfoPanel);
-        }
-
-        carPanel.revalidate();
-        carPanel.repaint();  // Redessine le panel avec les nouvelles voitures
     }
 }
 
