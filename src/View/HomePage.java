@@ -11,6 +11,8 @@ import Model.Voiture;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -19,10 +21,12 @@ import java.util.List;
 
 public class HomePage extends JFrame {
 
-    private JButton btnLogin, btnCreateAccount, btnHomePageClient, btnInitDB;
+    private JButton btnLogin, btnCreateAccount, btnInitDB;
     private JTextField tfLocation, tfPickUpDate, tfDropOffDate;
     private JButton btnSearch;
     private JButton btnClientForm;
+
+    private JComboBox<String> typeField;
 
     public HomePage() {
         initUI();
@@ -58,18 +62,6 @@ public class HomePage extends JFrame {
         northPanel.add(appTitle);
         northPanel.add(pageTitle);
         northPanel.add(Box.createVerticalGlue());
-
-        JPanel searchPanel = createSearchPanel();
-        northPanel.add(searchPanel);
-
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JButton btnLogin = new JButton(new ImageIcon(getClass().getResource("/Pictures/AccountPicture.png")));
-
-        JButton btnCreateAccount = new JButton("Créer Compte");
-
-        JButton btnHomePageClient = new JButton("HomePageClient");
-
-        JButton btnInitDB = new JButton("Init BDD Graphique");
 
         btnLogin = new JButton(new ImageIcon(getClass().getResource("/Pictures/AccountPicture.png")));
         btnLogin.setBorderPainted(false);
@@ -107,10 +99,12 @@ public class HomePage extends JFrame {
         btnInitDB.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));  // Configuration pour aligner verticalement
         titlePanel.add(appTitle);
+        titlePanel.add(pageTitle);
 
         // Créer un espace invisible à gauche qui équilibre les éléments à droite
-        Box.Filler leftFiller = new Box.Filler(new Dimension(150, 50), new Dimension(150, 50), new Dimension(150, 50));
+        Box.Filler leftFiller = new Box.Filler(new Dimension(170, 50), new Dimension(170, 50), new Dimension(170, 50));
         northPanel.add(leftFiller, BorderLayout.WEST);
 
         JPanel loginPanel = new JPanel();
@@ -119,27 +113,24 @@ public class HomePage extends JFrame {
         loginPanel.add(btnCreateAccount);
         loginPanel.add(btnInitDB);
 
-        buttonPanel.add(btnHomePageClient);
+        JPanel searchPanel = createSearchPanel();
 
-        northPanel.add(searchPanel);
+        JPanel carPanel = createCarPanel(); // Affichage des voitures
+
         northPanel.add(titlePanel, BorderLayout.CENTER);
         northPanel.add(loginPanel, BorderLayout.EAST);
 
-        northPanel.add(buttonPanel, BorderLayout.SOUTH);
-
-        // Ajoute le northPanel au mainPanel
-        mainPanel.add(northPanel, BorderLayout.NORTH);
-
-        // Centre de la page
+        // Panneau central pour contenir le titre et la barre de recherche
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+        centerPanel.add(searchPanel, BorderLayout.CENTER);
+        centerPanel.add(carPanel, BorderLayout.SOUTH);
 
-        JScrollPane scrollPane = new JScrollPane(centerPanel);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder());
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
+        mainPanel.add(northPanel, BorderLayout.NORTH);
+        mainPanel.add(centerPanel, BorderLayout.CENTER);
 
         // Configuration finale de la fenêtre
+        getContentPane().add(mainPanel);
         setContentPane(mainPanel);
         pack();
         setVisible(true);
@@ -178,47 +169,6 @@ public class HomePage extends JFrame {
         dialog.setModal(true);
         dialog.setLocationRelativeTo(this); // Centrer par rapport à HomePage
         dialog.setVisible(true);
-    }
-
-    public void HomePageClient() {
-        JPanel mainPanel = new JPanel(new BorderLayout());
-
-        JPanel northPanel = new JPanel();
-        northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS));
-
-        JLabel appTitle = new JLabel("CARECE", SwingConstants.CENTER);
-        JLabel pageTitle = new JLabel("VOTRE LOCATION", SwingConstants.CENTER);
-
-        appTitle.setFont(new Font("Arial", Font.BOLD, 40)); // Taille de police ajustée
-        pageTitle.setFont(new Font("Arial", Font.BOLD, 30)); // Taille de police ajustée
-        appTitle.setForeground(new Color(0, 128, 0)); // Couleur du texte en vert
-        pageTitle.setForeground(new Color(0, 128, 0)); // Couleur du texte en vert
-        appTitle.setAlignmentX(Component.CENTER_ALIGNMENT); // Centre le titre dans le northPanel
-        pageTitle.setAlignmentX(Component.CENTER_ALIGNMENT); // Centre le titre dans le northPanel
-
-        northPanel.add(Box.createVerticalGlue());
-        northPanel.add(appTitle);
-        northPanel.add(pageTitle);
-        northPanel.add(Box.createVerticalGlue());
-
-        // Barre de recherche
-        JPanel searchPanel = createSearchPanel();
-
-        // Liste du nordPanel
-        northPanel.add(appTitle); // Ajoute le titre au northPanel
-        northPanel.add(pageTitle); // Ajoute le titre au northPanel
-        northPanel.add(searchPanel); // Ajoute la barre de recherche au northPanel
-
-        // Ajoute le northPanel contenant le titre et la barre de recherche en haut du mainPanel
-        mainPanel.add(northPanel, BorderLayout.NORTH);
-
-        // Affichage des voitures
-        JPanel carPanel = createCarPanel();
-        mainPanel.add(carPanel, BorderLayout.CENTER);
-
-        getContentPane().add(mainPanel);
-        setContentPane(mainPanel);
-        setVisible(true);
     }
 
     private JPanel createCarPanel() {
@@ -278,15 +228,15 @@ public class HomePage extends JFrame {
         JPanel searchPanel = new JPanel();
         searchPanel.setBackground(new Color(0xF8F8F8)); // Couleur de fond gris clair
         searchPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        searchPanel.setBackground(Color.WHITE); // Assure que le fond est blanc
+        //searchPanel.setBackground(Color.GRAY); // Assure que le fond est blanc
+        searchPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
         // Composants de la barre de recherche
-        JTextField tfPickUpDate = new JTextField("sam. 6/4", 10);
-        JTextField tfDropOffDate = new JTextField("sam. 13/4", 10);
+        JTextField tfPickUpDate = new JTextField("30-01-2024", 15);
+        JTextField tfDropOffDate = new JTextField("02-02-2024", 15);
         JButton btnSearch = new JButton("Rechercher");
 
         // Personnalisation des composants
-
         tfPickUpDate.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY, 1), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         tfDropOffDate.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.GRAY, 1), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         btnSearch.setBackground(new Color(0xFF5733)); // Couleur rouge/orange
@@ -295,16 +245,23 @@ public class HomePage extends JFrame {
         btnSearch.setBorderPainted(false);
         btnSearch.setOpaque(true);
 
+        // Création du JComboBox
+        String[] carTypes = {"Citadine", "Utilitaire", "Familiale", "Berline", "SUV"};
+        JComboBox<String> comboBox = new JComboBox<>(carTypes);
+        comboBox.setSelectedIndex(0);  // Sélection par défaut du premier élément
+
         // Ajout des composants au panel
         searchPanel.add(new JLabel("Quand voulez-vous louer votre voiture ?"));
         searchPanel.add(tfPickUpDate);
         searchPanel.add(tfDropOffDate);
         searchPanel.add(btnSearch);
+        searchPanel.add(comboBox);
 
         add(searchPanel, BorderLayout.NORTH);
 
         return searchPanel;
     }
+
 }
 
 

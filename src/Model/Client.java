@@ -14,8 +14,9 @@ public class Client extends User {
     public Client(String email, String motDePasse, String telephone) { //Client non adhérant
         super(email, motDePasse);
         this.telephone = telephone;
-        //this.adhesion = false;
     }
+
+
 
     public Client(int id) { //Client non adhérant
         super(id);
