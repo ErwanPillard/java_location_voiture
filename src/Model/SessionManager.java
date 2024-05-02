@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SessionManager {
     private static SessionManager instance;
@@ -196,10 +198,29 @@ public class SessionManager {
     }
 
     public static Object[][] fetchReservationsData(int clientId) {
-        return new Object[][]{
-                {1, "2023-01-10", "2023-01-15", 100.0, "Confirmée"},
-                {2, "2023-02-20", "2023-02-25", 150.0, "Annulée"}
-        };
+        List<Object[]> list = new ArrayList<>();
+        String query = "SELECT numReservation, dateDebutReservation, dateFinReservation, montant, etat, voiture_immatriculation FROM Reservation WHERE id_client = ?";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, clientId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                list.add(new Object[]{
+                        rs.getInt("numReservation"),
+                        rs.getDate("dateDebutReservation").toString(),
+                        rs.getDate("dateFinReservation").toString(),
+                        rs.getDouble("montant"),
+                        rs.getString("etat"),
+                        rs.getString("voiture_immatriculation"),
+                });
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list.toArray(new Object[0][]);
     }
 
     public void logIn(User user) throws SQLException {
