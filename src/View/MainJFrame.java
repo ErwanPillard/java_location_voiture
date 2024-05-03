@@ -1,6 +1,7 @@
 package View;
 
-import View.Employe.ParkAutoView2;
+import View.Employe.ParkAutoView;
+
 import View.layouts.MenuOver;
 
 import javax.swing.*;
@@ -14,7 +15,7 @@ public class MainJFrame extends JFrame {
         JPanel jpBody = new JPanel();
         jpBody.setLayout(new BorderLayout());
 
-        new ParkAutoView2(jpBody);
+        new ParkAutoView(jpBody);
 
         this.setJMenuBar(new MenuOver(jpBody));
         this.setContentPane(jpBody);

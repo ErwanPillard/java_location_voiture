@@ -7,8 +7,6 @@ import Model.Modele;
 import Model.Voiture;
 import View.layouts.Options;
 import utils.PlaceholderTextField;
-import utils.RoundBorder;
-import utils.Util;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -23,9 +21,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import static utils.Util.addFormField;
-
-public class ParkAutoView{
+public class ParkAutoView {
 
     private JComboBox<String> filterCategorieComboBox;
     private JComboBox<String> filterBoiteVitesseComboBox;
@@ -34,7 +30,6 @@ public class ParkAutoView{
     private static JButton editButton;
 
     private VoitureJTable jTableList;
-
 
 
     // Créez des JLabels pour afficher les détails du modèle dans le panneau droit
@@ -51,13 +46,13 @@ public class ParkAutoView{
     private static final JLabel labelAttelage = new JLabel("Attelage : ");
     private static final JLabel labelBoiteVitesse = new JLabel("Boite de vitesse : ");
 
-    public ParkAutoView(JPanel jpBody){
+    public ParkAutoView(JPanel jpBody) {
         createView(jpBody);
         registerListeners();
     }
 
 
-    private void registerListeners(){
+    private void registerListeners() {
         filterCategorieComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -168,9 +163,6 @@ public class ParkAutoView{
     }
 
 
-
-
-
     protected static void displayModele(Modele modele) {
         int id = modele.getId();
         String marque = modele.getMarque();
@@ -200,24 +192,39 @@ public class ParkAutoView{
     }
 
 
+    public JPanel tabPanel(JPanel tabPanel) {
 
-    public void rightPanel(JPanel mainPanel) {
-        // Créez un nouveau JPanel pour contenir les composants de droite
-        JPanel rightPanel = new JPanel();
-        rightPanel.setLayout(new GridLayout(20, 1)); // 2 lignes, 1 colonne
+        tabPanel.setLayout(new GridBagLayout());
+        //Jtable into JScroll
+        jTableList = new VoitureJTable();
+        JScrollPane jspList = new JScrollPane();
 
-        rightPanel.setMinimumSize(new Dimension(300, 500)); // Définir une taille maximale de largeur 400 pixels et une hauteur maximale illimitée
-        rightPanel.setPreferredSize(new Dimension(300, 500));
-        rightPanel.setMaximumSize(new Dimension(500,500)); // Définir une taille maximale de largeur 400 pixels et une hauteur maximale illimitée
+        jspList.setViewportView(jTableList);
+        jspList.setPreferredSize(new Dimension(900, 700));
+        jspList.setMinimumSize(new Dimension(500, 500));
 
-        rightPanel.setBorder(BorderFactory.createEmptyBorder(0,0,0,50));
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        gbc.gridwidth = 1; // seul composant de sa colonne, il est donc le dernier.
+        gbc.gridheight = GridBagConstraints.REMAINDER; // valeur par défaut - peut s'étendre sur une seule ligne.
+
+        tabPanel.add(jspList, gbc);
+
+        return tabPanel;
+    }
+
+    public JPanel filterPanel(JPanel filterPanel) {
+
+        filterPanel.setLayout(new GridBagLayout());
+        // Création du champ de recherche avec une icône de loupe
+        searchField = new PlaceholderTextField("Search");
+        searchField.setBorder(BorderFactory.createCompoundBorder(
+                searchField.getBorder(),
+                BorderFactory.createEmptyBorder(0, 5, 0, 5)));
 
         JLabel labelTriezParCategorie = new JLabel("Triez par catégorie");
-        labelTriezParCategorie.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
         JLabel labelTriezParBoiteVitesse = new JLabel("Auto / Manuelle ?");
-        labelTriezParBoiteVitesse.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-
 
         String[] categories1 = new String[Categorie.values().length + 1];
         categories1[0] = "--Non spécifié--"; // Texte par défaut
@@ -235,116 +242,122 @@ public class ParkAutoView{
         filterCategorieComboBox = new JComboBox<>(categories1);
         filterBoiteVitesseComboBox = new JComboBox<>(categories2);
 
-        // Création du champ de recherche avec une icône de loupe
-        searchField = new PlaceholderTextField("Search");
-        searchField.setBorder(BorderFactory.createCompoundBorder(
-                searchField.getBorder(),
-                BorderFactory.createEmptyBorder(0, 5, 0, 5))); // Ajout d'un petit espacement à gauche et à droite du champ de recherche
-        searchField.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        GridBagConstraints gbc = new GridBagConstraints();
 
-        Color backgroundColor = new Color(255, 255, 255);
-        rightPanel.setBackground(backgroundColor);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
 
-        rightPanel.add(searchField);
-        rightPanel.add(labelTriezParCategorie);
-        rightPanel.add(filterCategorieComboBox);
-        rightPanel.add(labelTriezParBoiteVitesse);
-        rightPanel.add(filterBoiteVitesseComboBox);
+        gbc.gridwidth = GridBagConstraints.REMAINDER; //Occupe toute sa ligne
+        gbc.gridheight = 1; // valeur par défaut. 1 seul cellule par column
 
-        // Ajoutez les JLabels au JPanel rightPanel
+        gbc.weightx = 1.; //espace supplémentaire alloué aux autres composants
+        gbc.weighty = 1.;
 
-        labelId.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        labelMarque.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        labelNom.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        labelNbPlaces.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        labelNbPortes.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        labelTailleCoffre.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        labelCaracteristiques.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        labelPrixJournalier.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        labelNoteSatisfaction.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        labelCategorie.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        labelAttelage.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        labelBoiteVitesse.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
+        gbc.fill = GridBagConstraints.BOTH; //occupe tout l'espace dans les 2 sens
 
-        rightPanel.add(labelId);
-        rightPanel.add(labelMarque);
-        rightPanel.add(labelNom);
-        rightPanel.add(labelNbPlaces);
-        rightPanel.add(labelNbPortes);
-        rightPanel.add(labelTailleCoffre);
-        rightPanel.add(labelCaracteristiques);
-        rightPanel.add(labelPrixJournalier);
-        rightPanel.add(labelNoteSatisfaction);
-        rightPanel.add(labelCategorie);
-        rightPanel.add(labelAttelage);
-        rightPanel.add(labelBoiteVitesse);
+        gbc.anchor = GridBagConstraints.LINE_START; // aligné au debut du panel
 
-        // Ajoutez le JPanel rightPanel à droite dans le JPanel principal avec des contraintes de position
-        GridBagConstraints gbcRightPanel = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
 
-        gbcRightPanel.gridx = 1; // Colonne 1
-        gbcRightPanel.gridy = 0; // Ligne 0
-        gbcRightPanel.weightx = 0.2; // Poids horizontal (pour réduire la largeur)
-        gbcRightPanel.weighty = 1.0; // Poids vertical (pour occuper l'espace disponible)
-        //gbcRightPanel.fill = GridBagConstraints.BOTH; // Remplissage dans les deux sens
-        mainPanel.add(rightPanel, gbcRightPanel);
+        filterPanel.add(labelTriezParCategorie, gbc);
+        gbc.gridy++;
+        filterPanel.add(filterCategorieComboBox, gbc);
+        gbc.gridy++;
+        filterPanel.add(labelTriezParBoiteVitesse, gbc);
+        gbc.gridy++;
+        filterPanel.add(filterBoiteVitesseComboBox, gbc);
+
+        return filterPanel;
     }
 
-    public void leftPanel(JPanel mainPanel) {
-        // Créez un nouveau JPanel pour contenir les composants de gauche
-        JPanel leftPanel = new JPanel();
-        leftPanel.setLayout(new GridLayout(1, 1)); // 1 ligne, 1 colonne
+    public JPanel categoriePanel(JPanel categoriePanel) {
 
-        leftPanel.setMinimumSize(new Dimension(800, 2000)); // Définir une taille maximale de largeur 400 pixels et une hauteur maximale illimitée
-        leftPanel.setPreferredSize(new Dimension(800,700)); // Définir une taille maximale de largeur 400 pixels et une hauteur maximale illimitée
-        leftPanel.setMaximumSize(new Dimension(800, 2000)); // Définir une taille maximale de largeur 400 pixels et une hauteur maximale illimitée
+        categoriePanel.setLayout(new GridBagLayout());
 
-        //leftPanel.setBorder(BorderFactory.createEmptyBorder(0,100,0,100));
+        GridBagConstraints gbc = new GridBagConstraints();
 
-        JScrollPane jspList = new JScrollPane();
-        jTableList = new VoitureJTable();
-        jspList.setViewportView(jTableList);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
 
-        leftPanel.add(jspList);
+        gbc.gridwidth = GridBagConstraints.REMAINDER; //Occupe toute sa ligne
+        gbc.gridheight = 1; // valeur par défaut. 1 seul cellule par column
 
-        // Ajoutez le tableau à gauche dans le JPanel principal avec des contraintes de position
-        GridBagConstraints gbcLeftPanel = new GridBagConstraints();
-        gbcLeftPanel.gridx = 0; // Colonne 0
-        gbcLeftPanel.gridy = 0; // Ligne 0
-        gbcLeftPanel.gridheight = 2; // Occupe 2 lignes
-        gbcLeftPanel.weightx = 1.0; // Poids horizontal (pour occuper l'espace disponible)
-        gbcLeftPanel.weighty = 1.0; // Poids vertical (pour occuper l'espace disponible)
-        gbcLeftPanel.fill = GridBagConstraints.VERTICAL; // Remplissage dans les deux sens
+        gbc.weightx = 2.; //espace supplémentaire alloué aux autres composants
+        gbc.weighty = 1.;
 
-        mainPanel.add(leftPanel, gbcLeftPanel);
+        gbc.fill = GridBagConstraints.BOTH; //occupe tout l'espace dans les 2 sens
+
+        gbc.anchor = GridBagConstraints.LINE_START; // aligné au debut du panel
+
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        categoriePanel.add(labelId, gbc);
+        gbc.gridy++;
+        categoriePanel.add(labelMarque, gbc);
+        gbc.gridy++;
+        categoriePanel.add(labelNom, gbc);
+        gbc.gridy++;
+        categoriePanel.add(labelNbPlaces, gbc);
+        gbc.gridy++;
+        categoriePanel.add(labelNbPortes, gbc);
+        gbc.gridy++;
+        categoriePanel.add(labelTailleCoffre, gbc);
+        gbc.gridy++;
+        categoriePanel.add(labelCaracteristiques, gbc);
+        gbc.gridy++;
+        categoriePanel.add(labelPrixJournalier, gbc);
+        gbc.gridy++;
+        categoriePanel.add(labelNoteSatisfaction, gbc);
+        gbc.gridy++;
+        categoriePanel.add(labelCategorie, gbc);
+        gbc.gridy++;
+        categoriePanel.add(labelAttelage, gbc);
+        gbc.gridy++;
+        categoriePanel.add(labelBoiteVitesse, gbc);
+
+        return categoriePanel;
     }
-
-
-
 
     public void createView(JPanel jpBody) {
-        // Créez une instance de JLabel pour l'image
-        imageLabel = new JLabel();
+
         editButton = new JButton();
+        imageLabel = new JLabel();
 
-        // Créez un JPanel pour contenir le tableau et le JPanel rightPanel
+        //Main
         JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new GridBagLayout()); // Utilisation du GridBagLayout
+        mainPanel.setLayout(new GridBagLayout());
 
-        Color backgroundColor = new Color(57, 57, 96);
+        JPanel tabPanel = new JPanel(); //Panel Tableau voiture
+        JPanel filterPanel = new JPanel();
+        JPanel categoriePanel = new JPanel();
+
+        Color backgroundColor = new Color(21, 21, 23);
         mainPanel.setBackground(backgroundColor);
 
-        leftPanel(mainPanel);
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        gbc.gridx = 2;
+        filterPanel.setBackground(Color.white);
+        filterPanel.setPreferredSize(new Dimension(300, 200));
+        mainPanel.add(filterPanel(filterPanel), gbc);
+
+        gbc.gridy = 1;
+        categoriePanel.setBackground(Color.white);
+        categoriePanel.setPreferredSize(new Dimension(300, 400));
+        mainPanel.add(categoriePanel(categoriePanel), gbc);
 
 
-        rightPanel(mainPanel);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridheight = GridBagConstraints.REMAINDER; // valeur par défaut - peut s'étendre sur une seule ligne.
+        gbc.insets = new Insets(0, 0, 0, 20);
+        mainPanel.add(tabPanel(tabPanel), gbc);
 
         // Ajoutez le JPanel principal à jpBody
         jpBody.removeAll(); // Supprimer tous les composants existants de jpBody
+        jpBody.setLayout(new BorderLayout());
         jpBody.add(new Options(jTableList), BorderLayout.SOUTH); // Options en bas
         jpBody.add(mainPanel, BorderLayout.CENTER); // Tableau et composants à droite
         jpBody.revalidate(); // Actualiser l'affichage
     }
-
-
 }
