@@ -1,5 +1,6 @@
 package View;
 
+import View.Employe.ParkAutoView2;
 import View.layouts.MenuOver;
 
 import javax.swing.*;
@@ -13,6 +14,8 @@ public class MainJFrame extends JFrame {
         JPanel jpBody = new JPanel();
         jpBody.setLayout(new BorderLayout());
 
+        new ParkAutoView2(jpBody);
+
         this.setJMenuBar(new MenuOver(jpBody));
         this.setContentPane(jpBody);
     }
@@ -25,6 +28,10 @@ public class MainJFrame extends JFrame {
 
         //Center the frame
         frame.setLocationRelativeTo(null);
+
+        // Maximiser la fenêtre pour la mettre en plein écran
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
         //Display the window.
         frame.pack();
         frame.setVisible(true);

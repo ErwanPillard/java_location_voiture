@@ -7,6 +7,7 @@ import Model.Modele;
 import Model.Voiture;
 import View.layouts.Options;
 import utils.PlaceholderTextField;
+import utils.RoundBorder;
 import utils.Util;
 
 import javax.imageio.ImageIO;
@@ -205,8 +206,17 @@ public class ParkAutoView{
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new GridLayout(20, 1)); // 2 lignes, 1 colonne
 
+        rightPanel.setMinimumSize(new Dimension(300, 500)); // Définir une taille maximale de largeur 400 pixels et une hauteur maximale illimitée
+        rightPanel.setPreferredSize(new Dimension(300, 500));
+        rightPanel.setMaximumSize(new Dimension(500,500)); // Définir une taille maximale de largeur 400 pixels et une hauteur maximale illimitée
+
+        rightPanel.setBorder(BorderFactory.createEmptyBorder(0,0,0,50));
+
         JLabel labelTriezParCategorie = new JLabel("Triez par catégorie");
+        labelTriezParCategorie.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+
         JLabel labelTriezParBoiteVitesse = new JLabel("Auto / Manuelle ?");
+        labelTriezParBoiteVitesse.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
 
         String[] categories1 = new String[Categorie.values().length + 1];
@@ -230,6 +240,10 @@ public class ParkAutoView{
         searchField.setBorder(BorderFactory.createCompoundBorder(
                 searchField.getBorder(),
                 BorderFactory.createEmptyBorder(0, 5, 0, 5))); // Ajout d'un petit espacement à gauche et à droite du champ de recherche
+        searchField.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+
+        Color backgroundColor = new Color(255, 255, 255);
+        rightPanel.setBackground(backgroundColor);
 
         rightPanel.add(searchField);
         rightPanel.add(labelTriezParCategorie);
@@ -238,6 +252,19 @@ public class ParkAutoView{
         rightPanel.add(filterBoiteVitesseComboBox);
 
         // Ajoutez les JLabels au JPanel rightPanel
+
+        labelId.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
+        labelMarque.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
+        labelNom.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
+        labelNbPlaces.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
+        labelNbPortes.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
+        labelTailleCoffre.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
+        labelCaracteristiques.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
+        labelPrixJournalier.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
+        labelNoteSatisfaction.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
+        labelCategorie.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
+        labelAttelage.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
+        labelBoiteVitesse.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
 
         rightPanel.add(labelId);
         rightPanel.add(labelMarque);
@@ -256,10 +283,10 @@ public class ParkAutoView{
         GridBagConstraints gbcRightPanel = new GridBagConstraints();
 
         gbcRightPanel.gridx = 1; // Colonne 1
-        gbcRightPanel.gridy = 1; // Ligne 0
-        gbcRightPanel.weightx = 0.1; // Poids horizontal (pour réduire la largeur)
-        gbcRightPanel.weighty = 0.5; // Poids vertical (pour occuper l'espace disponible)
-        gbcRightPanel.fill = GridBagConstraints.BOTH; // Remplissage dans les deux sens
+        gbcRightPanel.gridy = 0; // Ligne 0
+        gbcRightPanel.weightx = 0.2; // Poids horizontal (pour réduire la largeur)
+        gbcRightPanel.weighty = 1.0; // Poids vertical (pour occuper l'espace disponible)
+        //gbcRightPanel.fill = GridBagConstraints.BOTH; // Remplissage dans les deux sens
         mainPanel.add(rightPanel, gbcRightPanel);
     }
 
@@ -267,6 +294,12 @@ public class ParkAutoView{
         // Créez un nouveau JPanel pour contenir les composants de gauche
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new GridLayout(1, 1)); // 1 ligne, 1 colonne
+
+        leftPanel.setMinimumSize(new Dimension(800, 2000)); // Définir une taille maximale de largeur 400 pixels et une hauteur maximale illimitée
+        leftPanel.setPreferredSize(new Dimension(800,700)); // Définir une taille maximale de largeur 400 pixels et une hauteur maximale illimitée
+        leftPanel.setMaximumSize(new Dimension(800, 2000)); // Définir une taille maximale de largeur 400 pixels et une hauteur maximale illimitée
+
+        //leftPanel.setBorder(BorderFactory.createEmptyBorder(0,100,0,100));
 
         JScrollPane jspList = new JScrollPane();
         jTableList = new VoitureJTable();
@@ -279,9 +312,10 @@ public class ParkAutoView{
         gbcLeftPanel.gridx = 0; // Colonne 0
         gbcLeftPanel.gridy = 0; // Ligne 0
         gbcLeftPanel.gridheight = 2; // Occupe 2 lignes
-        gbcLeftPanel.weightx = 0.6; // Poids horizontal (pour occuper l'espace disponible)
+        gbcLeftPanel.weightx = 1.0; // Poids horizontal (pour occuper l'espace disponible)
         gbcLeftPanel.weighty = 1.0; // Poids vertical (pour occuper l'espace disponible)
-        gbcLeftPanel.fill = GridBagConstraints.BOTH; // Remplissage dans les deux sens
+        gbcLeftPanel.fill = GridBagConstraints.VERTICAL; // Remplissage dans les deux sens
+
         mainPanel.add(leftPanel, gbcLeftPanel);
     }
 
@@ -297,17 +331,11 @@ public class ParkAutoView{
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridBagLayout()); // Utilisation du GridBagLayout
 
+        Color backgroundColor = new Color(57, 57, 96);
+        mainPanel.setBackground(backgroundColor);
 
         leftPanel(mainPanel);
 
-        // Ajoutez le tableau à gauche dans le JPanel principal avec des contraintes de position
-        GridBagConstraints gbcTable = new GridBagConstraints();
-        gbcTable.gridx = 0; // Colonne 0
-        gbcTable.gridy = 0; // Ligne 0
-        gbcTable.gridwidth = 2; // Occupe 2 colonnes
-        gbcTable.weightx = 1.0; // Poids horizontal (pour occuper l'espace disponible)
-        gbcTable.weighty = 1.0; // Poids vertical (pour occuper l'espace disponible)
-        gbcTable.fill = GridBagConstraints.BOTH; // Remplissage dans les deux sens
 
         rightPanel(mainPanel);
 
