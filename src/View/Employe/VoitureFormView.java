@@ -108,6 +108,7 @@ public class VoitureFormView extends JDialog {
         });
 
     }
+
     public File selectImage() {
         JFileChooser fileChooser = new JFileChooser();
 
@@ -122,7 +123,6 @@ public class VoitureFormView extends JDialog {
         }
         return selectedFile;
     }
-
 
     private void configure() {
         setTitle("Ajout de voiture");
