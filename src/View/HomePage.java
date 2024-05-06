@@ -71,10 +71,7 @@ public class HomePage extends JFrame {
                 controller.showLoginDialog(this); // 'this' réfère à la JFrame HomePage
                 if (SessionManager.userType().equals("Employe")) {
                     this.setVisible(false); // Cache HomePage
-                    //dispose();
                     MainJFrame.employeInterface();
-                    // Afficher la page spéciale pour les employés
-                    // Par exemple, new EmployeePage().setVisible(true);
                 }else{
                     new HomePage().setVisible(true); // Rouvre HomePage
                 }

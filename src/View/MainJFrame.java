@@ -24,6 +24,7 @@ public class MainJFrame extends JFrame {
     public static void employeInterface() {
         //Create and set up the window.
         JFrame frame = new MainJFrame();
+        frame.setTitle("Espace Employe");
         frame.setMinimumSize(PREFERREDSIZE);
         frame.setPreferredSize(PREFERREDSIZE);
 
