@@ -1,23 +1,26 @@
 package View.Employe;
 
-import Dao.DatabaseManager;
-import Model.OffreReduction;
-import Model.TypeAdhesion;
-import View.layouts.Options;
-
 import javax.swing.*;
 import java.awt.*;
-import java.sql.*;
-import java.time.LocalDate;
-import java.util.ArrayList;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class OffreReductionView {
     private OffreReductionJTable jTableList;
+    private JButton jbAjtOffre;
 
 
     public OffreReductionView(JPanel jpBody) {
         createView(jpBody);
+        registerListeners();
+    }
 
+    private void registerListeners() {
+        jbAjtOffre.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            }
+        });
     }
 
     public JPanel tabPanel(JPanel tabPanel) {
@@ -41,48 +44,60 @@ public class OffreReductionView {
         return tabPanel;
     }
 
-    public void createView(JPanel jpBody) {
-        JPanel mainPanel = new JPanel(new GridBagLayout());
-        mainPanel.setBackground(new Color(235, 237, 239));
+    public JPanel leftPanel(JPanel leftPanel) {
 
-        JPanel tabPanel = new JPanel(new GridBagLayout()); //Panel Tableau voiture
+        leftPanel.setLayout(new GridBagLayout());
+
+        JLabel jlAjtOffre = new JLabel("Ajouter une offre de réduction");
+        jbAjtOffre = new JButton("Ajouter");
+
+        leftPanel.setBackground(Color.WHITE);
 
         GridBagConstraints gbc = new GridBagConstraints();
 
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.insets = new Insets(5,5,5,5);
+
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.gridheight = 1;
+
+        gbc.weightx = 1.;
+        gbc.weighty = 1.;
+
+        gbc.anchor = GridBagConstraints.LINE_START;
+
+        leftPanel.add(jlAjtOffre, gbc);
+
+        gbc.gridy = 1;
+        leftPanel.add(jbAjtOffre, gbc);
+
+        return leftPanel;
+    }
+
+    public void createView(JPanel jpBody) {
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+        mainPanel.setBackground(new Color(235, 237, 239));
+
+        JPanel tabPanel = new JPanel(new GridBagLayout()); //Panel Tableau voiture
+        JPanel leftPanel = new JPanel(new GridBagLayout());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.LINE_START;
         gbc.gridheight = GridBagConstraints.REMAINDER; // valeur par défaut - peut s'étendre sur une seule ligne.
+        mainPanel.add(leftPanel(leftPanel), gbc);
+
+
+        gbc.gridx = 1;
+        gbc.insets = new Insets(10,10,10,10);
         mainPanel.add(tabPanel(tabPanel), gbc);
 
         jpBody.removeAll();
         jpBody.setLayout(new BorderLayout());
         jpBody.add(mainPanel, BorderLayout.CENTER);
         jpBody.revalidate();
-    }
-
-
-
-    // Méthode pour récupérer les offres de réduction depuis la base de données
-    private ArrayList<OffreReduction> getOffresFromDatabase() {
-        ArrayList<OffreReduction> offres = new ArrayList<>();
-
-        try (Connection conn = DatabaseManager.getConnection()) {
-            String query = "SELECT * FROM OffreReduction";
-            Statement statement = conn.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
-            while (resultSet.next()) {
-                String nom = resultSet.getString("nom");
-                String description = resultSet.getString("description");
-                LocalDate dateDebut = resultSet.getDate("dateDebut").toLocalDate();
-                LocalDate dateFin = resultSet.getDate("dateFin").toLocalDate();
-                float pourcentageReduction = resultSet.getFloat("pourcentageReduction");
-                TypeAdhesion typeAdhesion = TypeAdhesion.valueOf(resultSet.getString("typeAdhesion"));
-                OffreReduction offre = new OffreReduction(nom, description, dateDebut, dateFin, pourcentageReduction, typeAdhesion);
-                offres.add(offre);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return offres;
     }
 }
