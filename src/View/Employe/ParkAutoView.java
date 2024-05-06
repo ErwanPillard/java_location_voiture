@@ -279,19 +279,22 @@ public class ParkAutoView {
         gbc.gridx = 0;
         gbc.gridy = 0;
 
-        gbc.gridwidth = GridBagConstraints.REMAINDER; //Occupe toute sa ligne
+        gbc.gridwidth = GridBagConstraints.REMAINDER; // Occupe toute sa ligne
         gbc.gridheight = 1; // valeur par défaut. 1 seul cellule par column
 
-        gbc.weightx = 2.; //espace supplémentaire alloué aux autres composants
+        gbc.weightx = 2.; // espace supplémentaire alloué aux autres composants
         gbc.weighty = 1.;
 
-        gbc.fill = GridBagConstraints.BOTH; //occupe tout l'espace dans les 2 sens
+        gbc.fill = GridBagConstraints.BOTH; // occupe tout l'espace dans les 2 sens
 
         gbc.anchor = GridBagConstraints.LINE_START; // aligné au debut du panel
 
         gbc.insets = new Insets(10, 10, 10, 10);
 
-        categoriePanel.add(labelId, gbc);
+        JLabel title = new JLabel("Modèle");
+        title.setFont(new Font("Arial", Font.BOLD, 20)); // Police Arial en gras
+
+        categoriePanel.add(title, gbc);
         gbc.gridy++;
         categoriePanel.add(labelMarque, gbc);
         gbc.gridy++;
@@ -318,6 +321,7 @@ public class ParkAutoView {
         return categoriePanel;
     }
 
+
     public void createView(JPanel jpBody) {
 
         editButton = new JButton();
@@ -327,9 +331,9 @@ public class ParkAutoView {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridBagLayout());
 
-        JPanel tabPanel = new JPanel(); //Panel Tableau voiture
-        JPanel filterPanel = new JPanel();
-        JPanel categoriePanel = new JPanel();
+        JPanel tabPanel = new JPanel(new GridBagLayout()); //Panel Tableau voiture
+        JPanel filterPanel = new JPanel(new GridBagLayout());
+        JPanel categoriePanel = new JPanel(new GridBagLayout());
 
         Color backgroundColor = new Color(235, 237, 239);
         mainPanel.setBackground(backgroundColor);

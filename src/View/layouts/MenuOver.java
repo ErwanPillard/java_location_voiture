@@ -9,6 +9,7 @@ import javax.swing.*;
 
 import View.Employe.ClientBaseView;
 import View.Employe.ModeleView;
+import View.Employe.OffreReductionView;
 import View.Employe.ParkAutoView;
 
 import View.UserInfo;
@@ -33,6 +34,7 @@ public class MenuOver extends JMenuBar {
     private JMenuItem jmiEdit;
     private JMenuItem jmiRemove;
     private JMenuItem jmiMonCompte;
+    private JMenuItem jmiOffreReduction;
 
     private JMenu jmHelp;
     private JMenu jmEspaceEmploye;
@@ -59,6 +61,9 @@ public class MenuOver extends JMenuBar {
         jmEspaceEmploye = createMenu("Mon espace", 'I');
 
         jmiVoiture = createMenuItem(jmFile, "Park auto", 'S', "details",
+                KeyStroke.getKeyStroke(KeyEvent.VK_F2, InputEvent.ALT_MASK));
+
+        jmiOffreReduction = createMenuItem(jmFile, "Offre de Réduction", 'S', "details",
                 KeyStroke.getKeyStroke(KeyEvent.VK_F2, InputEvent.ALT_MASK));
 
         jmiMonCompte = createMenuItem(jmEspaceEmploye, "Mon Compte", 'S', "details",
@@ -153,6 +158,12 @@ public class MenuOver extends JMenuBar {
         jmiMonCompte.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 new UserInfo().setVisible(true);
+            }
+        });
+
+        jmiOffreReduction.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                new OffreReductionView(jpBody);
             }
         });
     }
