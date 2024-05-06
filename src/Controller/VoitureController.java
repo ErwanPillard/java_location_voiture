@@ -57,7 +57,7 @@ public class VoitureController {
         return Voiture.immatExists(immat);
     }
 
-    public synchronized void addUserListener(VoitureListener l) {
+    public synchronized void addVoitureListener(VoitureListener l) {
         if (!voitureListeners.contains(l)) {
             voitureListeners.add(l);
         }

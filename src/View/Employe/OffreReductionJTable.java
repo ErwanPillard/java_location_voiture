@@ -1,8 +1,9 @@
 package View.Employe;
 
 import Controller.OffreReductionController;
+import Controller.listeners.MailEvent;
+import Controller.listeners.OffreReductionListener;
 import Model.OffreReduction;
-
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -10,13 +11,14 @@ import javax.swing.table.TableRowSorter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class OffreReductionJTable extends JTable {
+public class OffreReductionJTable extends JTable implements OffreReductionListener {
     private TableModel model = new TableModel();
     private static TableRowSorter<TableModel> sorter;
 
     public OffreReductionJTable() {
         this.setModel(model);
         this.getTableHeader().setReorderingAllowed(false);
+        OffreReductionController.getInstance().addOffreListener(this);
         updateTable(loadAll());
     }
 
@@ -47,6 +49,9 @@ public class OffreReductionJTable extends JTable {
         }
         return offres;
     }
+
+    @Override
+    public void offreadd(MailEvent<OffreReduction> event) {model.insertRow(0, event.getSource().toArray());}
 
     private class TableModel extends DefaultTableModel {
 

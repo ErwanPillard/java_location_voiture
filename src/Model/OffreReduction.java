@@ -14,11 +14,11 @@ public class OffreReduction {
     private LocalDate dateDebut;
     private LocalDate dateFin;
     private float pourcentageReduction;
-    private TypeAdhesion typeAdhesion;
+    private String typeAdhesion;
 
     // Constructeur
     public OffreReduction(String nom, String description, LocalDate dateDebut, LocalDate dateFin,
-                          float pourcentageReduction, TypeAdhesion typeAdhesion) {
+                          float pourcentageReduction, String typeAdhesion) {
         this.nom = nom;
         this.description = description;
         this.dateDebut = dateDebut;
@@ -68,11 +68,11 @@ public class OffreReduction {
         this.pourcentageReduction = pourcentageReduction;
     }
 
-    public TypeAdhesion getTypeAdhesion() {
+    public String getTypeAdhesion() {
         return typeAdhesion;
     }
 
-    public void setTypeAdhesion(TypeAdhesion idTypeAdhesion) {
+    public void setTypeAdhesion(String idTypeAdhesion) {
         this.typeAdhesion = idTypeAdhesion;
     }
 
@@ -86,4 +86,8 @@ public class OffreReduction {
         return offreReductionDAO.all();
     }
 
+    public void add(OffreReduction offreReduction) throws SQLException {
+        OffreReductionDAO offreReductionDAO = new OffreReductionDAOImpl();
+        offreReductionDAO.add(offreReduction);
+    }
 }

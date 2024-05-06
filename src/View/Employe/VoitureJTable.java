@@ -33,7 +33,7 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
     public VoitureJTable() {
         this.setModel(model);
         this.getTableHeader().setReorderingAllowed(false);
-        VoitureController.getInstance().addUserListener(this);
+        VoitureController.getInstance().addVoitureListener(this);
         updateTable(loadAll());
         cellEdit();
         imageSelector();
@@ -241,7 +241,6 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
             JOptionPane.showMessageDialog(this, "Aucune voiture sélectionnée pour la suppression.", "Erreur", JOptionPane.ERROR_MESSAGE);
         }
     }
-
 
     @Override
     public void cmdAdd() {

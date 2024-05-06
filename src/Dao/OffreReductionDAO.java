@@ -11,4 +11,6 @@ public interface OffreReductionDAO {
     List<OffreReduction> all() throws SQLException;
 
     OffreReduction createOffreReduction(ResultSet rset) throws SQLException;
+
+    void add(OffreReduction offreReduction) throws SQLException;
 }

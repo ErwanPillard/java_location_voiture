@@ -1,5 +1,7 @@
 package View.Employe;
 
+import Model.OffreReduction;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,6 +10,7 @@ import java.awt.event.ActionListener;
 public class OffreReductionView {
     private OffreReductionJTable jTableList;
     private JButton jbAjtOffre;
+    private JButton jbSuppOffre;
 
 
     public OffreReductionView(JPanel jpBody) {
@@ -19,6 +22,7 @@ public class OffreReductionView {
         jbAjtOffre.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                OffreReductionForm.toggle();
             }
         });
     }
@@ -51,6 +55,9 @@ public class OffreReductionView {
         JLabel jlAjtOffre = new JLabel("Ajouter une offre de réduction");
         jbAjtOffre = new JButton("Ajouter");
 
+        JLabel jlSuppOffre = new JLabel("Supprimer une offre de réduction");
+        jbSuppOffre = new JButton("Supprimer");
+
         leftPanel.setBackground(Color.WHITE);
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -69,8 +76,12 @@ public class OffreReductionView {
 
         leftPanel.add(jlAjtOffre, gbc);
 
-        gbc.gridy = 1;
+        gbc.gridy++;
         leftPanel.add(jbAjtOffre, gbc);
+        gbc.gridy++;
+        leftPanel.add(jlSuppOffre, gbc);
+        gbc.gridy++;
+        leftPanel.add(jbSuppOffre, gbc);
 
         return leftPanel;
     }
