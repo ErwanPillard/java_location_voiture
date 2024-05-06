@@ -331,7 +331,7 @@ public class ParkAutoView {
         JPanel filterPanel = new JPanel();
         JPanel categoriePanel = new JPanel();
 
-        Color backgroundColor = new Color(21, 21, 23);
+        Color backgroundColor = new Color(235, 237, 239);
         mainPanel.setBackground(backgroundColor);
 
         GridBagConstraints gbc = new GridBagConstraints();

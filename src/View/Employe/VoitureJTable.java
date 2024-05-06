@@ -33,7 +33,7 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
     public VoitureJTable() {
         this.setModel(model);
         this.getTableHeader().setReorderingAllowed(false);
-        VoitureController.getInstance().addUserListener(this);
+        //VoitureController.getInstance().addUserListener(this);
         updateTable(loadAll());
         cellEdit();
         imageSelector();

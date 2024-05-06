@@ -20,8 +20,8 @@ import java.util.List;
 
 public class HomePage extends JFrame {
     private JButton btnLogin, btnCreateAccount, btnInitDB;
-    JPanel searchPanel = createSearchPanel();
-    JPanel carPanel = createCarPanel(); // Affichage des voitures
+    JPanel searchPanel;
+    JPanel carPanel; // Affichage des voitures
 
     public HomePage() {
         searchPanel = createSearchPanel();
@@ -69,7 +69,15 @@ public class HomePage extends JFrame {
                 this.setVisible(false);
                 UserConnectionController controller = new UserConnectionController(this, new ConnexionUtilisateur(), new UserConnectionImpl());
                 controller.showLoginDialog(this); // 'this' réfère à la JFrame HomePage
-                new HomePage().setVisible(true); // Rouvre HomePage
+                if (SessionManager.userType().equals("Employe")) {
+                    this.setVisible(false); // Cache HomePage
+                    //dispose();
+                    MainJFrame.employeInterface();
+                    // Afficher la page spéciale pour les employés
+                    // Par exemple, new EmployeePage().setVisible(true);
+                }else{
+                    new HomePage().setVisible(true); // Rouvre HomePage
+                }
             }
         });
 
