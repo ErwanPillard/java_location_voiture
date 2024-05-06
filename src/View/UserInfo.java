@@ -19,7 +19,6 @@ public class UserInfo extends JFrame {
     private final JButton btnRetour;
     private final JButton btnFacture;
     private final JButton btnReservations;
-    private final JButton btnModifierVehicule;
     private final JButton btnInterfaceEmploye;
     private final JButton btnAjouterVoiture;
     private final JButton btnAjouterModele;
@@ -69,15 +68,6 @@ public class UserInfo extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 afficherReservationsDialog(SessionManager.getCurrentUser().getId());
-            }
-        });
-        btnModifierVehicule = new JButton("Modifier le parc de véhicule");
-        btnModifierVehicule.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                /*
-               modifParcDialog();
-                 */
             }
         });
         btnInterfaceEmploye = new JButton("Afficher l'interface employée");

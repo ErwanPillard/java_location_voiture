@@ -19,7 +19,7 @@ public class SessionManager {
     private static Employe currentEmploye;
     private static Entreprise currentEntreprise;
     private static Client currentClient;
-    private static String userType;
+    public static String userType;
     private static boolean isLoggedIn;
 
     private SessionManager() {
