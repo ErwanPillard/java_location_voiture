@@ -1,11 +1,14 @@
 package View;
 
 import View.Employe.ParkAutoView;
-
 import View.layouts.MenuOver;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 public class MainJFrame extends JFrame {
     //TEST pour interface employe
@@ -19,6 +22,7 @@ public class MainJFrame extends JFrame {
 
         this.setJMenuBar(new MenuOver(jpBody));
         this.setContentPane(jpBody);
+
     }
 
     public static void employeInterface() {

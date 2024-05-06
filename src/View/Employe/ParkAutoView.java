@@ -5,6 +5,7 @@ import Model.BoiteVitesse;
 import Model.Categorie;
 import Model.Modele;
 import Model.Voiture;
+import View.MainJFrame;
 import View.layouts.Options;
 import utils.PlaceholderTextField;
 
@@ -15,13 +16,14 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ParkAutoView {
+public class ParkAutoView{
 
     private JComboBox<String> filterCategorieComboBox;
     private JComboBox<String> filterBoiteVitesseComboBox;
@@ -50,6 +52,24 @@ public class ParkAutoView {
         createView(jpBody);
         registerListeners();
     }
+
+    private void setFondEcran(JPanel panel, String cheminImage) {
+        try {
+            // Charger l'image du fond d'écran
+            BufferedImage img = ImageIO.read(new File(cheminImage));
+            // Créer une ImageIcon à partir de l'image
+            ImageIcon imageIcon = new ImageIcon(img);
+            // Créer un JLabel avec l'image de fond
+            JLabel backgroundLabel = new JLabel(imageIcon);
+            // Définir la taille du JLabel pour qu'elle corresponde à la taille de la JPanel
+            backgroundLabel.setBounds(0, 0, panel.getWidth(), panel.getHeight());
+            // Ajouter le JLabel au JPanel
+            panel.add(backgroundLabel);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
     private void registerListeners() {
@@ -327,6 +347,7 @@ public class ParkAutoView {
         editButton = new JButton();
         imageLabel = new JLabel();
 
+
         //Main
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridBagLayout());
@@ -335,7 +356,7 @@ public class ParkAutoView {
         JPanel filterPanel = new JPanel(new GridBagLayout());
         JPanel categoriePanel = new JPanel(new GridBagLayout());
 
-        Color backgroundColor = new Color(235, 237, 239);
+        Color backgroundColor = new Color(55, 95, 158);
         mainPanel.setBackground(backgroundColor);
 
         GridBagConstraints gbc = new GridBagConstraints();
