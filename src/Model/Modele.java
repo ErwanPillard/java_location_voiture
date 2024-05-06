@@ -14,7 +14,7 @@ public class Modele {
     private int nbPorte;
     private float tailleCoffre;
     private String caracteristiques;
-    private int prixJournalier;
+    private static int prixJournalier;
     private boolean attelage;
     private float noteSatisfaction;
     private BoiteVitesse boiteVitesse;
@@ -81,7 +81,7 @@ public class Modele {
         return caracteristiques;
     }
 
-    public int getPrixJournalier() {
+    public static int getPrixJournalier() {
         return prixJournalier;
     }
 

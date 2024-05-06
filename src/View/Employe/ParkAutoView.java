@@ -122,7 +122,7 @@ public class ParkAutoView {
             try {
                 ByteArrayInputStream bais = new ByteArrayInputStream(image);
                 Image img = ImageIO.read(bais);
-                carImage = new ImageIcon(img.getScaledInstance(300, 150, Image.SCALE_SMOOTH));
+                carImage = new ImageIcon(img.getScaledInstance(300, 300, Image.SCALE_SMOOTH));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -132,7 +132,7 @@ public class ParkAutoView {
                 imageLabel.setIcon(carImage); // Définir l'icône avec l'image
                 imageLabel.setText(null); // Effacer le texte si une image est chargée
             } else {
-                System.out.println("imageLabel is null"); // Déboguer si imageLabel est null
+                //System.out.println("imageLabel is null"); // Déboguer si imageLabel est null
             }
         } else {
             // Afficher un message si aucune image n'est disponible
@@ -140,7 +140,7 @@ public class ParkAutoView {
                 imageLabel.setIcon(null); // Effacer l'icône si aucune image n'est disponible
                 imageLabel.setText("No images"); // Définir le texte si aucune image n'est disponible
             } else {
-                System.out.println("imageLabel is null"); // Déboguer si imageLabel est null
+                //System.out.println("imageLabel is null"); // Déboguer si imageLabel est null
             }
         }
 

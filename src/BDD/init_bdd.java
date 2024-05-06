@@ -86,7 +86,7 @@ public class init_bdd {
                 int nbPlaces = 4 + rand.nextInt(2); // Aléatoire entre 4 et 5
                 int nbPortes = 3 + rand.nextInt(3); // Aléatoire entre 3 et 5
                 float tailleCoffre = 300.0f + rand.nextFloat() * (500.0f - 300.0f); // Aléatoire entre 300.0 et 500.0
-                int prixJournalier = 25 + rand.nextInt(126); // Aléatoire entre 25 et 150
+                int prixJournalier = 30*i; // Prix journalier
                 Integer noteSatisfaction = rand.nextBoolean() ? rand.nextInt(5) + 1 : null; // Aléatoire entre 1 et 5 ou null
                 String categorie = categories[rand.nextInt(categories.length)]; // Aléatoire parmi 'Citadine', 'Berline', 'SUV', 'Familiale', 'Utilitaire'
                 String attelage = rand.nextBoolean() ? "Oui" : "Non"; // Aléatoire entre 'Oui' et 'Non'
@@ -198,11 +198,10 @@ public class init_bdd {
                     ResultSet generatedKeys = insertStmt.getGeneratedKeys();
                     if (generatedKeys.next()) {
                         long factureId = generatedKeys.getLong(1);
-                        System.out.println("Facture ajoutée avec succès, ID: " + factureId);
+                        //System.out.println("Facture ajoutée avec succès, ID: " + factureId);
                     }
                 }
                 connection.commit(); // Commit de la transaction si tout est correct
-                System.out.println("Toutes les factures ont été ajoutées avec succès.");
             } catch (SQLException e) {
                 System.err.println("Erreur lors de l'exécution de la requête : " + e.getMessage());
                 connection.rollback(); // Rollback en cas d'erreur
