@@ -79,9 +79,9 @@ public class OffreReductionView {
         gbc.gridy++;
         leftPanel.add(jbAjtOffre, gbc);
         gbc.gridy++;
-        leftPanel.add(jlSuppOffre, gbc);
+        //leftPanel.add(jlSuppOffre, gbc);
         gbc.gridy++;
-        leftPanel.add(jbSuppOffre, gbc);
+        //leftPanel.add(jbSuppOffre, gbc);
 
         return leftPanel;
     }
