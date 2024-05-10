@@ -33,8 +33,8 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
     public VoitureJTable() {
         this.setModel(model);
         this.getTableHeader().setReorderingAllowed(false);
-        VoitureController.getInstance().addUserListener(this);
-        updateTable(loadAll());
+        VoitureController.getInstance().addUserListener(this);// ajoute user au tab pas utile
+        updateTable(loadAll());// verifi si les celluels sont editable
         cellEdit();
         imageSelector();
 
@@ -94,7 +94,7 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
         }
 
         @Override
-        public boolean isCellEditable(int row, int column) {
+        public boolean isCellEditable(int row, int column) {// permet de modif les cellules
             if (column == 0 || column == 1 || column == 5 || column == 6 || column == 7 || column == 12 || column == 14) {
                 return false;
             }
