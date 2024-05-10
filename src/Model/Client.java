@@ -1,9 +1,9 @@
 package Model;
 
-import Dao.ClientDAO;
-import Dao.ClientDAOImpl;
+import Dao.*;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class Client extends User {
     //private final boolean adhesion;
@@ -29,6 +29,32 @@ public class Client extends User {
         this.telephone = telephone;
     }
 
+    public static List<Client> all() throws SQLException {
+        ClientDAO clientDAO = new ClientDAOImpl();
+        return clientDAO.all();
+    }
+
+
+    public static Client findByTelephone(String telephone) throws SQLException {
+        ClientDAO clientDAO = new ClientDAOImpl();
+        return clientDAO.findByTelephone(telephone);
+    }
+
+    public Object[] toArray() {
+        Client client;
+        try {
+            client = Client.getClientById(id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        //return new Object[] {this.immatriculation, this.dateMiseCirculation.toString(), this.nbKilometre, this.couleur, modele.getMarque(), modele.getNom(), modele.getNbPlace(), modele.getNbPorte(), modele.getTailleCoffre(), modele.getCaracteristiques(), modele.getPrixJournalier(), modele.getNoteSatisfaction(), modele.getCategorie(), modele.isAttelage() ? "Oui" : "Non", modele.getBoiteVitesse()};
+        return new Object[] {this.telephone};
+    }
+
+    public static Client getClientById(int id) throws SQLException{
+        ClientDAO clientDAO = new ClientDAOImpl();
+        return clientDAO.getClientById(id);
+    }
     public String getTelephone() {
         return telephone;
     }
@@ -50,6 +76,19 @@ public class Client extends User {
         ClientDAO clientDAO = new ClientDAOImpl();
         return clientDAO.emailExists(email);
     }
+
+    /*public Object[] toArray() {
+        /*Modele modele;
+        try {
+            modele = Modele.getModeleById(modele_id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        //return new Object[] {this.immatriculation, this.dateMiseCirculation.toString(), this.nbKilometre, this.couleur, modele.getMarque(), modele.getNom(), modele.getNbPlace(), modele.getNbPorte(), modele.getTailleCoffre(), modele.getCaracteristiques(), modele.getPrixJournalier(), modele.getNoteSatisfaction(), modele.getCategorie(), modele.isAttelage() ? "Oui" : "Non", modele.getBoiteVitesse()};
+        return new Object[] {this.immatriculation, this.dateMiseCirculation.toString(), this.nbKilometre, this.couleur};
+    }*/
+
+
 }
 
 

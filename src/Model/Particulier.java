@@ -2,6 +2,8 @@ package Model;
 
 import Dao.ClientDAO;
 import Dao.ClientDAOImpl;
+import Dao.ModeleDAO;
+import Dao.ModeleDAOImpl;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -84,4 +86,6 @@ public class Particulier extends Client {
         ClientDAO clientDAO = new ClientDAOImpl();
         clientDAO.addParticulier(particulier);
     }
+
+
 }
