@@ -16,6 +16,11 @@ public class Client extends User {
         this.telephone = telephone;
     }
 
+    public Client(String email, String telephone) { //Client non adhérant
+        super(email);
+        this.telephone = telephone;
+    }
+
 
 
     public Client(int id) { //Client non adhérant
@@ -29,26 +34,20 @@ public class Client extends User {
         this.telephone = telephone;
     }
 
-    public static List<Client> all() throws SQLException {
+    public static List<User> allUserClient() throws SQLException {
         ClientDAO clientDAO = new ClientDAOImpl();
-        return clientDAO.all();
+        return clientDAO.allUserClient();
+    }
+
+    public static List<Particulier> allParticuliers() throws SQLException {
+        ClientDAO clientDAO = new ClientDAOImpl();
+        return clientDAO.allParticuliers();
     }
 
 
     public static Client findByTelephone(String telephone) throws SQLException {
         ClientDAO clientDAO = new ClientDAOImpl();
         return clientDAO.findByTelephone(telephone);
-    }
-
-    public Object[] toArray() {
-        Client client;
-        try {
-            client = Client.getClientById(id);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        //return new Object[] {this.immatriculation, this.dateMiseCirculation.toString(), this.nbKilometre, this.couleur, modele.getMarque(), modele.getNom(), modele.getNbPlace(), modele.getNbPorte(), modele.getTailleCoffre(), modele.getCaracteristiques(), modele.getPrixJournalier(), modele.getNoteSatisfaction(), modele.getCategorie(), modele.isAttelage() ? "Oui" : "Non", modele.getBoiteVitesse()};
-        return new Object[] {this.telephone};
     }
 
     public static Client getClientById(int id) throws SQLException{
@@ -76,19 +75,6 @@ public class Client extends User {
         ClientDAO clientDAO = new ClientDAOImpl();
         return clientDAO.emailExists(email);
     }
-
-    /*public Object[] toArray() {
-        /*Modele modele;
-        try {
-            modele = Modele.getModeleById(modele_id);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        //return new Object[] {this.immatriculation, this.dateMiseCirculation.toString(), this.nbKilometre, this.couleur, modele.getMarque(), modele.getNom(), modele.getNbPlace(), modele.getNbPorte(), modele.getTailleCoffre(), modele.getCaracteristiques(), modele.getPrixJournalier(), modele.getNoteSatisfaction(), modele.getCategorie(), modele.isAttelage() ? "Oui" : "Non", modele.getBoiteVitesse()};
-        return new Object[] {this.immatriculation, this.dateMiseCirculation.toString(), this.nbKilometre, this.couleur};
-    }*/
-
-
 }
 
 

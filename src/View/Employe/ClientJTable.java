@@ -4,6 +4,7 @@ import Controller.ClientController;
 import Controller.listeners.ClientListener;
 import Controller.listeners.MailEvent;
 import Model.Client;
+import Model.User;
 import Model.Voiture;
 import View.listeners.EventListener;
 
@@ -26,8 +27,8 @@ public class ClientJTable extends JTable implements ClientListener, EventListene
     public ClientJTable() {
         this.setModel(model);
         this.getTableHeader().setReorderingAllowed(false);
-        ClientController.getInstance().addUserListener(this);// ajoute user au tab pas utile
-        updateTable(loadAll());// verifi si les celluels sont editable
+        //ClientController.getInstance().addUserListener(this);// ajoute user au tab pas utile
+        //updateTable(loadAllClient());// verifi si les celluels sont editable
         cellEdit();
         sorter = new TableRowSorter<>(model);
         setRowSorter(sorter); // Assignez le TableRowSorter à la JTable
@@ -39,7 +40,7 @@ public class ClientJTable extends JTable implements ClientListener, EventListene
         clearTable();
         // Ajoutez les nouvelles voitures à votre JTable
         for (Client client : clients) {
-            model.insertRow(0, client.toArray());
+            //model.insertRow(0, client.toArray());
         }
         DefaultTableModel model = (DefaultTableModel) getModel();
         model.fireTableDataChanged();
@@ -50,10 +51,10 @@ public class ClientJTable extends JTable implements ClientListener, EventListene
     }
 
 
-    public ArrayList<Client> loadAll(){
-        ArrayList<Client> clients = new ArrayList<>();
+    public ArrayList<User> loadAllClient(){
+        ArrayList<User> clients = new ArrayList<>();
         try {
-            clients = (ArrayList<Client>) ClientController.getInstance().allClients();
+            clients = (ArrayList<User>) ClientController.getInstance().allClients();
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erreur", e.getMessage(), JOptionPane.ERROR_MESSAGE);

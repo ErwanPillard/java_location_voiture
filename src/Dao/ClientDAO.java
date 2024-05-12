@@ -13,5 +13,8 @@ public interface ClientDAO {
     Client getClientById(int id) throws SQLException;
 
 
-    List<Client> all() throws SQLException;
+
+    List<User> allUserClient() throws SQLException;
+
+    List<Particulier> allParticuliers() throws SQLException;
 }

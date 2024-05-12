@@ -49,21 +49,43 @@ public class ClientDAOImpl implements ClientDAO {
             throwables.printStackTrace();
         }
     }
-    public List<Client> all() throws SQLException {
-        ArrayList<Client> clients = new ArrayList<>();
+    public List<User> allUserClient() throws SQLException {
+        ArrayList<User> clients = new ArrayList<>();
 
         Connection c = DatabaseManager.getConnection();
-        PreparedStatement pstmt = c.prepareStatement("SELECT * FROM Client");
+        PreparedStatement pstmt = c.prepareStatement("SELECT * FROM User JOIN Client ON User.id = Client.id;");
 
         ResultSet rset = pstmt.executeQuery();
-        /*while (rset.next()) {
-            clients.add(createCLient(rset));
-        }*/
+        while (rset.next()) {
+            clients.add(createUserAsClient(rset));
+        }
 
         pstmt.close();
         c.close();
 
         return clients;
+    }
+
+    public List<Particulier> allParticuliers() throws SQLException {
+        ArrayList<Particulier> particuliers = new ArrayList<>();
+
+        Connection c = DatabaseManager.getConnection();
+        PreparedStatement pstmt = c.prepareStatement("SELECT P.id, P.nom, P.prenom, P.numeroPermis, P.birthDate, C.telephone, U.email FROM Particulier P JOIN Client C ON P.id = C.id JOIN User U ON U.id = C.id");
+
+        ResultSet rset = pstmt.executeQuery();
+        while (rset.next()) {
+            particuliers.add(createParticuliers(rset));
+        }
+
+        pstmt.close();
+        c.close();
+
+        return particuliers;
+    }
+
+    public Particulier createParticuliers(ResultSet rset) throws SQLException {
+        Particulier particulier = new Particulier(rset.getString("nom"), rset.getString("prenom"), rset.getString("email"),rset.getString("telephone"),rset.getString("numeroPermis"), rset.getDate("birthDate").toLocalDate());
+        return particulier;
     }
 
     @Override
@@ -148,15 +170,17 @@ public class ClientDAOImpl implements ClientDAO {
         Client client = null;
         ResultSet rset = pstmt.executeQuery();
 
-
-        /*while (rset.next()) {
-            client = createModele(rset);
-        }*/
+        client = new Client(id, rset.getString("telephone"));
 
         pstmt.close();
         c.close();
 
         return client;
+    }
+
+    public User createUserAsClient(ResultSet rset) throws SQLException {
+        User user = new User(rset.getString("email"));
+        return user;
     }
 
    /* @Override

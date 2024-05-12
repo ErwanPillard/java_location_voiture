@@ -33,6 +33,14 @@ public class Particulier extends Client {
         this.birthDate = birthDate;
     }
 
+    public Particulier(String nom, String prenom, String email, String telephone, String numeroPermis, LocalDate birthDate) {
+        super(email, telephone);
+        this.nom = nom;
+        this.prenom = prenom;
+        this.numeroPermis = numeroPermis;
+        this.birthDate = birthDate;
+    }
+
     public Particulier(int id, String nom, String prenom, String numeroPermis, LocalDate birthDate) {
         super(id);
         this.id = id;
@@ -85,6 +93,10 @@ public class Particulier extends Client {
     public void add(Particulier particulier) throws SQLException {
         ClientDAO clientDAO = new ClientDAOImpl();
         clientDAO.addParticulier(particulier);
+    }
+
+    public Object[] toArray() {
+        return new Object[] {this.getEmail(), this.nom, this.prenom, this.getTelephone(), this.birthDate, this.numeroPermis};
     }
 
 

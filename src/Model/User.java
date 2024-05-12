@@ -1,5 +1,7 @@
 package Model;
 
+import java.sql.SQLException;
+
 public class User {
     private int id;
     private String email;
@@ -18,6 +20,10 @@ public class User {
 
     public User(int id, String email) {
         this.id = id;
+        this.email = email;
+    }
+
+    public User(String email) {
         this.email = email;
     }
 

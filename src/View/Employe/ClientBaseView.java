@@ -10,6 +10,7 @@ import Model.Client;
 import Model.Modele;
 import Model.Particulier;
 import Model.Voiture;
+import View.Employe.Button.ParticulierJTable;
 import View.layouts.Options;
 import View.listeners.EventListener;
 
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 
 public class ClientBaseView {
 
-    private ClientJTable jTableList;
+    private ParticulierJTable jTableList;
 
 
     private static final JLabel labelId = new JLabel("Id : ");
@@ -84,7 +85,7 @@ public class ClientBaseView {
 
         tabPanel.setLayout(new GridBagLayout());
         //Jtable into JScroll
-        jTableList = new ClientJTable();
+        jTableList = new ParticulierJTable();
         JScrollPane jspList = new JScrollPane();
 
         jspList.setViewportView(jTableList);

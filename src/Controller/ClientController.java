@@ -5,10 +5,7 @@ import Controller.listeners.ClientListener;
 import Controller.listeners.VoitureListener;
 import Dao.ClientDAO;
 import Dao.ClientDAOImpl;
-import Model.Client;
-import Model.Entreprise;
-import Model.Particulier;
-import Model.Voiture;
+import Model.*;
 
 import javax.swing.*;
 import java.sql.*;
@@ -43,16 +40,20 @@ public class ClientController {
         }
     }
 
-    public   List<Client> allClients() throws SQLException {
-        return Client.all();
+    public   List<User> allClients() throws SQLException {
+        return Client.allUserClient();
     }
     public Client findByTelephone(String telephone) throws SQLException {
         return Client.findByTelephone(telephone);
     }
 
+    public   List<Particulier> allParticuliers() throws SQLException {
+        return Client.allParticuliers();
+    }
+
 
     public boolean emailExists(String email) throws SQLException {return Client.emailExists(email);}
-    public synchronized void addUserListener(ClientListener l) {
+    public synchronized void addClientListener(ClientListener l) {
         if (!clientListeners.contains(l)) {
             clientListeners.add(l);
         }
