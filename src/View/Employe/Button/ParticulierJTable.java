@@ -71,14 +71,7 @@ public class ParticulierJTable extends JTable implements ClientListener, EventLi
 
         @Override
         public boolean isCellEditable(int row, int column) {// permet de modif les cellules
-            if
-            (column == 0 || column == 1 ) {
-
-                //(column == 0 || column == 1 || column == 5 || column == 6 || column == 7 || column == 12 || column == 14) {
-                return false;
-            }
-            return true;
-
+            return false;
         }
 
     }
