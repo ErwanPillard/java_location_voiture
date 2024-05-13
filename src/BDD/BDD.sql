@@ -119,5 +119,5 @@ CREATE TABLE OffreReduction
     dateDebut            DATE         NOT NULL,
     dateFin              DATE         NOT NULL,
     pourcentageReduction FLOAT        NOT NULL,
-    typeAdhesion         ENUM('BRONZE', 'ARGENT', 'OR') NOT NULL
+    typeAdhesion         ENUM('NOUVEAUCLIENT', 'BRONZE', 'ARGENT', 'OR') NOT NULL
 )ENGINE = InnoDB;

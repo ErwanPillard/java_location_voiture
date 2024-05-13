@@ -25,6 +25,10 @@ public class Voiture {
         this.modele_id= modele_id;
     }
 
+    public Voiture(int modele_id) {
+        this.modele_id= modele_id;
+    }
+
     public LocalDate getDateMiseCirculation() {
         return dateMiseCirculation;
     }
@@ -60,7 +64,6 @@ public class Voiture {
     public int getModele_id() {
         return modele_id;
     }
-
 
     public void setModele_id(int modele_id) {
         this.modele_id = modele_id;

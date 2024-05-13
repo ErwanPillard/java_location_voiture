@@ -1,9 +1,8 @@
 package View;
 
-import Controller.HomeController;
 import Controller.UserConnectionController;
 import Controller.VoitureController;
-import Dao.UserConnection;
+import Dao.DatabaseManager;
 import Dao.UserConnectionImpl;
 import Model.SessionManager;
 import Model.Voiture;
@@ -15,29 +14,27 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class HomePage extends JFrame {
-
     private JButton btnLogin, btnCreateAccount, btnInitDB;
-    private JTextField tfLocation, tfPickUpDate, tfDropOffDate;
-    private JButton btnSearch;
-    private JButton btnClientForm;
+    JPanel searchPanel;
+    JPanel carPanel; // Affichage des voitures
 
-    private JComboBox<String> typeField;
+    JTextField tfPickUpDate = new JTextField("20-01-2024", 15);
+    JTextField tfDropOffDate = new JTextField("29-01-2024", 15);
+    String model = "Citadine";
 
     public HomePage() {
+        searchPanel = createSearchPanel();
+        carPanel = createCarPanel();
         initUI();
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            HomePage homePage = new HomePage();
-            UserConnection userConnexion = new UserConnectionImpl(); // Assure-toi que cette classe est correctement implémentée.
-            new HomeController(homePage, userConnexion); // Cette ligne connecte la vue et le contrôleur.
-        });
     }
 
     public void initUI() {
@@ -48,12 +45,10 @@ public class HomePage extends JFrame {
         JPanel mainPanel = new JPanel(new BorderLayout());
         JPanel northPanel = new JPanel(new BorderLayout());
 
-        JLabel appTitle = new JLabel("CARECE", SwingConstants.CENTER);
-        appTitle.setFont(new Font("Arial", Font.BOLD, 40));
-        appTitle.setForeground(new Color(0, 128, 0));
+        JLabel appTitle = new JLabel(new ImageIcon(getClass().getResource("/Pictures/Logo.png")));
         appTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel pageTitle = new JLabel("VOTRE LOCATION", SwingConstants.CENTER);
+        JLabel pageTitle = new JLabel("Votre location de voiture", SwingConstants.CENTER);
         pageTitle.setFont(new Font("Arial", Font.BOLD, 30));
         pageTitle.setForeground(new Color(0, 128, 0));
         pageTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -80,7 +75,12 @@ public class HomePage extends JFrame {
                 this.setVisible(false);
                 UserConnectionController controller = new UserConnectionController(this, new ConnexionUtilisateur(), new UserConnectionImpl());
                 controller.showLoginDialog(this); // 'this' réfère à la JFrame HomePage
-                new HomePage().setVisible(true); // Rouvre HomePage
+                if (SessionManager.userType().equals("Employe")) {
+                    this.setVisible(false); // Cache HomePage
+                    MainJFrame.employeInterface();
+                }else{
+                    new HomePage().setVisible(true); // Rouvre HomePage
+                }
             }
         });
 
@@ -120,9 +120,7 @@ public class HomePage extends JFrame {
         loginPanel.add(btnCreateAccount);
         loginPanel.add(btnInitDB);
 
-        JPanel searchPanel = createSearchPanel();
-
-        JPanel carPanel = createCarPanel(); // Affichage des voitures
+        searchPanel = createSearchPanel();
 
         northPanel.add(titlePanel, BorderLayout.CENTER);
         northPanel.add(loginPanel, BorderLayout.EAST);
@@ -159,36 +157,6 @@ public class HomePage extends JFrame {
         return btnLogin;
     }
 
-    public JTextField getTfLocation() {
-        return tfLocation;
-    }
-
-    public JTextField getTfPickUpDate() {
-        return tfPickUpDate;
-    }
-
-    public JTextField getTfDropOffDate() {
-        return tfDropOffDate;
-    }
-
-    public JButton getBtnSearch() {
-        return btnSearch;
-    }
-
-    private void showUserConnectionDialog() {
-        JDialog dialog = new JDialog();
-        ConnexionUtilisateur connexionUtilisateurPanel = new ConnexionUtilisateur();
-        UserConnection userConnexionDao = new UserConnectionImpl(); // Assure-toi que cette implémentation est correcte et complète.
-        new UserConnectionController(this, connexionUtilisateurPanel, userConnexionDao);
-
-        dialog.setTitle("Connexion");
-        dialog.setContentPane(connexionUtilisateurPanel);
-        dialog.setSize(300, 200); // Ajuste la taille selon tes besoins
-        dialog.setModal(true);
-        dialog.setLocationRelativeTo(this); // Centrer par rapport à HomePage
-        dialog.setVisible(true);
-    }
-
     private JPanel createCarPanel() {
         JPanel carPanel = new JPanel(new GridLayout(0, 3, 10, 10)); // 3 voitures par ligne, espacement de 10 pixels
         carPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Marge de 10 pixels autour du panel
@@ -217,7 +185,7 @@ public class HomePage extends JFrame {
                     Image img = ImageIO.read(bais);
                     carImage = new ImageIcon(img.getScaledInstance(150, 100, Image.SCALE_SMOOTH));
                 } catch (IOException e) {
-                    //e.printStackTrace();
+                    e.printStackTrace();
                 }
 
                 JLabel carImageLabel = new JLabel(carImage);
@@ -230,31 +198,164 @@ public class HomePage extends JFrame {
             carDetailsPanel.add(new JLabel("Date de mise en circulation: " + voiture.getDateMiseCirculation()));
             carDetailsPanel.add(new JLabel("Kilométrage: " + voiture.getNbKilometre()));
             carDetailsPanel.add(new JLabel("Couleur: " + voiture.getCouleur()));
-            carDetailsPanel.add(new JLabel("Modèle: " + voiture.getModele_id()));
+            if (voiture.getModele_id() == 1) {
+                carDetailsPanel.add(new JLabel("Modèle: " + "citadine"));
+            } else if (voiture.getModele_id() == 2) {
+                carDetailsPanel.add(new JLabel("Modèle: " + "familiale"));
+            } else if (voiture.getModele_id() == 3) {
+                carDetailsPanel.add(new JLabel("Modèle: " + "utilitaire"));
+            } else if (voiture.getModele_id() == 4) {
+                carDetailsPanel.add(new JLabel("Modèle: " + "berline"));
+            } else if (voiture.getModele_id() == 5) {
+                carDetailsPanel.add(new JLabel("Modèle: " + "suv"));
+            }
+            carDetailsPanel.add(new JLabel("Prix journalier: " + getPrixJournalier(voiture.getModele_id())));
 
+            JPanel reservation = new JPanel(new BorderLayout());
+            if (SessionManager.isLoggedIn() && !Objects.equals(SessionManager.userType(), "Employe")) {
+                JButton btnReserver = new JButton("Réserver");
+                btnReserver.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String dateDebut = tfPickUpDate.getText();
+                        String dateFin = tfDropOffDate.getText();
+                        Reservation.toggle(dateDebut, dateFin, voiture);
+                    }
+                });
+                btnReserver.setBackground(new Color(0x377e21)); // Couleur Verte
+                btnReserver.setFont(new Font("Arial", Font.BOLD, 14)); // Police en gras
+                btnReserver.setForeground(Color.WHITE);
+                btnReserver.setFocusPainted(false);
+                btnReserver.setBorderPainted(false);
+                btnReserver.setOpaque(true);
+
+                // Créer un panneau pour contenir le bouton avec des marges
+                JPanel buttonPanel = new JPanel(new BorderLayout());
+                buttonPanel.add(btnReserver, BorderLayout.CENTER);
+                buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Ajoute de l'espace autour du bouton
+
+                reservation.add(buttonPanel, BorderLayout.SOUTH);
+            }
+
+            carInfoPanel.add(reservation, BorderLayout.EAST);
+            carInfoPanel.add(carDetailsPanel, BorderLayout.CENTER);
+
+            carPanel.add(carInfoPanel);
+        }
+        return carPanel;
+    }
+
+    private void updateCarPanel(List<Voiture> voitures, String model) {
+        carPanel.removeAll();  // Supprime tous les composants précédents de carPanel
+
+        // Réinitialise le layout et les bordures si nécessaire
+        carPanel.setLayout(new GridLayout(0, 3, 10, 10));
+        carPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        for (Voiture voiture : voitures) {
+            JPanel carInfoPanel = new JPanel(new BorderLayout());
+            carInfoPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+            byte[] image = Voiture.getImageByImmatriculation(voiture.getImmatriculation());
+            if (image != null) {
+                // Chargement de l'image de la voiture
+                ImageIcon carImage = null;
+                try {
+                    ByteArrayInputStream bais = new ByteArrayInputStream(image);
+                    Image img = ImageIO.read(bais);
+                    carImage = new ImageIcon(img.getScaledInstance(150, 100, Image.SCALE_SMOOTH));
+                } catch (IOException e) {
+                    // Handle error
+                }
+
+                JLabel carImageLabel = new JLabel(carImage);
+                carInfoPanel.add(carImageLabel, BorderLayout.NORTH);
+            }
+
+            // Ajout des autres informations de la voiture
+            JPanel carDetailsPanel = new JPanel(new GridLayout(0, 1));
+            carDetailsPanel.add(new JLabel("Immatriculation: " + voiture.getImmatriculation()));
+            carDetailsPanel.add(new JLabel("Date de mise en circulation: " + voiture.getDateMiseCirculation()));
+            carDetailsPanel.add(new JLabel("Kilométrage: " + voiture.getNbKilometre()));
+            carDetailsPanel.add(new JLabel("Couleur: " + voiture.getCouleur()));
+            if (voiture.getModele_id() == 1) {
+                carDetailsPanel.add(new JLabel("Modèle: " + "citadine"));
+            } else if (voiture.getModele_id() == 2) {
+                carDetailsPanel.add(new JLabel("Modèle: " + "familiale"));
+            } else if (voiture.getModele_id() == 3) {
+                carDetailsPanel.add(new JLabel("Modèle: " + "utilitaire"));
+            } else if (voiture.getModele_id() == 4) {
+                carDetailsPanel.add(new JLabel("Modèle: " + "berline"));
+            } else if (voiture.getModele_id() == 5) {
+                carDetailsPanel.add(new JLabel("Modèle: " + "suv"));
+            }
+            carDetailsPanel.add(new JLabel("Prix journalier: " + getPrixJournalier(voiture.getModele_id())));
+
+            JPanel reservation = new JPanel(new BorderLayout());
+            if (SessionManager.isLoggedIn() && !Objects.equals(SessionManager.userType(), "Employe")) {
+                JButton btnReserver = new JButton("Réserver");
+                btnReserver.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String dateDebut = tfPickUpDate.getText();
+                        String dateFin = tfDropOffDate.getText();
+                        Reservation.toggle(dateDebut, dateFin, voiture);
+                    }
+                });
+                btnReserver.setBackground(new Color(0x377e21)); // Couleur Verte
+                btnReserver.setFont(new Font("Arial", Font.BOLD, 14)); // Police en gras
+                btnReserver.setForeground(Color.WHITE);
+                btnReserver.setFocusPainted(false);
+                btnReserver.setBorderPainted(false);
+                btnReserver.setOpaque(true);
+
+                // Créer un panneau pour contenir le bouton avec des marges
+                JPanel buttonPanel = new JPanel(new BorderLayout());
+                buttonPanel.add(btnReserver, BorderLayout.CENTER);
+                buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Ajoute de l'espace autour du bouton
+
+                reservation.add(buttonPanel, BorderLayout.SOUTH);
+            }
+
+            carInfoPanel.add(reservation, BorderLayout.EAST);
             carInfoPanel.add(carDetailsPanel, BorderLayout.CENTER);
 
             carPanel.add(carInfoPanel);
         }
 
-        return carPanel;
+        carPanel.revalidate();
+        carPanel.repaint();  // Redessine le panel avec les nouvelles voitures
     }
 
     private JPanel createSearchPanel() {
         // Panel de recherche
-        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        final JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         searchPanel.setBackground(new Color(0xF8F8F8)); // Couleur de fond gris clair
         searchPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         searchPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         searchPanel.setMaximumSize(new Dimension(10000, 80));
 
+        // Création du JComboBox
+        String[] carTypes = {"Modèle", "Citadine", "Familiale", "Utilitaire", "Berline", "SUV"};
+        JComboBox<String> comboBox = new JComboBox<>(carTypes);
+        comboBox.setSelectedIndex(0);  // Sélection par défaut du premier élément
+
         // Composants de la barre de recherche
-        JTextField tfPickUpDate = new JTextField("30-01-2024", 15);
-        JTextField tfDropOffDate = new JTextField("02-02-2024", 15);
+        tfPickUpDate = new JTextField("20-01-2024", 15);
+        tfDropOffDate = new JTextField("29-01-2024", 15);
         JButton btnSearch = new JButton("Rechercher");
-        btnSearch = new JButton("Rechercher");
-        btnSearch.addActionListener(e -> {
-            init_bdd_graphique.toggle();
+        btnSearch.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model = (String) comboBox.getSelectedItem();
+                try {
+                    List<Voiture> filteredVoiture = VoitureController.getInstance().findVoituresByModel(model);
+                    updateCarPanel(filteredVoiture, model);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Erreur lors de la récupération des voitures : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            }
         });
 
         // Personnalisation des composants
@@ -267,21 +368,42 @@ public class HomePage extends JFrame {
         btnSearch.setBorderPainted(false);
         btnSearch.setOpaque(true);
 
-        // Création du JComboBox
-        String[] carTypes = {"Citadine", "Utilitaire", "Familiale", "Berline", "SUV"};
-        JComboBox<String> comboBox = new JComboBox<>(carTypes);
-        comboBox.setSelectedIndex(0);  // Sélection par défaut du premier élément
-
         // Ajout des composants au panel
-        searchPanel.add(new JLabel("Quand voulez-vous louer votre voiture ?"));
+        searchPanel.add(new JLabel("Quand voulez-vous louer votre voiture ? Quel modèle ?"));
         searchPanel.add(tfPickUpDate);
         searchPanel.add(tfDropOffDate);
-        searchPanel.add(btnSearch);
         searchPanel.add(comboBox);
+        searchPanel.add(btnSearch);
 
         add(searchPanel, BorderLayout.NORTH);
 
         return searchPanel;
+    }
+
+    private int getPrixJournalier(int modeleId) {
+        // Initialisation de la valeur par défaut pour le prix journalier
+        int prixJournalier = -1;
+
+        // Obtention de la connexion à la base de données
+        try (Connection conn = DatabaseManager.getConnection()) {
+            // Préparation de la requête SQL pour récupérer le prix journalier
+            String sql = "SELECT prixJournalier FROM Modele WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, modeleId);  // Définir l'ID du modèle dans la requête
+
+                // Exécution de la requête
+                try (ResultSet rs = stmt.executeQuery()) {
+                    // Vérification si un résultat est retourné
+                    if (rs.next()) {
+                        prixJournalier = rs.getInt("prixJournalier");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la récupération du prix journalier: " + e.getMessage());
+        }
+
+        return prixJournalier;
     }
 }
 

@@ -2,6 +2,8 @@ package Model;
 
 import Dao.ClientDAO;
 import Dao.ClientDAOImpl;
+import Dao.ModeleDAO;
+import Dao.ModeleDAOImpl;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -25,6 +27,14 @@ public class Particulier extends Client {
 
     public Particulier(String nom, String prenom, String email, String motDePasse, String telephone, String numeroPermis, LocalDate birthDate) {
         super(email, motDePasse, telephone);
+        this.nom = nom;
+        this.prenom = prenom;
+        this.numeroPermis = numeroPermis;
+        this.birthDate = birthDate;
+    }
+
+    public Particulier(String nom, String prenom, String email, String telephone, String numeroPermis, LocalDate birthDate) {
+        super(email, telephone);
         this.nom = nom;
         this.prenom = prenom;
         this.numeroPermis = numeroPermis;
@@ -84,4 +94,10 @@ public class Particulier extends Client {
         ClientDAO clientDAO = new ClientDAOImpl();
         clientDAO.addParticulier(particulier);
     }
+
+    public Object[] toArray() {
+        return new Object[] {this.getEmail(), this.nom, this.prenom, this.getTelephone(), this.birthDate, this.numeroPermis};
+    }
+
+
 }

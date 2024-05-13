@@ -1,9 +1,14 @@
 package View;
 
+import View.Employe.ParkAutoView;
 import View.layouts.MenuOver;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 public class MainJFrame extends JFrame {
     //TEST pour interface employe
@@ -13,18 +18,26 @@ public class MainJFrame extends JFrame {
         JPanel jpBody = new JPanel();
         jpBody.setLayout(new BorderLayout());
 
+        new ParkAutoView(jpBody);
+
         this.setJMenuBar(new MenuOver(jpBody));
         this.setContentPane(jpBody);
+
     }
 
     public static void employeInterface() {
         //Create and set up the window.
         JFrame frame = new MainJFrame();
+        frame.setTitle("Espace Employe");
         frame.setMinimumSize(PREFERREDSIZE);
         frame.setPreferredSize(PREFERREDSIZE);
 
         //Center the frame
         frame.setLocationRelativeTo(null);
+
+        // Maximiser la fenêtre pour la mettre en plein écran
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
         //Display the window.
         frame.pack();
         frame.setVisible(true);

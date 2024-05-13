@@ -1,9 +1,10 @@
 package Dao;
 
-import Model.Entreprise;
-import Model.Particulier;
+import Model.*;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ClientDAOImpl implements ClientDAO {
@@ -47,6 +48,44 @@ public class ClientDAOImpl implements ClientDAO {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
+    public List<User> allUserClient() throws SQLException {
+        ArrayList<User> clients = new ArrayList<>();
+
+        Connection c = DatabaseManager.getConnection();
+        PreparedStatement pstmt = c.prepareStatement("SELECT * FROM User JOIN Client ON User.id = Client.id;");
+
+        ResultSet rset = pstmt.executeQuery();
+        while (rset.next()) {
+            clients.add(createUserAsClient(rset));
+        }
+
+        pstmt.close();
+        c.close();
+
+        return clients;
+    }
+
+    public List<Particulier> allParticuliers() throws SQLException {
+        ArrayList<Particulier> particuliers = new ArrayList<>();
+
+        Connection c = DatabaseManager.getConnection();
+        PreparedStatement pstmt = c.prepareStatement("SELECT P.id, P.nom, P.prenom, P.numeroPermis, P.birthDate, C.telephone, U.email FROM Particulier P JOIN Client C ON P.id = C.id JOIN User U ON U.id = C.id");
+
+        ResultSet rset = pstmt.executeQuery();
+        while (rset.next()) {
+            particuliers.add(createParticuliers(rset));
+        }
+
+        pstmt.close();
+        c.close();
+
+        return particuliers;
+    }
+
+    public Particulier createParticuliers(ResultSet rset) throws SQLException {
+        Particulier particulier = new Particulier(rset.getString("nom"), rset.getString("prenom"), rset.getString("email"),rset.getString("telephone"),rset.getString("numeroPermis"), rset.getDate("birthDate").toLocalDate());
+        return particulier;
     }
 
     @Override
@@ -102,5 +141,71 @@ public class ClientDAOImpl implements ClientDAO {
         }
         return false; // Par défaut, considère que l'email n'existe pas
     }
+
+    public Client findByTelephone(String telephone) throws SQLException {
+        Connection c = DatabaseManager.getConnection();
+
+        PreparedStatement pstmt = c.prepareStatement("SELECT * FROM Voiture WHERE immatriculation = ?");
+        pstmt.setString(1, telephone);
+
+        Client client = null;
+        ResultSet rset = pstmt.executeQuery();
+
+        /*while (rset.next()) {
+            client = createClient(rset);
+        }*/
+
+        pstmt.close();
+        c.close();
+
+        return client;
+    }
+
+    public Client getClientById(int id) throws SQLException{
+        Connection c = DatabaseManager.getConnection();
+
+        PreparedStatement pstmt = c.prepareStatement("SELECT * FROM Client WHERE id = ?");
+        pstmt.setString(1, String.valueOf(id));
+
+        Client client = null;
+        ResultSet rset = pstmt.executeQuery();
+
+        client = new Client(id, rset.getString("telephone"));
+
+        pstmt.close();
+        c.close();
+
+        return client;
+    }
+
+    public User createUserAsClient(ResultSet rset) throws SQLException {
+        User user = new User(rset.getString("email"));
+        return user;
+    }
+
+   /* @Override
+    public List<Client> all() throws SQLException {
+        // Déclaration d'une liste pour stocker les noms des modèles
+        ArrayList<String> clientList = new ArrayList<>();
+
+        // Requête SQL pour sélectionner les noms des modèles
+        String queryClient= "SELECT email FROM Client;";
+
+        try (Connection connection = DatabaseManager.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(queryClient)) {
+
+            // Parcourir les résultats et ajouter les noms à la liste
+            while (resultSet.next()) {
+                String clientEmail = resultSet.getString("email");
+                clientList.add(clientEmail);
+            }
+        }
+
+        // Convertir la liste en tableau de chaînes de caractères
+        String[] client = clientList.toArray(new String[0]);
+
+        return client;
+    }*/
 
 }

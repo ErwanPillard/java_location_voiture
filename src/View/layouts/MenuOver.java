@@ -9,7 +9,10 @@ import javax.swing.*;
 
 import View.Employe.ClientBaseView;
 import View.Employe.ModeleView;
+import View.Employe.OffreReductionView;
 import View.Employe.ParkAutoView;
+
+import View.UserInfo;
 import View.listeners.EventListener;
 import utils.Util;
 
@@ -30,8 +33,11 @@ public class MenuOver extends JMenuBar {
     private JMenuItem jmiAdd;
     private JMenuItem jmiEdit;
     private JMenuItem jmiRemove;
+    private JMenuItem jmiMonCompte;
+    private JMenuItem jmiOffreReduction;
 
     private JMenu jmHelp;
+    private JMenu jmEspaceEmploye;
     private JMenuItem jmiAbout;
 
     private JPanel jpBody; // Ajoutez ce champ à votre classe MenuOver
@@ -52,8 +58,16 @@ public class MenuOver extends JMenuBar {
 
         jmHelp = createMenu("Aide", 'H');
 
+        jmEspaceEmploye = createMenu("Mon espace", 'I');
+
         jmiVoiture = createMenuItem(jmFile, "Park auto", 'S', "details",
                 KeyStroke.getKeyStroke(KeyEvent.VK_F2, InputEvent.ALT_MASK));
+
+        jmiOffreReduction = createMenuItem(jmFile, "Offre de Réduction", 'S', "details",
+                KeyStroke.getKeyStroke(KeyEvent.VK_F2, InputEvent.ALT_MASK));
+
+        jmiMonCompte = createMenuItem(jmEspaceEmploye, "Mon Compte", 'S', "details",
+                KeyStroke.getKeyStroke(KeyEvent.VK_F5, InputEvent.ALT_MASK));
 
         jmiClient = createMenuItem(jmFile, "Base Client", 'S', "details",
                 KeyStroke.getKeyStroke(KeyEvent.VK_F3, InputEvent.ALT_MASK));
@@ -138,6 +152,18 @@ public class MenuOver extends JMenuBar {
         jmiAbout.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 System.out.println("About");
+            }
+        });
+
+        jmiMonCompte.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                new UserInfo().setVisible(true);
+            }
+        });
+
+        jmiOffreReduction.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                new OffreReductionView(jpBody);
             }
         });
     }

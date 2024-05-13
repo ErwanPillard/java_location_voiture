@@ -10,7 +10,8 @@ public class ConnexionUtilisateur extends JPanel {
 
     public ConnexionUtilisateur() {
         setLayout(new BorderLayout());
-        JPanel formPanel = new JPanel(new GridLayout(3, 2));
+        JPanel formPanel = new JPanel(new GridLayout(2, 2));
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 1));
 
         formPanel.add(new JLabel("Email :"));
         usernameField = new JTextField();
@@ -21,9 +22,16 @@ public class ConnexionUtilisateur extends JPanel {
         formPanel.add(passwordField);
 
         loginButton = new JButton("Connexion");
-        formPanel.add(loginButton);
+        loginButton.setBackground(new Color(0x377e21)); // Couleur Verte
+        loginButton.setFont(new Font("Arial", Font.BOLD, 14)); // Police en gras
+        loginButton.setForeground(Color.WHITE);
+        loginButton.setFocusPainted(false);
+        loginButton.setBorderPainted(false);
+        loginButton.setOpaque(true);
+        buttonPanel.add(loginButton);
 
         add(formPanel, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.SOUTH);
     }
 
     public String getUsername() {
