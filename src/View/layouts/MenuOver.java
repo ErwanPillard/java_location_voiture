@@ -7,7 +7,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.*;
 
-import View.Employe.ClientBaseView;
+import View.Employe.BaseClient.ClientBaseView;
 import View.Employe.ModeleView;
 import View.Employe.OffreReductionView;
 import View.Employe.ParkAutoView;

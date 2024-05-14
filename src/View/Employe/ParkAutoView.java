@@ -279,6 +279,9 @@ public class ParkAutoView{
 
         gbc.insets = new Insets(10, 10, 10, 10);
 
+
+        filterPanel.add(searchField, gbc);
+        gbc.gridy++;
         filterPanel.add(labelTriezParCategorie, gbc);
         gbc.gridy++;
         filterPanel.add(filterCategorieComboBox, gbc);
@@ -356,12 +359,13 @@ public class ParkAutoView{
         JPanel filterPanel = new JPanel(new GridBagLayout());
         JPanel categoriePanel = new JPanel(new GridBagLayout());
 
-        Color backgroundColor = new Color(55, 95, 158);
+        Color backgroundColor = new Color(55, 126, 34);
         mainPanel.setBackground(backgroundColor);
 
         GridBagConstraints gbc = new GridBagConstraints();
 
         gbc.gridx = 2;
+        gbc.gridy = 0;
         filterPanel.setBackground(Color.white);
         filterPanel.setPreferredSize(new Dimension(300, 200));
         mainPanel.add(filterPanel(filterPanel), gbc);

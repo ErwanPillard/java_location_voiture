@@ -17,4 +17,6 @@ public interface ClientDAO {
     List<User> allUserClient() throws SQLException;
 
     List<Particulier> allParticuliers() throws SQLException;
+
+    List<Entreprise> allEntreprises() throws SQLException;
 }

@@ -1,4 +1,4 @@
-package View.Employe.Button;
+package View.Employe.BaseClient;
 
 import Controller.ClientController;
 import Controller.listeners.ClientListener;
@@ -14,7 +14,7 @@ import javax.swing.table.TableRowSorter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ParticulierJTable extends JTable implements ClientListener, EventListener {
+public class ParticulierJTable extends JTable {
     private TableModel model = new TableModel();
     private static TableRowSorter<TableModel> sorter;
 
@@ -23,7 +23,6 @@ public class ParticulierJTable extends JTable implements ClientListener, EventLi
     public ParticulierJTable() {
         this.setModel(model);
         this.getTableHeader().setReorderingAllowed(false);
-        ClientController.getInstance().addClientListener(this);// ajoute user au tab pas utile
         updateTable(loadAllParticulier());// verifi si les celluels sont editable
 
         sorter = new TableRowSorter<>(model);
@@ -73,25 +72,6 @@ public class ParticulierJTable extends JTable implements ClientListener, EventLi
         public boolean isCellEditable(int row, int column) {// permet de modif les cellules
             return false;
         }
-
-    }
-
-
-    @Override
-    public void clientadd(MailEvent<Voiture> event){model.insertRow(0, event.getSource().toArray());}
-
-    @Override
-    public void cmdEdit() {
-
-    }
-
-    @Override
-    public void cmdRemove() {
-
-    }
-
-    @Override
-    public void cmdAdd() {
 
     }
 }

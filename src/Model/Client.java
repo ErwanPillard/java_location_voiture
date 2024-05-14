@@ -44,6 +44,11 @@ public class Client extends User {
         return clientDAO.allParticuliers();
     }
 
+    public static List<Entreprise> allEntreprises() throws SQLException {
+        ClientDAO clientDAO = new ClientDAOImpl();
+        return clientDAO.allEntreprises();
+    }
+
 
     public static Client findByTelephone(String telephone) throws SQLException {
         ClientDAO clientDAO = new ClientDAOImpl();

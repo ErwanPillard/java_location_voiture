@@ -1,4 +1,4 @@
-package View.Employe;
+package View.Employe.BaseClient;
 
 import Controller.ClientController;
 import Controller.listeners.ClientListener;

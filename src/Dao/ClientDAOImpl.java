@@ -83,9 +83,31 @@ public class ClientDAOImpl implements ClientDAO {
         return particuliers;
     }
 
+    public List<Entreprise> allEntreprises() throws SQLException {
+        ArrayList<Entreprise> entreprises = new ArrayList<>();
+
+        Connection c = DatabaseManager.getConnection();
+        PreparedStatement pstmt = c.prepareStatement("SELECT E.id, E.nom, E.numeroSiret, C.telephone, U.email FROM Entreprise E JOIN Client C ON E.id = C.id JOIN User U ON U.id = C.id");
+
+        ResultSet rset = pstmt.executeQuery();
+        while (rset.next()) {
+            entreprises.add(createEntreprises(rset));
+        }
+
+        pstmt.close();
+        c.close();
+
+        return entreprises;
+    }
+
     public Particulier createParticuliers(ResultSet rset) throws SQLException {
         Particulier particulier = new Particulier(rset.getString("nom"), rset.getString("prenom"), rset.getString("email"),rset.getString("telephone"),rset.getString("numeroPermis"), rset.getDate("birthDate").toLocalDate());
         return particulier;
+    }
+
+    public Entreprise createEntreprises(ResultSet rset) throws SQLException {
+        Entreprise entreprise = new Entreprise(rset.getString("nom"), rset.getString("email"), rset.getString("telephone"),rset.getString("numeroSiret"));
+        return entreprise;
     }
 
     @Override

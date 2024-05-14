@@ -1,33 +1,16 @@
-package View.Employe;
+package View.Employe.BaseClient;
 
-import Controller.ClientController;
-import Controller.ModeleController;
-import Controller.VoitureController;
-import Controller.listeners.ClientListener;
-import Controller.listeners.MailEvent;
-import Controller.listeners.VoitureListener;
 import Model.Client;
-import Model.Modele;
-import Model.Particulier;
-import Model.Voiture;
-import View.Employe.Button.ParticulierJTable;
+import Model.Entreprise;
 import View.layouts.Options;
-import View.listeners.EventListener;
 
 import javax.swing.*;
-import javax.swing.event.CellEditorListener;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
 import java.awt.*;
-import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class ClientBaseView {
 
-    private ParticulierJTable jTableList;
+    private ParticulierJTable jTableListParticulier;
+    private EntrepriseJTable jTableListEntreprise;
 
 
     private static final JLabel labelId = new JLabel("Id : ");
@@ -39,15 +22,13 @@ public class ClientBaseView {
     public void createView(JPanel jpBody) {
         // Créez un JPanel pour contenir le tableau et le JPanel rightPanel
         JPanel mainPanel = new JPanel();
-
-
         mainPanel.setLayout(new GridBagLayout());
 
         JPanel tabPanel = new JPanel(); //Panel Tableau voiture
         JPanel filterPanel = new JPanel();
         JPanel categoriePanel = new JPanel();
 
-        Color backgroundColor = new Color(21, 21, 23);
+        Color backgroundColor = new Color(55, 126, 34);
         mainPanel.setBackground(backgroundColor);
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -73,31 +54,55 @@ public class ClientBaseView {
         // Ajoutez le JPanel principal à jpBody
         jpBody.removeAll(); // Supprimer tous les composants existants de jpBody
         jpBody.setLayout(new BorderLayout());
-        jpBody.add(new Options(jTableList), BorderLayout.SOUTH); // Options en bas
         jpBody.add(mainPanel, BorderLayout.CENTER); // Tableau et composants à droite
         jpBody.revalidate(); // Actualiser l'affichage
-
-
-
     }
 
     public JPanel tabPanel(JPanel tabPanel) {
-
         tabPanel.setLayout(new GridBagLayout());
-        //Jtable into JScroll
-        jTableList = new ParticulierJTable();
-        JScrollPane jspList = new JScrollPane();
+        tabPanel.setBackground(Color.white);
 
-        jspList.setViewportView(jTableList);
-        jspList.setPreferredSize(new Dimension(900, 700));
-        jspList.setMinimumSize(new Dimension(500, 500));
+        JLabel jLabelParticulier = new JLabel("Particulier");
+        JLabel jLabelEntreprise = new JLabel("Entreprise");
+        jLabelParticulier.setFont(new Font("Arial", Font.BOLD, 20)); // Police Arial en gras
+        jLabelEntreprise.setFont(new Font("Arial", Font.BOLD, 20)); // Police Arial en gras
+
+        // Création des JScrollPane pour chaque JTable
+        JScrollPane jspListParticulier = new JScrollPane();
+        JScrollPane jspListEntreprise = new JScrollPane();
+
+        // Création des JTables
+        jTableListParticulier = new ParticulierJTable();
+        jTableListEntreprise = new EntrepriseJTable();
+
+        // Ajout des JTables dans les JScrollPane
+        jspListParticulier.setViewportView(jTableListParticulier);
+        jspListParticulier.setPreferredSize(new Dimension(1000, 300));
+        jspListParticulier.setMinimumSize(new Dimension(500, 300));
+
+        jspListEntreprise.setViewportView(jTableListEntreprise);
+        jspListEntreprise.setPreferredSize(new Dimension(1000, 300));
+        jspListEntreprise.setMinimumSize(new Dimension(500, 300));
 
         GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.anchor = GridBagConstraints.CENTER;
 
-        gbc.gridwidth = 1; // seul composant de sa colonne, il est donc le dernier.
-        gbc.gridheight = GridBagConstraints.REMAINDER; // valeur par défaut - peut s'étendre sur une seule ligne.
+        gbc.gridy = 1;
+        tabPanel.add(jspListParticulier, gbc);
+        gbc.gridy = 3;
+        // Ajout du JScrollPane pour la JTable Entreprise
+        tabPanel.add(jspListEntreprise, gbc);
 
-        tabPanel.add(jspList, gbc);
+        gbc.insets = new Insets(10, 10, 10, 0); // Ajout d'un espace de 5 pixels entre les deux JScrollPanes
+        gbc.gridy = 0;
+        tabPanel.add(jLabelParticulier, gbc);
+        gbc.gridy = 2;
+        tabPanel.add(jLabelEntreprise, gbc);
 
         return tabPanel;
     }
