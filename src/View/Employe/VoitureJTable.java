@@ -55,7 +55,6 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
     }
 
     static void search(String searchText) {
-        System.out.println(searchText);
         RowFilter<VoitureJTable.TableModel, Object> rf = null;
         try {
             // Créez un filtre en fonction de la chaîne de recherche

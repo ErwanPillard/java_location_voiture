@@ -29,6 +29,16 @@ public class ParticulierJTable extends JTable {
         setRowSorter(sorter); // Assignez le TableRowSorter à la JTable
     }
 
+    static void search(String searchText) {
+        RowFilter<ParticulierJTable.TableModel, Object> rf = null;
+        try {
+            // Créez un filtre en fonction de la chaîne de recherche
+            rf = RowFilter.regexFilter("(?i)" + searchText); // (?i) pour ignorer la casse
+        } catch (java.util.regex.PatternSyntaxException e) {
+            return;
+        }
+        sorter.setRowFilter(rf); // Appliquez le filtre au TableRowSorter
+    }
 
     void updateTable(ArrayList<Particulier> particuliers){
         // Effacez le contenu actuel de votre JTable
