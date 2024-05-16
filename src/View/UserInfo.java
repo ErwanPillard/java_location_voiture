@@ -363,7 +363,7 @@ public class UserInfo extends JFrame {
         dialog.add(btnClose, BorderLayout.SOUTH);
 
         // Configuration et affichage de la boîte de dialogue
-        dialog.setSize(500, 400);
+        dialog.setSize(900, 400);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
     }
