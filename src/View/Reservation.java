@@ -3,6 +3,7 @@ package View;
 import Dao.DatabaseManager;
 import Model.SessionManager;
 import Model.Voiture;
+import Controller.ReservationController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,6 +32,7 @@ public class Reservation extends JDialog {
     private JTextField txtVoitureCouleur;
     private JButton btnFermer;
     private JButton btnForfait;
+    private JButton btnConfirmer = new JButton("Confirmer la réservation");;
 
     // Paramètres ajoutés pour la réservation
     private Voiture voiture;
@@ -225,12 +227,13 @@ public class Reservation extends JDialog {
         panelInfo.add(labelVoiture);
         panelInfo.add(voitureImmatTextField);
 
-        JButton btnConfirmer = new JButton("Confirmer la réservation");
         btnConfirmer.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // mettre la reservation en base de données
+                float montant = calculerMontant(dateDebutLocalDate, dateFinLocalDate, voiture);
+                ReservationController.confirmerReservation(dateDebut, dateFin, voiture, montant);
             }
         });
+
         btnConfirmer.setBackground(new Color(0x377e21)); // Couleur Verte
         btnConfirmer.setFont(new Font("Arial", Font.BOLD, 14)); // Police en gras
         btnConfirmer.setForeground(Color.WHITE);
@@ -331,5 +334,9 @@ public class Reservation extends JDialog {
         dialog.add(buttonPanel, BorderLayout.SOUTH);
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
+    }
+
+    public JButton getBtnConfirmer() {
+        return btnConfirmer;
     }
 }
