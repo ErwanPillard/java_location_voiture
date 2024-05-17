@@ -78,6 +78,13 @@ public class UserInfo extends JFrame {
                 View.MainJFrame.employeInterface();
             }
         });
+        btnInterfaceEmploye.setBackground(new Color(0x377e21)); // Couleur Verte
+        btnInterfaceEmploye.setFont(new Font("Arial", Font.BOLD, 20)); // Police en gras
+        btnInterfaceEmploye.setForeground(Color.WHITE);
+        btnInterfaceEmploye.setFocusPainted(false);
+        btnInterfaceEmploye.setBorderPainted(false);
+        btnInterfaceEmploye.setOpaque(true);
+
         btnAjouterVoiture = new JButton("Ajouter une voiture");
         btnAjouterVoiture.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnAjouterVoiture.addActionListener(new ActionListener() {
@@ -155,8 +162,7 @@ public class UserInfo extends JFrame {
             tabbedPane.addTab("Factures", invoicesPanel);
         } else {
             // Onglet des employés
-            employeePanel = new JPanel(new BorderLayout());
-            employeePanel.setLayout(new BoxLayout(employeePanel, BoxLayout.Y_AXIS));  // Configuration pour aligner verticalement
+            employeePanel = new JPanel(new GridBagLayout());
             tabbedPane.addTab("Interface employée", employeePanel);
         }
 
@@ -210,18 +216,17 @@ public class UserInfo extends JFrame {
             personalInfoPanel.add(labelPrenomEmploye);
             personalInfoPanel.add(labelFonctionEmploye);
 
-            employeePanel.add(btnInterfaceEmploye);
-            employeePanel.add(btnAjouterVoiture);
-            employeePanel.add(btnAjouterModele);
-            employeePanel.add(btnSupprimerVoiture);
-            employeePanel.add(btnSupprimerModele);
-            employeePanel.add(btnConfirmerReservation);
-            btnInterfaceEmploye.setAlignmentX(Component.CENTER_ALIGNMENT);
-            btnAjouterVoiture.setAlignmentX(Component.CENTER_ALIGNMENT);
-            btnAjouterModele.setAlignmentX(Component.CENTER_ALIGNMENT);
-            btnSupprimerVoiture.setAlignmentX(Component.CENTER_ALIGNMENT);
-            btnSupprimerModele.setAlignmentX(Component.CENTER_ALIGNMENT);
-            btnConfirmerReservation.setAlignmentX(Component.CENTER_ALIGNMENT);
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.insets = new Insets(10, 10, 10, 10);
+            gbc.gridx = 0;
+            gbc.gridy = GridBagConstraints.RELATIVE; // Placer chaque bouton dans une nouvelle ligne
+
+            employeePanel.add(btnInterfaceEmploye, gbc);
+            employeePanel.add(btnAjouterVoiture, gbc);
+            employeePanel.add(btnAjouterModele, gbc);
+            employeePanel.add(btnSupprimerVoiture, gbc);
+            employeePanel.add(btnSupprimerModele, gbc);
+            employeePanel.add(btnConfirmerReservation, gbc);
         }
         mainPanel.add(tabbedPane);
 
