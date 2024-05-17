@@ -39,7 +39,7 @@ public class ClientBaseView {
         JPanel filterPanel = new JPanel();
         JPanel categoriePanel = new JPanel();
 
-        Color backgroundColor = new Color(55, 126, 34);
+        Color backgroundColor = new Color(123, 183, 191);
         mainPanel.setBackground(backgroundColor);
 
         GridBagConstraints gbc = new GridBagConstraints();

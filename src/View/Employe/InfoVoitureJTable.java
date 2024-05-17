@@ -15,7 +15,12 @@ public class InfoVoitureJTable extends JTable {
     private String[] columnNames = {"Num réservation", "Début", "Fin", "Montant", "Nom Client"};
 
     public InfoVoitureJTable() {
-        DefaultTableModel model = new DefaultTableModel(null, columnNames);
+        DefaultTableModel model = new DefaultTableModel(null, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Rendre toutes les cellules non éditables
+            }
+        };
         setModel(model);
         getTableHeader().setReorderingAllowed(false);
     }
