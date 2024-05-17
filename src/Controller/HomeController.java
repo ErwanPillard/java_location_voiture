@@ -1,11 +1,16 @@
 package Controller;
 
+import Dao.DatabaseManager;
 import Dao.UserConnection;
 import Model.SessionManager;
 import Model.User;
 import View.HomePage;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class HomeController {
     private final HomePage homePage;
@@ -46,5 +51,28 @@ public class HomeController {
         } else {
             SessionManager.getInstance().logOut();
         }
+    }
+
+    public static boolean isCarAvailable(String immatriculation, LocalDate startDate, LocalDate endDate) {
+        String sql = "SELECT COUNT(*) AS count FROM Reservation " +
+                "WHERE voiture_immatriculation = ? " +
+                "AND (dateDebutReservation <= ? AND dateFinReservation >= ?)";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, immatriculation);
+            stmt.setDate(2, java.sql.Date.valueOf(endDate));
+            stmt.setDate(3, java.sql.Date.valueOf(startDate));
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next() && rs.getInt("count") > 0) {
+                    return false;  // Voiture non disponible
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;  // Voiture disponible
     }
 }

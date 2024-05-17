@@ -231,6 +231,9 @@ public class Reservation extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 float montant = calculerMontant(dateDebutLocalDate, dateFinLocalDate, voiture);
                 ReservationController.confirmerReservation(dateDebut, dateFin, voiture, montant);
+                if (ReservationController.reservationBool()){
+                    dispose();
+                }
             }
         });
 
@@ -334,9 +337,5 @@ public class Reservation extends JDialog {
         dialog.add(buttonPanel, BorderLayout.SOUTH);
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
-    }
-
-    public JButton getBtnConfirmer() {
-        return btnConfirmer;
     }
 }
