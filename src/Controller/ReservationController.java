@@ -6,12 +6,14 @@ import Model.Voiture;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
 
 public class ReservationController {
+    static int rowsInserted;
 
     public static void confirmerReservation(String dateDebut, String dateFin, Voiture voiture, float montant) {
         LocalDate dateDebutLocalDate;
@@ -33,20 +35,24 @@ public class ReservationController {
                     stmt.setString(5, voiture.getImmatriculation());
                     stmt.setInt(6, idClient);
 
-                    int rowsInserted = stmt.executeUpdate();
+                    rowsInserted = stmt.executeUpdate();
                     if (rowsInserted > 0) {
                         JOptionPane.showMessageDialog(null, "Réservation confirmée avec succès !");
-                    } else {
+                        } else {
                         JOptionPane.showMessageDialog(null, "Échec de la confirmation de la réservation.", "Erreur", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Erreur lors de la confirmation de la réservation : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
-            }
+                }
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erreur de format de date : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
-        }
+            }
+    }
+
+    public static boolean reservationBool() {
+        return rowsInserted > 0;
     }
 }
