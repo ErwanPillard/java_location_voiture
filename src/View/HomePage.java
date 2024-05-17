@@ -67,20 +67,17 @@ public class HomePage extends JFrame {
 
         btnLogin.addActionListener(e -> {
             SessionManager.getInstance();
+            this.setVisible(false); // Cache HomePage
             if (SessionManager.isLoggedIn()) {
-                this.setVisible(false); // Cache HomePage
+                /*if (SessionManager.userType().equals("Employe")) {
+                    MainJFrame.employeInterface(); // Affiche l'interface employé
+                } */
                 new UserInfo().setVisible(true); // Affiche UserInfo
             } else {
                 // L'utilisateur n'est pas connecté, ouvre le dialogue de connexion
-                this.setVisible(false);
                 UserConnectionController controller = new UserConnectionController(this, new ConnexionUtilisateur(), new UserConnectionImpl());
                 controller.showLoginDialog(this); // 'this' réfère à la JFrame HomePage
-                if (SessionManager.userType().equals("Employe")) {
-                    this.setVisible(false); // Cache HomePage
-                    MainJFrame.employeInterface();
-                }else{
-                    new HomePage().setVisible(true); // Rouvre HomePage
-                }
+                new HomePage().setVisible(true); // Rouvre HomePage
             }
         });
 

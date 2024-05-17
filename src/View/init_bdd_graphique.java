@@ -93,7 +93,7 @@ public class init_bdd_graphique extends JFrame {
         init_bdd_graphique.setVisible(!init_bdd_graphique.isVisible());
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
                 new init_bdd_graphique().setVisible(true);
@@ -101,7 +101,7 @@ public class init_bdd_graphique extends JFrame {
                 throw new RuntimeException(e);
             }
         });
-    }
+    }*/
 
     private void setupButtonActions() {
         btnNettoyer.addActionListener(e -> {
