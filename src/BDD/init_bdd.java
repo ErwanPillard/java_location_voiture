@@ -9,9 +9,19 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
 public class init_bdd {
+    private static final String[] COLORS = {"Rouge", "Bleu", "Vert", "Noir", "Blanc", "Gris", "Jaune", "Orange", "Violet", "Rose"};
+    private static final String DATE_MISE_EN_CIRCULATION = "2024-01-01";
+    private static final String IMAGE_CITADINE = "../Pictures/Citadine.png";
+    private static final String IMAGE_FAMILIALE = "Familiale.png";
+    private static final String IMAGE_UTILITAIRE = "Utilitaire.png";
+    private static final String IMAGE_BERLINE = "Berline.png";
+    private static final String IMAGE_SUV = "SUV.png";
+
     public static void insertUsers(Connection connection) throws SQLException {
         String userSql = "INSERT INTO User (id, email, motDePasse) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(userSql)) {
@@ -164,7 +174,6 @@ public class init_bdd {
         }
     }
 
-
     public static void insertFacture(Connection connection) throws SQLException {
         Random rand = new Random();
 
@@ -212,6 +221,131 @@ public class init_bdd {
         } catch (SQLException e) {
             System.err.println("Problème de connexion ou de transaction : " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    public static void insertCitadine(Connection connection) throws SQLException {
+        String sql = "INSERT INTO Voiture (immatriculation, dateMiseEnCirculation, nbKilometre, couleur, modele_id, image) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            Random random = new Random();
+
+            for (int i = 1; i <= 10; i++) {
+                String immatriculation = String.format("AA-%03d-AA", i);
+                int kilometrage = 100 + random.nextInt(901);  // Génère un nombre entre 100 et 1000
+                String couleur = COLORS[random.nextInt(COLORS.length)];
+
+                pstmt.setString(1, immatriculation);
+                pstmt.setDate(2, java.sql.Date.valueOf(LocalDate.parse(DATE_MISE_EN_CIRCULATION)));
+                pstmt.setInt(3, kilometrage);
+                pstmt.setString(4, couleur);
+                pstmt.setInt(5, 1);  // Supposons que l'ID du modèle pour "citadine" est 1
+                pstmt.setString(6, IMAGE_CITADINE);
+
+                pstmt.addBatch();  // Ajoute cette insertion au batch
+            }
+
+            pstmt.executeBatch();  // Exécute toutes les insertions en une seule fois
+        }
+    }
+
+    public static void insertFamiliale(Connection connection) throws SQLException {
+        String sql = "INSERT INTO Voiture (immatriculation, dateMiseEnCirculation, nbKilometre, couleur, modele_id, image) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            Random random = new Random();
+
+            for (int i = 11; i <= 20; i++) {
+                String immatriculation = String.format("AA-%03d-AA", i);
+                int kilometrage = 100 + random.nextInt(901);  // Génère un nombre entre 100 et 1000
+                String couleur = COLORS[random.nextInt(COLORS.length)];
+
+                pstmt.setString(1, immatriculation);
+                pstmt.setDate(2, java.sql.Date.valueOf(LocalDate.parse(DATE_MISE_EN_CIRCULATION)));
+                pstmt.setInt(3, kilometrage);
+                pstmt.setString(4, couleur);
+                pstmt.setInt(5, 2);  // Supposons que l'ID du modèle pour "familiale" est 1
+                pstmt.setString(6, IMAGE_FAMILIALE);
+
+                pstmt.addBatch();  // Ajoute cette insertion au batch
+            }
+
+            pstmt.executeBatch();  // Exécute toutes les insertions en une seule fois
+        }
+    }
+
+    public static void insertUtilitaire(Connection connection) throws SQLException {
+        String sql = "INSERT INTO Voiture (immatriculation, dateMiseEnCirculation, nbKilometre, couleur, modele_id, image) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            Random random = new Random();
+
+            for (int i = 21; i <= 30; i++) {
+                String immatriculation = String.format("AA-%03d-AA", i);
+                int kilometrage = 100 + random.nextInt(901);  // Génère un nombre entre 100 et 1000
+                String couleur = COLORS[random.nextInt(COLORS.length)];
+
+                pstmt.setString(1, immatriculation);
+                pstmt.setDate(2, java.sql.Date.valueOf(LocalDate.parse(DATE_MISE_EN_CIRCULATION)));
+                pstmt.setInt(3, kilometrage);
+                pstmt.setString(4, couleur);
+                pstmt.setInt(5, 3);  // Supposons que l'ID du modèle pour "utilitaire" est 1
+                pstmt.setString(6, IMAGE_UTILITAIRE);
+
+                pstmt.addBatch();  // Ajoute cette insertion au batch
+            }
+
+            pstmt.executeBatch();  // Exécute toutes les insertions en une seule fois
+        }
+    }
+
+    public static void insertBerline(Connection connection) throws SQLException {
+        String sql = "INSERT INTO Voiture (immatriculation, dateMiseEnCirculation, nbKilometre, couleur, modele_id, image) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            Random random = new Random();
+
+            for (int i = 31; i <= 40; i++) {
+                String immatriculation = String.format("AA-%03d-AA", i);
+                int kilometrage = 100 + random.nextInt(901);  // Génère un nombre entre 100 et 1000
+                String couleur = COLORS[random.nextInt(COLORS.length)];
+
+                pstmt.setString(1, immatriculation);
+                pstmt.setDate(2, java.sql.Date.valueOf(LocalDate.parse(DATE_MISE_EN_CIRCULATION)));
+                pstmt.setInt(3, kilometrage);
+                pstmt.setString(4, couleur);
+                pstmt.setInt(5, 4);  // Supposons que l'ID du modèle pour "berline" est 1
+                pstmt.setString(6, IMAGE_BERLINE);
+
+                pstmt.addBatch();  // Ajoute cette insertion au batch
+            }
+
+            pstmt.executeBatch();  // Exécute toutes les insertions en une seule fois
+        }
+    }
+
+    public static void insertSUV(Connection connection) throws SQLException {
+        String sql = "INSERT INTO Voiture (immatriculation, dateMiseEnCirculation, nbKilometre, couleur, modele_id, image) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            Random random = new Random();
+
+            for (int i = 41; i <= 50; i++) {
+                String immatriculation = String.format("AA-%03d-AA", i);
+                int kilometrage = 100 + random.nextInt(901);  // Génère un nombre entre 100 et 1000
+                String couleur = COLORS[random.nextInt(COLORS.length)];
+
+                pstmt.setString(1, immatriculation);
+                pstmt.setDate(2, java.sql.Date.valueOf(LocalDate.parse(DATE_MISE_EN_CIRCULATION)));
+                pstmt.setInt(3, kilometrage);
+                pstmt.setString(4, couleur);
+                pstmt.setInt(5, 5);  // Supposons que l'ID du modèle pour "SUV" est 1
+                pstmt.setString(6, IMAGE_SUV);
+
+                pstmt.addBatch();  // Ajoute cette insertion au batch
+            }
+
+            pstmt.executeBatch();  // Exécute toutes les insertions en une seule fois
         }
     }
 

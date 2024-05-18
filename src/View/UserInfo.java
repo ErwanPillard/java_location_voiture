@@ -158,7 +158,7 @@ public class UserInfo extends JFrame {
         JPanel employeePanel = null;
         if ((SessionManager.userType().equals("Particulier")) || SessionManager.userType().equals("Entreprise")) {
             // Onglet des factures pour les particuliers et les entreprises
-            invoicesPanel = new JPanel(new BorderLayout());
+            invoicesPanel = new JPanel(new GridBagLayout());
             tabbedPane.addTab("Factures", invoicesPanel);
         } else {
             // Onglet des employés
@@ -172,6 +172,11 @@ public class UserInfo extends JFrame {
         personalInfoPanel.add(labelUserType);
         personalInfoPanel.add(labelEmail);
         personalInfoPanel.add(btnModifMdp);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.gridx = 0;
+        gbc.gridy = GridBagConstraints.RELATIVE; // Placer chaque bouton dans une nouvelle ligne
 
         if (SessionManager.userType().equals("Particulier")) {
             JLabel labelNomPart = new JLabel("Nom : " + SessionManager.getCurrentParticulier().getNom());
@@ -187,11 +192,8 @@ public class UserInfo extends JFrame {
             personalInfoPanel.add(labelBirthDatePart);
             personalInfoPanel.add(labelNumPart);
 
-            invoicesPanel.add(btnFacture);
-            invoicesPanel.add(btnReservations);
-
-            btnFacture.setAlignmentX(Component.CENTER_ALIGNMENT);
-            btnReservations.setAlignmentX(Component.CENTER_ALIGNMENT);
+            invoicesPanel.add(btnFacture, gbc);
+            invoicesPanel.add(btnReservations, gbc);
         } else if (SessionManager.userType().equals("Entreprise")) {
             JLabel labelNomEntreprise = new JLabel("Nom de l'entreprise : " + SessionManager.getCurrentEntreprise().getNom());
             JLabel labelNumSiretEntreprise = new JLabel("Numéro siret : " + SessionManager.getCurrentEntreprise().getNumSiret());
@@ -202,11 +204,8 @@ public class UserInfo extends JFrame {
             personalInfoPanel.add(labelNumSiretEntreprise);
             personalInfoPanel.add(labelNumEntreprise);
 
-            invoicesPanel.add(btnFacture);
-            invoicesPanel.add(btnReservations);
-
-            btnFacture.setAlignmentX(Component.CENTER_ALIGNMENT);
-            btnReservations.setAlignmentX(Component.CENTER_ALIGNMENT);
+            invoicesPanel.add(btnFacture, gbc);
+            invoicesPanel.add(btnReservations, gbc);
         } else if (SessionManager.userType().equals("Employe")) {
             JLabel labelNomEmploye = new JLabel("Nom : " + SessionManager.getCurrentEmploye().getNom());
             JLabel labelPrenomEmploye = new JLabel("Prénom : " + SessionManager.getCurrentEmploye().getPrenom());
@@ -215,11 +214,6 @@ public class UserInfo extends JFrame {
             personalInfoPanel.add(labelNomEmploye);
             personalInfoPanel.add(labelPrenomEmploye);
             personalInfoPanel.add(labelFonctionEmploye);
-
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.insets = new Insets(10, 10, 10, 10);
-            gbc.gridx = 0;
-            gbc.gridy = GridBagConstraints.RELATIVE; // Placer chaque bouton dans une nouvelle ligne
 
             employeePanel.add(btnInterfaceEmploye, gbc);
             employeePanel.add(btnAjouterVoiture, gbc);

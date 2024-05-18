@@ -13,8 +13,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -177,12 +176,10 @@ public class HomePage extends JFrame {
 
         // Affichage des voitures
         for (Voiture voiture : voitures) {
-            // Vérifier la disponibilité de la voiture
             boolean isAvailable = HomeController.isCarAvailable(voiture.getImmatriculation(), startDate, endDate);
             if (!isAvailable) {
-                continue;  // Si la voiture n'est pas disponible, passer à la suivante
+                continue;
             }
-
             JPanel carInfoPanel = new JPanel(new BorderLayout());
             carInfoPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
@@ -194,16 +191,24 @@ public class HomePage extends JFrame {
                 try {
                     ByteArrayInputStream bais = new ByteArrayInputStream(image);
                     Image img = ImageIO.read(bais);
+                    if (img == null) {
+                        throw new IOException("L'image n'a pas pu être lue, img est null.");
+                    }
                     carImage = new ImageIcon(img.getScaledInstance(150, 100, Image.SCALE_SMOOTH));
                 } catch (IOException e) {
                     e.printStackTrace();
+                    // Afficher un message d'erreur pour l'utilisateur
+                    JLabel errorLabel = new JLabel("Erreur de chargement de l'image");
+                    carInfoPanel.add(errorLabel, BorderLayout.NORTH);
                 }
-
                 JLabel carImageLabel = new JLabel(carImage);
                 carInfoPanel.add(carImageLabel, BorderLayout.NORTH);
+            } else {
+                // Afficher un message d'erreur si l'image est null
+                JLabel errorLabel = new JLabel("Image non disponible");
+                carInfoPanel.add(errorLabel, BorderLayout.NORTH);
             }
 
-            // Ajout des autres informations de la voiture
             JPanel carDetailsPanel = new JPanel(new GridLayout(0, 1));
             carDetailsPanel.add(new JLabel("Immatriculation: " + voiture.getImmatriculation()));
             carDetailsPanel.add(new JLabel("Date de mise en circulation: " + voiture.getDateMiseCirculation()));
@@ -426,4 +431,22 @@ public class HomePage extends JFrame {
 
         return prixJournalier;
     }
+
+    private static byte[] readImageAsBytes(String imagePath) throws IOException {
+        File file = new File(imagePath);
+        if (!file.exists()) {
+            throw new IOException("Le fichier image n'existe pas : " + imagePath);
+        }
+
+        try (FileInputStream fis = new FileInputStream(file);
+             ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = fis.read(buffer)) != -1) {
+                baos.write(buffer, 0, bytesRead);
+            }
+            return baos.toByteArray();
+        }
+    }
+
 }

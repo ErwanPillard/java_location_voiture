@@ -31,13 +31,19 @@ public class init_bdd_graphique extends JFrame {
     private final JButton btnAjouterReservation;
     private final JButton btnAjouterFacture;
 
+    private final JButton btnAjouterCitadine;
+    private final JButton btnAjouterFamiliale;
+    private final JButton btnAjouterUtilitaire;
+    private final JButton btnAjouterBerline;
+    private final JButton btnAjouterSUV;
+
     /*public init_bdd_graphique() {
         createButtons();
         configure();
     }*/
 
     public init_bdd_graphique() throws SQLException {
-        setSize(400, 250);
+        setSize(500, 300);
         setLocationRelativeTo(null);
         setLayout(new FlowLayout());
 
@@ -53,6 +59,12 @@ public class init_bdd_graphique extends JFrame {
         btnAjouterReservation = new JButton("8. Ajouter des Reservation");
         btnAjouterFacture = new JButton("9. Ajouter des Factures");
 
+        btnAjouterCitadine = new JButton("9. Ajouter des Citadines");
+        btnAjouterFamiliale = new JButton("9. Ajouter des Familiale");
+        btnAjouterUtilitaire = new JButton("9. Ajouter des Utilitaire");
+        btnAjouterBerline = new JButton("9. Ajouter des Berline");
+        btnAjouterSUV = new JButton("9. Ajouter des SUV");
+
         add(btnNettoyer);
         add(btnAjouterUsers);
         add(btnAjouterEmployes);
@@ -62,6 +74,12 @@ public class init_bdd_graphique extends JFrame {
         add(btnAjouterModele);
         add(btnAjouterReservation);
         add(btnAjouterFacture);
+
+        add(btnAjouterCitadine);
+        add(btnAjouterFamiliale);
+        add(btnAjouterUtilitaire);
+        add(btnAjouterBerline);
+        add(btnAjouterSUV);
 
         setupButtonActions();
     }
@@ -174,6 +192,48 @@ public class init_bdd_graphique extends JFrame {
                 JOptionPane.showMessageDialog(this, "Factures ajoutés", "Succès", JOptionPane.INFORMATION_MESSAGE);
             } catch (SQLException throwables) {
                 JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout des factures", "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+
+        btnAjouterCitadine.addActionListener(e -> {
+            try {
+                init_bdd.insertCitadine(connection);
+                JOptionPane.showMessageDialog(this, "Citadines ajoutés", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            } catch (SQLException throwables) {
+                JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout des citadines", "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        btnAjouterFamiliale.addActionListener(e -> {
+            try {
+                init_bdd.insertFamiliale(connection);
+                JOptionPane.showMessageDialog(this, "Familiales ajoutés", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            } catch (SQLException throwables) {
+                JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout des familiales", "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        btnAjouterUtilitaire.addActionListener(e -> {
+            try {
+                init_bdd.insertUtilitaire(connection);
+                JOptionPane.showMessageDialog(this, "Utilitaires ajoutés", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            } catch (SQLException throwables) {
+                JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout des utilitaires", "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        btnAjouterBerline.addActionListener(e -> {
+            try {
+                init_bdd.insertBerline(connection);
+                JOptionPane.showMessageDialog(this, "Berlines ajoutés", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            } catch (SQLException throwables) {
+                JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout des berlines", "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        btnAjouterSUV.addActionListener(e -> {
+            try {
+                init_bdd.insertSUV(connection);
+                JOptionPane.showMessageDialog(this, "SUV ajoutés", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            } catch (SQLException throwables) {
+                JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout des SUV", "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         });
     }

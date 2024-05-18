@@ -87,10 +87,11 @@ public class UserInfoController {
     public List<Facture> getUserInvoices(int userId) {
         List<Facture> invoices = new ArrayList<>();
 
-        // Cette requête est juste un exemple, ajuste-la en fonction de la façon dont les factures sont liées aux utilisateurs dans ta base de données
-        String sql = "SELECT f.dateDebutReservation, f.dateFinReservation, f.montant, f.etat, f.voiture_immatriculation, f.id_client " +
+        // Ajuste la requête en fonction de la façon dont les factures sont liées aux utilisateurs dans ta base de données
+        String sql = "SELECT f.numeroFacture, f.dateEmission, r.dateDebutReservation, r.dateFinReservation, r.montant, r.etat, r.voiture_immatriculation, r.id_client " +
                 "FROM Facture f " +
-                "JOIN Reservation r ON f.dateDebutReservation = r.dateDebutReservation and f.dateFinReservation = r.dateFinReservation  and f.montant = r.montant  and f.etat = r.etat  and f.voiture_immatriculation = r.voiture_immatriculation  and f.id_client = r.id_client ";
+                "JOIN Reservation r ON f.dateDebutReservation = r.dateDebutReservation AND f.dateFinReservation = r.dateFinReservation AND f.voiture_immatriculation = r.voiture_immatriculation AND f.id_client = r.id_client " +
+                "WHERE r.id_client = ?";
 
         try (Connection connection = DatabaseManager.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -99,20 +100,19 @@ public class UserInfoController {
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     int numeroFacture = rs.getInt("numeroFacture");
-                    LocalDateTime dateEmission = LocalDateTime.parse("30-01-2003");
-                    LocalDateTime dateDebut = LocalDateTime.parse("30-01-2003");
-                    LocalDateTime dateFin = LocalDateTime.parse("30-01-2003");
+                    LocalDateTime dateEmission = rs.getTimestamp("dateEmission").toLocalDateTime();
+                    LocalDateTime dateDebut = rs.getTimestamp("dateDebutReservation").toLocalDateTime();
+                    LocalDateTime dateFin = rs.getTimestamp("dateFinReservation").toLocalDateTime();
                     float montant = rs.getFloat("montant");
                     String etat = rs.getString("etat");
-                    String voiture_immatriculation = rs.getString("immatriculation");
-                    int id_client = rs.getInt("id_client");
-                    invoices.add(new Facture(numeroFacture, dateEmission, dateDebut, dateFin, montant, etat, voiture_immatriculation, id_client));
+                    String voitureImmatriculation = rs.getString("voiture_immatriculation");
+                    int idClient = rs.getInt("id_client");
+                    invoices.add(new Facture(numeroFacture, dateEmission, dateDebut, dateFin, montant, etat, voitureImmatriculation, idClient));
                 }
             }
         } catch (Exception e) {
             e.printStackTrace(); // Gestion des exceptions
         }
-
         return invoices;
     }
 }
