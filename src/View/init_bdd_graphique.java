@@ -5,6 +5,7 @@ import Dao.DatabaseManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -200,7 +201,7 @@ public class init_bdd_graphique extends JFrame {
             try {
                 init_bdd.insertCitadine(connection);
                 JOptionPane.showMessageDialog(this, "Citadines ajoutés", "Succès", JOptionPane.INFORMATION_MESSAGE);
-            } catch (SQLException throwables) {
+            } catch (SQLException | IOException throwables) {
                 JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout des citadines", "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         });
@@ -208,7 +209,7 @@ public class init_bdd_graphique extends JFrame {
             try {
                 init_bdd.insertFamiliale(connection);
                 JOptionPane.showMessageDialog(this, "Familiales ajoutés", "Succès", JOptionPane.INFORMATION_MESSAGE);
-            } catch (SQLException throwables) {
+            } catch (SQLException | IOException throwables) {
                 JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout des familiales", "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         });
@@ -216,7 +217,7 @@ public class init_bdd_graphique extends JFrame {
             try {
                 init_bdd.insertUtilitaire(connection);
                 JOptionPane.showMessageDialog(this, "Utilitaires ajoutés", "Succès", JOptionPane.INFORMATION_MESSAGE);
-            } catch (SQLException throwables) {
+            } catch (SQLException | IOException throwables) {
                 JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout des utilitaires", "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         });
@@ -224,7 +225,7 @@ public class init_bdd_graphique extends JFrame {
             try {
                 init_bdd.insertBerline(connection);
                 JOptionPane.showMessageDialog(this, "Berlines ajoutés", "Succès", JOptionPane.INFORMATION_MESSAGE);
-            } catch (SQLException throwables) {
+            } catch (SQLException | IOException throwables) {
                 JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout des berlines", "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         });
@@ -232,7 +233,7 @@ public class init_bdd_graphique extends JFrame {
             try {
                 init_bdd.insertSUV(connection);
                 JOptionPane.showMessageDialog(this, "SUV ajoutés", "Succès", JOptionPane.INFORMATION_MESSAGE);
-            } catch (SQLException throwables) {
+            } catch (SQLException | IOException throwables) {
                 JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout des SUV", "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         });

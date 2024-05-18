@@ -432,7 +432,7 @@ public class HomePage extends JFrame {
         return prixJournalier;
     }
 
-    private static byte[] readImageAsBytes(String imagePath) throws IOException {
+    public static byte[] readImageAsBytes(String imagePath) throws IOException {
         File file = new File(imagePath);
         if (!file.exists()) {
             throw new IOException("Le fichier image n'existe pas : " + imagePath);
