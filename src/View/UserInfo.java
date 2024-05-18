@@ -1,16 +1,22 @@
 package View;
 
 import Controller.UserInfoController;
+import Dao.DatabaseManager;
 import Model.SessionManager;
 import View.Employe.ModeleView;
 import View.Employe.VoitureFormView;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import static Model.SessionManager.updateTelephoneInDatabase;
 
@@ -122,7 +128,7 @@ public class UserInfo extends JFrame {
         btnConfirmerReservation.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ModeleView.toggle();
+                confirmeReservationDialog();
             }
         });
         btnModifMdp = new JButton("Modifier le mot de passe");
@@ -365,6 +371,29 @@ public class UserInfo extends JFrame {
         dialog.setSize(900, 400);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
+    }
+
+    public static void confirmeReservationDialog() {
+        String query = "SELECT * FROM Reservation WHERE etat = 'non-confirmée'";
+        try (Connection conn = DatabaseManager.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                // Assumer que tu as des colonnes comme id, dateDebutReservation, etc.
+                Object[] row = new Object[]{
+                        rs.getInt("numReservation"),
+                        rs.getDate("dateDebutReservation"),
+                        rs.getDate("dateFinReservation"),
+                        rs.getFloat("montant"),
+                        rs.getString("etat"),
+                        // Ajouter d'autres colonnes selon la structure de ta table
+                };
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Erreur lors du chargement des réservations", "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void modifParcDialog() {

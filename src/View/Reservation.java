@@ -229,11 +229,11 @@ public class Reservation extends JDialog {
 
         btnConfirmer.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                float montant = calculerMontant(dateDebutLocalDate, dateFinLocalDate, voiture);
-                ReservationController.confirmerReservation(dateDebut, dateFin, voiture, montant);
-                if (ReservationController.reservationBool()){
-                    dispose();
-                }
+                // Rediriger vers la page de paiement
+                PaymentPage paymentPage = new PaymentPage();
+                paymentPage.setVisible(true);
+                dialog.dispose();
+                Reservation.this.dispose(); // Fermer la fenêtre de réservation
             }
         });
 
