@@ -7,7 +7,6 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
-
 import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
