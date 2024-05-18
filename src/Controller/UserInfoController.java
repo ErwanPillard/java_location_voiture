@@ -66,8 +66,12 @@ public class UserInfoController {
             Object[] row = new Object[]{
                     invoice.getNumFacture(),
                     invoice.getDate(),
+                    invoice.getDateDebutReservation(),
+                    invoice.getDateFinReservation(),
                     invoice.getMontant(),
-                    invoice.isEtat()
+                    invoice.getEtat(),
+                    invoice.getVoiture_immatriculation(),
+                    invoice.getId_client()
             };
             tableModel.addRow(row);
         }
@@ -84,9 +88,9 @@ public class UserInfoController {
         List<Facture> invoices = new ArrayList<>();
 
         // Cette requête est juste un exemple, ajuste-la en fonction de la façon dont les factures sont liées aux utilisateurs dans ta base de données
-        String sql = "SELECT f.numeroFacture, f.dateEmission, f.montant, f.etat " +
+        String sql = "SELECT f.dateDebutReservation, f.dateFinReservation, f.montant, f.etat, f.voiture_immatriculation, f.id_client " +
                 "FROM Facture f " +
-                "JOIN Reservation r ON f.numeroFacture = r.facture_numeroFacture ";
+                "JOIN Reservation r ON f.dateDebutReservation = r.dateDebutReservation and f.dateFinReservation = r.dateFinReservation  and f.montant = r.montant  and f.etat = r.etat  and f.voiture_immatriculation = r.voiture_immatriculation  and f.id_client = r.id_client ";
 
         try (Connection connection = DatabaseManager.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -95,11 +99,14 @@ public class UserInfoController {
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     int numeroFacture = rs.getInt("numeroFacture");
-                    //LocalDate dateEmission = rs.getLocalDate("dateEmission");
                     LocalDateTime dateEmission = LocalDateTime.parse("30-01-2003");
+                    LocalDateTime dateDebut = LocalDateTime.parse("30-01-2003");
+                    LocalDateTime dateFin = LocalDateTime.parse("30-01-2003");
                     float montant = rs.getFloat("montant");
-                    boolean etat = rs.getBoolean("etat");
-                    invoices.add(new Facture(numeroFacture, dateEmission, montant, etat));
+                    String etat = rs.getString("etat");
+                    String voiture_immatriculation = rs.getString("immatriculation");
+                    int id_client = rs.getInt("id_client");
+                    invoices.add(new Facture(numeroFacture, dateEmission, dateDebut, dateFin, montant, etat, voiture_immatriculation, id_client));
                 }
             }
         } catch (Exception e) {

@@ -5,15 +5,23 @@ import java.time.LocalDateTime;
 
 public class Facture {
     private int numFacture;
-    private LocalDateTime date;
+    private LocalDateTime dateEmission;
+    private LocalDateTime dateDebutReservation;
+    private LocalDateTime dateFinReservation;
     private float montant;
-    private boolean etat; //true si facture paye
+    private String etat;
+    private String voiture_immatriculation;
+    private int id_client;
 
-    public Facture(int numFacture, LocalDateTime date, float montant, boolean etat) {
+    public Facture(int numFacture, LocalDateTime date, LocalDateTime dateDebutReservation, LocalDateTime dateFinReservation, float montant, String etat, String voiture_immatriculation, int id_client) {
         this.numFacture = numFacture;
-        this.date = date;
+        this.dateEmission = date;
+        this.dateDebutReservation = dateDebutReservation;
+        this.dateFinReservation = dateFinReservation;
         this.montant = montant;
         this.etat = etat;
+        this.voiture_immatriculation = voiture_immatriculation;
+        this.id_client = id_client;
     }
 
     public int getNumFacture() {
@@ -25,11 +33,43 @@ public class Facture {
     }
 
     public LocalDateTime getDate() {
-        return date;
+        return dateEmission;
+    }
+
+    public LocalDateTime getDateDebutReservation() {
+        return dateDebutReservation;
+    }
+
+    public LocalDateTime getDateFinReservation() {
+        return dateFinReservation;
     }
 
     public void setDate(LocalDateTime date) {
-        this.date = date;
+        this.dateEmission = date;
+    }
+
+    public void setDateDebutReservation(LocalDateTime dateDebutReservation) {
+        this.dateDebutReservation = dateDebutReservation;
+    }
+
+    public void setDateFinReservation(LocalDateTime dateFinReservation) {
+        this.dateFinReservation = dateFinReservation;
+    }
+
+    public String getVoiture_immatriculation() {
+        return voiture_immatriculation;
+    }
+
+    public void setVoiture_immatriculation(String voiture_immatriculation) {
+        this.voiture_immatriculation = voiture_immatriculation;
+    }
+
+    public int getId_client() {
+        return id_client;
+    }
+
+    public void setId_client(int id_client) {
+        this.id_client = id_client;
     }
 
     public float getMontant() {
@@ -40,11 +80,11 @@ public class Facture {
         this.montant = montant;
     }
 
-    public boolean isEtat() {
+    public String getEtat() {
         return etat;
     }
 
-    public void setEtat(boolean etat) {
+    public void setEtat(String etat) {
         this.etat = etat;
     }
 }

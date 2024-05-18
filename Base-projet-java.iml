@@ -21,5 +21,8 @@
     <orderEntry type="library" name="mysql-connector-j-8.3 (2)" level="project" />
     <orderEntry type="library" name="mysql-connector-j-8.3 (3)" level="project" />
     <orderEntry type="library" name="jBCrypt-0.4.1" level="project" />
+    <orderEntry type="library" name="jfreechart-1.0.19" level="project" />
+    <orderEntry type="library" name="jfreechart-1.5.3" level="project" />
+    <orderEntry type="library" name="jcommon-1.0.24" level="project" />
   </component>
 </module>

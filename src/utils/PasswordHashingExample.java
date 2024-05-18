@@ -6,7 +6,7 @@ public class PasswordHashingExample {
 
     public static void main(String[] args) {
         // Mot de passe en clair
-        String password = "azerty";
+        String password = "nina";
 
         // Hachage du mot de passe
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());

@@ -29,7 +29,6 @@ public class ClientController {
         }
     }
 
-
     /*public List<Particulier> allParticulier() throws SQLException {
         return Particulier.all();
     }*/
@@ -51,8 +50,13 @@ public class ClientController {
         return Client.allParticuliers();
     }
 
+    public   List<Entreprise> allEntreprises() throws SQLException {
+        return Client.allEntreprises();
+    }
+
 
     public boolean emailExists(String email) throws SQLException {return Client.emailExists(email);}
+
     public synchronized void addClientListener(ClientListener l) {
         if (!clientListeners.contains(l)) {
             clientListeners.add(l);

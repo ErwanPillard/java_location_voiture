@@ -1,5 +1,6 @@
 package View;
 
+import Controller.HomeController;
 import Controller.UserConnectionController;
 import Controller.VoitureController;
 import Dao.DatabaseManager;
@@ -18,6 +19,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -67,20 +70,17 @@ public class HomePage extends JFrame {
 
         btnLogin.addActionListener(e -> {
             SessionManager.getInstance();
+            this.setVisible(false); // Cache HomePage
             if (SessionManager.isLoggedIn()) {
-                this.setVisible(false); // Cache HomePage
+                /*if (SessionManager.userType().equals("Employe")) {
+                    MainJFrame.employeInterface(); // Affiche l'interface employé
+                } */
                 new UserInfo().setVisible(true); // Affiche UserInfo
             } else {
                 // L'utilisateur n'est pas connecté, ouvre le dialogue de connexion
-                this.setVisible(false);
                 UserConnectionController controller = new UserConnectionController(this, new ConnexionUtilisateur(), new UserConnectionImpl());
                 controller.showLoginDialog(this); // 'this' réfère à la JFrame HomePage
-                if (SessionManager.userType().equals("Employe")) {
-                    this.setVisible(false); // Cache HomePage
-                    MainJFrame.employeInterface();
-                }else{
-                    new HomePage().setVisible(true); // Rouvre HomePage
-                }
+                new HomePage().setVisible(true); // Rouvre HomePage
             }
         });
 
@@ -161,6 +161,11 @@ public class HomePage extends JFrame {
         JPanel carPanel = new JPanel(new GridLayout(0, 3, 10, 10)); // 3 voitures par ligne, espacement de 10 pixels
         carPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Marge de 10 pixels autour du panel
 
+        // Récupérer les dates sélectionnées par l'utilisateur
+        LocalDate startDate = LocalDate.parse(tfPickUpDate.getText(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        LocalDate endDate = LocalDate.parse(tfDropOffDate.getText(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
+
         // Liste fictive de voitures
         List<Voiture> voitures = new ArrayList<>();
 
@@ -172,6 +177,12 @@ public class HomePage extends JFrame {
 
         // Affichage des voitures
         for (Voiture voiture : voitures) {
+            // Vérifier la disponibilité de la voiture
+            boolean isAvailable = HomeController.isCarAvailable(voiture.getImmatriculation(), startDate, endDate);
+            if (!isAvailable) {
+                continue;  // Si la voiture n'est pas disponible, passer à la suivante
+            }
+
             JPanel carInfoPanel = new JPanel(new BorderLayout());
             carInfoPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
@@ -248,11 +259,21 @@ public class HomePage extends JFrame {
     private void updateCarPanel(List<Voiture> voitures, String model) {
         carPanel.removeAll();  // Supprime tous les composants précédents de carPanel
 
+        // Récupérer les dates sélectionnées par l'utilisateur
+        LocalDate startDate = LocalDate.parse(tfPickUpDate.getText(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        LocalDate endDate = LocalDate.parse(tfDropOffDate.getText(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
         // Réinitialise le layout et les bordures si nécessaire
         carPanel.setLayout(new GridLayout(0, 3, 10, 10));
         carPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         for (Voiture voiture : voitures) {
+            // Vérifier la disponibilité de la voiture
+            boolean isAvailable = HomeController.isCarAvailable(voiture.getImmatriculation(), startDate, endDate);
+            if (!isAvailable) {
+                continue;  // Si la voiture n'est pas disponible, passer à la suivante
+            }
+
             JPanel carInfoPanel = new JPanel(new BorderLayout());
             carInfoPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
@@ -406,11 +427,3 @@ public class HomePage extends JFrame {
         return prixJournalier;
     }
 }
-
-
-
-/*
-Passer la boite de dialogue qui affiche les informations de l'utilisateur en une classe à part.
-Ajouter un bouton de déconnexion pour l'utilisateur connecté (dans la nouvelle classe 'UserInfo.java')
-Différencier l'affichage de l'utilisateur s'il est particulier, entreprise ou employee.
- */

@@ -88,7 +88,7 @@ public class OffreReductionView {
 
     public void createView(JPanel jpBody) {
         JPanel mainPanel = new JPanel(new GridBagLayout());
-        mainPanel.setBackground(new Color(235, 237, 239));
+        mainPanel.setBackground(new Color(123, 183, 191));
 
         JPanel tabPanel = new JPanel(new GridBagLayout()); //Panel Tableau voiture
         JPanel leftPanel = new JPanel(new GridBagLayout());

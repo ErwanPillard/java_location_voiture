@@ -57,7 +57,6 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
     }
 
     static void search(String searchText) {
-        System.out.println(searchText);
         RowFilter<VoitureJTable.TableModel, Object> rf = null;
         try {
             // Créez un filtre en fonction de la chaîne de recherche
@@ -108,65 +107,8 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
 
     @Override
     public void cmdEdit() {
-        //generateModels();
-        generateCars();
     }
 
-    // Method to generate random data for models
-    public Modele generateRandomModele() {
-        Random random = new Random();
-        String[] marques = {"Toyota", "Honda", "Ford", "Chevrolet", "Volkswagen"};
-        String marque = marques[random.nextInt(marques.length)];
-        String[] noms = {"Corolla", "Civic", "F-150", "Silverado", "Golf"};
-        String nom = noms[random.nextInt(noms.length)];
-        int nbPlace = random.nextInt(5) + 1; // Random number of seats between 1 and 5
-        int nbPorte = random.nextInt(4) + 2; // Random number of doors between 2 and 5
-        float tailleCoffre = random.nextFloat() * 100; // Random trunk size between 0 and 100
-        String caracteristique = "Random characteristics"; // You can customize this
-        int prixJournalier = random.nextInt(200) + 50; // Random daily price between 50 and 250
-        float noteSatisfaction = 0; // Start with 0
-        boolean attelage = random.nextBoolean();
-        BoiteVitesse boiteVitesse = BoiteVitesse.values()[random.nextInt(BoiteVitesse.values().length)]; // Random gearbox type
-        Categorie categorieSelectionnee = Categorie.values()[random.nextInt(Categorie.values().length)]; // Random category
-        return new Modele(marque, nom, nbPlace, nbPorte, tailleCoffre, caracteristique, prixJournalier, noteSatisfaction, categorieSelectionnee, attelage, boiteVitesse);
-    }
-
-    // Method to generate random data for cars
-    public Voiture generateRandomCar() {
-        Random random = new Random();
-        String immatriculation = "RandomImmat" + random.nextInt(1000); // Generate a random license plate
-        LocalDate dateMiseEnCirculation = LocalDate.now().minusDays(random.nextInt(365)); // Random date within the last year
-        String[] colors = {"Red", "Blue", "White", "Black", "Silver"};
-        String couleur = colors[random.nextInt(colors.length)];
-        double nbKilometre = random.nextDouble() * 100000; // Random number of kilometers up to 100,000
-        int modele_id = random.nextInt(10) + 1;; // You need to get the model ID from the database, or you can assign it randomly if you want
-
-        return new Voiture(dateMiseEnCirculation, immatriculation, couleur, nbKilometre, modele_id);
-    }
-
-    // Method to generate 100 cars
-    public void generateCars() {
-        for (int i = 0; i < 100; i++) {
-            Voiture car = generateRandomCar();
-            try {
-                VoitureController.getInstance().addVoiture(car);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    // Method to generate 10 models
-    public void generateModels() {
-        for (int i = 0; i < 10; i++) {
-            Modele modele = generateRandomModele();
-            try {
-                ModeleController.getInstance().addModele(modele);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     public void cellEdit() {
 
@@ -184,6 +126,7 @@ public class VoitureJTable extends JTable implements VoitureListener, EventListe
                             Modele modele = ModeleController.getModeleById(voiture.getModele_id());
                             ParkAutoView.displayImageVoiture(voiture.getImmatriculation());
                             ParkAutoView.displayModele(modele);
+                            ParkAutoView.displayInfoVoiture(voiture.getImmatriculation());
                         } catch (SQLException ex) {
                             throw new RuntimeException(ex);
                         }

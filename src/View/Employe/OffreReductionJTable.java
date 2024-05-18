@@ -63,7 +63,7 @@ public class OffreReductionJTable extends JTable implements OffreReductionListen
 
         @Override
         public boolean isCellEditable(int row, int column) {
-            return true;
+            return false;
         }
 
     }

@@ -121,3 +121,11 @@ CREATE TABLE OffreReduction
     pourcentageReduction FLOAT        NOT NULL,
     typeAdhesion         ENUM('NOUVEAUCLIENT', 'BRONZE', 'ARGENT', 'OR') NOT NULL
 )ENGINE = InnoDB;
+
+-- Insérer des offres de réduction
+INSERT INTO OffreReduction (nom, description, dateDebut, dateFin, pourcentageReduction, typeAdhesion)
+VALUES
+    ('Offre Nouveau Client', 'Réduction pour les nouveaux clients', '2024-01-01', '2024-06-30', 10.0, 'NOUVEAUCLIENT'),
+    ('Offre Bronze', 'Réduction pour les clients de niveau Bronze', '2024-01-01', '2024-12-31', 5.0, 'BRONZE'),
+    ('Offre Argent', 'Réduction pour les clients de niveau Argent', '2024-01-01', '2024-12-31', 10.0, 'ARGENT'),
+    ('Offre Or', 'Réduction pour les clients de niveau Or', '2024-01-01', '2024-12-31', 15.0, 'OR');

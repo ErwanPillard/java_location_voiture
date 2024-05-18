@@ -1,4 +1,4 @@
-package View.Employe.Button;
+package View.Employe.BaseClient;
 
 import Controller.ClientController;
 import Controller.listeners.ClientListener;
@@ -14,7 +14,7 @@ import javax.swing.table.TableRowSorter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ParticulierJTable extends JTable implements ClientListener, EventListener {
+public class ParticulierJTable extends JTable {
     private TableModel model = new TableModel();
     private static TableRowSorter<TableModel> sorter;
 
@@ -23,13 +23,22 @@ public class ParticulierJTable extends JTable implements ClientListener, EventLi
     public ParticulierJTable() {
         this.setModel(model);
         this.getTableHeader().setReorderingAllowed(false);
-        ClientController.getInstance().addClientListener(this);// ajoute user au tab pas utile
         updateTable(loadAllParticulier());// verifi si les celluels sont editable
 
         sorter = new TableRowSorter<>(model);
         setRowSorter(sorter); // Assignez le TableRowSorter à la JTable
     }
 
+    static void search(String searchText) {
+        RowFilter<ParticulierJTable.TableModel, Object> rf = null;
+        try {
+            // Créez un filtre en fonction de la chaîne de recherche
+            rf = RowFilter.regexFilter("(?i)" + searchText); // (?i) pour ignorer la casse
+        } catch (java.util.regex.PatternSyntaxException e) {
+            return;
+        }
+        sorter.setRowFilter(rf); // Appliquez le filtre au TableRowSorter
+    }
 
     void updateTable(ArrayList<Particulier> particuliers){
         // Effacez le contenu actuel de votre JTable
@@ -71,34 +80,8 @@ public class ParticulierJTable extends JTable implements ClientListener, EventLi
 
         @Override
         public boolean isCellEditable(int row, int column) {// permet de modif les cellules
-            if
-            (column == 0 || column == 1 ) {
-
-                //(column == 0 || column == 1 || column == 5 || column == 6 || column == 7 || column == 12 || column == 14) {
-                return false;
-            }
-            return true;
-
+            return false;
         }
-
-    }
-
-
-    @Override
-    public void clientadd(MailEvent<Voiture> event){model.insertRow(0, event.getSource().toArray());}
-
-    @Override
-    public void cmdEdit() {
-
-    }
-
-    @Override
-    public void cmdRemove() {
-
-    }
-
-    @Override
-    public void cmdAdd() {
 
     }
 }

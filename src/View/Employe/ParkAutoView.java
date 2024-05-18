@@ -32,6 +32,8 @@ public class ParkAutoView{
     private static JButton editButton;
 
     private VoitureJTable jTableList;
+    private static InfoVoitureJTable jTable;
+
 
 
     // Créez des JLabels pour afficher les détails du modèle dans le panneau droit
@@ -211,27 +213,37 @@ public class ParkAutoView{
         labelBoiteVitesse.setText("Boite de vitesse : " + boiteVitesse);
     }
 
+    protected static void displayInfoVoiture(String immat){
+        jTable.updateTable(immat);
+    }
+
 
     public JPanel tabPanel(JPanel tabPanel) {
-
         tabPanel.setLayout(new GridBagLayout());
-        //Jtable into JScroll
+
+        // JTable dans JScrollPane
         jTableList = new VoitureJTable();
         JScrollPane jspList = new JScrollPane();
-
         jspList.setViewportView(jTableList);
-        jspList.setPreferredSize(new Dimension(900, 700));
-        jspList.setMinimumSize(new Dimension(500, 500));
+        jspList.setMinimumSize(new Dimension(800, 500));
 
+        // Contraintes GridBagConstraints pour que le JScrollPane s'étende sur toutes les lignes et colonnes disponibles
         GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0; // Position horizontale
+        gbc.gridy = 0; // Position verticale
+        gbc.gridwidth = GridBagConstraints.REMAINDER; // S'étendre sur toutes les colonnes restantes
+        gbc.gridheight = GridBagConstraints.REMAINDER; // S'étendre sur toutes les lignes restantes
+        gbc.fill = GridBagConstraints.BOTH; // Remplir l'espace disponible dans les deux directions
+        gbc.weightx = 1.0; // Poids horizontal pour l'expansion
+        gbc.weighty = 1.0; // Poids vertical pour l'expansion
 
-        gbc.gridwidth = 1; // seul composant de sa colonne, il est donc le dernier.
-        gbc.gridheight = GridBagConstraints.REMAINDER; // valeur par défaut - peut s'étendre sur une seule ligne.
-
+        // Ajouter le JScrollPane au panneau avec les contraintes GridBagConstraints
         tabPanel.add(jspList, gbc);
 
         return tabPanel;
     }
+
+
 
     public JPanel filterPanel(JPanel filterPanel) {
 
@@ -279,6 +291,9 @@ public class ParkAutoView{
 
         gbc.insets = new Insets(10, 10, 10, 10);
 
+
+        filterPanel.add(searchField, gbc);
+        gbc.gridy++;
         filterPanel.add(labelTriezParCategorie, gbc);
         gbc.gridy++;
         filterPanel.add(filterCategorieComboBox, gbc);
@@ -341,6 +356,31 @@ public class ParkAutoView{
         return categoriePanel;
     }
 
+    public JPanel infoResaPanel(JPanel infoResaPanel) {
+        infoResaPanel.setLayout(new GridBagLayout());
+
+        // Création du tableau
+        jTable = new InfoVoitureJTable(); // Utilisez la variable jTable au lieu de jTableList
+        JScrollPane jspList = new JScrollPane();
+        jspList.setViewportView(jTable); // Utilisez jTable au lieu de jTableList
+        jspList.setPreferredSize(new Dimension(300, 300));
+        jspList.setMinimumSize(new Dimension(300, 300));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        gbc.gridx = 0; // Position horizontale
+        gbc.gridy = 0; // Position verticale
+        gbc.gridwidth = GridBagConstraints.REMAINDER; // S'étendre sur toutes les colonnes restantes
+        gbc.gridheight = GridBagConstraints.REMAINDER; // S'étendre sur toutes les lignes restantes
+        gbc.fill = GridBagConstraints.BOTH; // Remplir l'espace disponible dans les deux directions
+        gbc.weightx = 1.0; // Poids horizontal pour l'expansion
+        gbc.weighty = 1.0; // Poids vertical pour l'expansion
+
+        infoResaPanel.add(jspList, gbc);
+
+        return infoResaPanel;
+    }
+
 
     public void createView(JPanel jpBody) {
 
@@ -355,29 +395,48 @@ public class ParkAutoView{
         JPanel tabPanel = new JPanel(new GridBagLayout()); //Panel Tableau voiture
         JPanel filterPanel = new JPanel(new GridBagLayout());
         JPanel categoriePanel = new JPanel(new GridBagLayout());
+        JPanel infoResaPanel = new JPanel(new GridBagLayout());
 
-        Color backgroundColor = new Color(55, 95, 158);
+        Color backgroundColor = new Color(123, 183, 191);
         mainPanel.setBackground(backgroundColor);
 
         GridBagConstraints gbc = new GridBagConstraints();
 
-        gbc.gridx = 2;
-        filterPanel.setBackground(Color.white);
-        filterPanel.setPreferredSize(new Dimension(300, 200));
-        mainPanel.add(filterPanel(filterPanel), gbc);
-
-        gbc.gridy = 1;
-        categoriePanel.setBackground(Color.white);
-        categoriePanel.setPreferredSize(new Dimension(300, 400));
-        mainPanel.add(categoriePanel(categoriePanel), gbc);
-
-
+        // Positionner le panneau de filtre à gauche
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.gridheight = GridBagConstraints.REMAINDER; // valeur par défaut - peut s'étendre sur une seule ligne.
-        gbc.insets = new Insets(0, 0, 0, 20);
+        gbc.gridheight = GridBagConstraints.REMAINDER; // Étendre le panneau sur deux lignes
+        gbc.weighty = 1.0; // Permettre au panneau de prendre toute la hauteur disponible
+        gbc.fill = GridBagConstraints.BOTH; // Remplir tout l'espace disponible
+        filterPanel.setBackground(Color.white);
+        mainPanel.add(filterPanel(filterPanel), gbc);
+
+        // Positionner le panneau de tableau au milieu
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.gridheight = GridBagConstraints.REMAINDER; // Réinitialiser la hauteur du panneau à la valeur par défaut
+        gbc.weightx = 1.0; // Permettre au panneau de prendre toute la largeur disponible
+        gbc.weighty = 1.0; // Permettre au panneau de prendre toute la hauteur disponible
+        gbc.fill = GridBagConstraints.BOTH; // Remplir l'espace disponible dans les deux directions
+        gbc.insets = new Insets(0, 10, 0, 10); // Ajouter des marges entre le panneau de gauche et le tableau
         mainPanel.add(tabPanel(tabPanel), gbc);
 
+        // Positionner le panneau d'information sur la réservation en haut à droite
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.weightx = 0.5; // Réduire légèrement le poids horizontal
+        gbc.gridheight = 1; // Réinitialiser la hauteur du panneau à 1
+        gbc.insets = new Insets(0, 0, 10, 0); // Définir les marges
+        gbc.fill = GridBagConstraints.BOTH; // Remplir tout l'espace disponible dans les deux directions
+        mainPanel.add(infoResaPanel(infoResaPanel), gbc);
+
+        // Positionner le panneau de catégorie en bas à droite
+        gbc.gridy = 1; // Changer la ligne à 1
+        gbc.weighty = 1.0; // Permettre au panneau de prendre toute la hauteur disponible
+        gbc.insets = new Insets(0, 0, 0, 0); // Définir les marges
+        gbc.anchor = GridBagConstraints.PAGE_END; // Aligner le panneau en bas de la cellule
+        categoriePanel.setBackground(Color.white);
+        mainPanel.add(categoriePanel(categoriePanel), gbc);
         // Ajoutez le JPanel principal à jpBody
         jpBody.removeAll(); // Supprimer tous les composants existants de jpBody
         jpBody.setLayout(new BorderLayout());

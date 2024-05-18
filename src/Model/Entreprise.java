@@ -23,6 +23,12 @@ public class Entreprise extends Client {
         this.numSiret = numSiret;
     }
 
+    public Entreprise(String nom, String email, String telephone, String numSiret) {
+        super(email, telephone);
+        this.nom = nom;
+        this.numSiret = numSiret;
+    }
+
     public Entreprise(int id, String nom, String numSiret) {
         super(id);
         this.nom = nom;
@@ -59,4 +65,7 @@ public class Entreprise extends Client {
         clientDAO.addEntreprise(entreprise);
     }
 
+    public Object[] toArray() {
+        return new Object[] {this.nom, this.getEmail(), this.getTelephone(), this.numSiret};
+    }
 }
