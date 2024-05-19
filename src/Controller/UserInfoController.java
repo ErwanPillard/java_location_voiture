@@ -60,19 +60,16 @@ public class UserInfoController {
         // Récupère les factures pour l'utilisateur actuel.
         List<Facture> userInvoices = getUserInvoices(SessionManager.getCurrentUser().getId());
 
-        String[] columnNames = {"Numéro de facture", "Date d'emission", "Montant", "Etat"};
+        String[] columnNames = {"Numéro de facture", "Date d'emission", "Montant", "Objet", "Etat"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
 
         for (Facture invoice : userInvoices) {
             Object[] row = new Object[]{
                     invoice.getNumFacture(),
                     invoice.getDate(),
-                    invoice.getDateDebutReservation(),
-                    invoice.getDateFinReservation(),
                     invoice.getMontant(),
-                    invoice.getEtat(),
-                    invoice.getVoiture_immatriculation(),
-                    invoice.getId_client()
+                    invoice.getObjet(),
+                    invoice.getEtat()
             };
             tableModel.addRow(row);
         }
@@ -98,11 +95,16 @@ public class UserInfoController {
     public List<Facture> getUserInvoices(int userId) {
         List<Facture> invoices = new ArrayList<>();
 
-        // Ajuste la requête en fonction de la façon dont les factures sont liées aux utilisateurs dans ta base de données
-        String sql = "SELECT f.numeroFacture, f.dateEmission, r.dateDebutReservation, r.dateFinReservation, r.montant, r.etat, r.voiture_immatriculation, r.id_client " +
+        String sql = "SELECT f.numeroFacture, f.dateEmission, r.dateDebutReservation, r.dateFinReservation, " +
+                "COALESCE(r.montant, o.pourcentageReduction * 10) AS montant, " +
+                "COALESCE(r.etat, 'Achat Offre') AS etat, " +
+                "r.voiture_immatriculation, f.id_client, " +
+                "CASE WHEN r.dateDebutReservation IS NOT NULL THEN 'Reservation' ELSE 'OffreReduction' END AS objet " +
                 "FROM Facture f " +
-                "JOIN Reservation r ON f.dateDebutReservation = r.dateDebutReservation AND f.dateFinReservation = r.dateFinReservation AND f.voiture_immatriculation = r.voiture_immatriculation AND f.id_client = r.id_client " +
-                "WHERE r.id_client = ?";
+                "LEFT JOIN Reservation r ON f.dateDebutReservation = r.dateDebutReservation AND f.dateFinReservation = r.dateFinReservation AND f.id_client = r.id_client " +
+                "LEFT JOIN ClientOffreAchat c ON f.id_client = c.id_client " +
+                "LEFT JOIN OffreReduction o ON c.id_offre = o.id " +
+                "WHERE f.id_client = ?";
 
         try (Connection connection = DatabaseManager.getConnection();
              PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -112,13 +114,21 @@ public class UserInfoController {
                 while (rs.next()) {
                     int numeroFacture = rs.getInt("numeroFacture");
                     LocalDateTime dateEmission = rs.getTimestamp("dateEmission").toLocalDateTime();
-                    LocalDateTime dateDebut = rs.getTimestamp("dateDebutReservation").toLocalDateTime();
-                    LocalDateTime dateFin = rs.getTimestamp("dateFinReservation").toLocalDateTime();
+                    LocalDateTime dateDebut = null;
+                    LocalDateTime dateFin = null;
+                    if (rs.getTimestamp("dateDebutReservation") != null) {
+                        dateDebut = rs.getTimestamp("dateDebutReservation").toLocalDateTime();
+                    }
+                    if (rs.getTimestamp("dateFinReservation") != null) {
+                        dateFin = rs.getTimestamp("dateFinReservation").toLocalDateTime();
+                    }
                     float montant = rs.getFloat("montant");
                     String etat = rs.getString("etat");
                     String voitureImmatriculation = rs.getString("voiture_immatriculation");
                     int idClient = rs.getInt("id_client");
-                    invoices.add(new Facture(numeroFacture, dateEmission, dateDebut, dateFin, montant, etat, voitureImmatriculation, idClient));
+                    String objet = rs.getString("objet");
+
+                    invoices.add(new Facture(numeroFacture, dateEmission, dateDebut, dateFin, montant, etat, voitureImmatriculation, idClient, objet));
                 }
             }
         } catch (Exception e) {

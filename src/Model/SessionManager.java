@@ -40,6 +40,10 @@ public class SessionManager {
         return currentClient;
     }
 
+    public static String getTypeAdhesion() {
+        return currentClient.getTypeAdhesion();
+    }
+
     public static Particulier getCurrentParticulier() {
         return currentParticulier;
     }

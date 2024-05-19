@@ -2,9 +2,7 @@ package Controller;
 
 import Controller.listeners.MailEvent;
 import Controller.listeners.OffreReductionListener;
-import Controller.listeners.VoitureListener;
 import Model.OffreReduction;
-import Model.Voiture;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,12 +11,11 @@ import java.util.List;
 public class OffreReductionController {
     private static final OffreReductionController instance = new OffreReductionController();
 
-    private List<OffreReductionListener> offreReductionListeners = new ArrayList<OffreReductionListener>();
+    private List<OffreReductionListener> offreReductionListeners = new ArrayList<>();
 
     public static OffreReductionController getInstance() {
         return instance;
     }
-
 
     public List<OffreReduction> allOffresReduction() throws SQLException {
         return OffreReduction.all();
@@ -32,7 +29,7 @@ public class OffreReductionController {
     }
 
     private void notifyListeners(OffreReduction offreReduction) {
-        MailEvent<OffreReduction> event = new MailEvent<OffreReduction>(offreReduction);
+        MailEvent<OffreReduction> event = new MailEvent<>(offreReduction);
         for (OffreReductionListener listener : offreReductionListeners) {
             listener.offreadd(event);
         }
@@ -43,5 +40,4 @@ public class OffreReductionController {
             offreReductionListeners.add(l);
         }
     }
-
 }

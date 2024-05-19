@@ -1,8 +1,12 @@
 package View;
 
+import Controller.PaymentPageController;
+import Controller.ReservationController;
 import Controller.UserInfoController;
 import Dao.DatabaseManager;
 import Model.SessionManager;
+import Model.OffreReduction;
+import Controller.OffreReductionController;
 import View.Employe.ModeleView;
 import View.Employe.VoitureFormView;
 
@@ -13,24 +17,26 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.List;
 
 import static Model.SessionManager.updateTelephoneInDatabase;
 
 public class UserInfo extends JFrame {
     private final JButton btnLogout;
     private final JButton btnRetour;
+
     private final JButton btnFacture;
     private final JButton btnReservations;
+    private final JButton btnOffres;
+
     private final JButton btnInterfaceEmploye;
     private final JButton btnAjouterVoiture;
     private final JButton btnAjouterModele;
     private final JButton btnSupprimerVoiture;
     private final JButton btnSupprimerModele;
     private final JButton btnConfirmerReservation;
+    private final JButton btnInitDB;
 
     private final JButton btnModifMdp;
     private final JButton btnModifTel;
@@ -52,6 +58,13 @@ public class UserInfo extends JFrame {
                 new HomePage().setVisible(true); // Rouvre HomePage
             }
         });
+        btnLogout.setBackground(new Color(0xFF0000)); // Couleur ROUGE
+        btnLogout.setFont(new Font("Arial", Font.BOLD, 14)); // Police en gras
+        btnLogout.setForeground(Color.WHITE);
+        btnLogout.setFocusPainted(false);
+        btnLogout.setBorderPainted(false);
+        btnLogout.setOpaque(true);
+
         btnRetour = new JButton("Retour à la page principale");
         btnRetour.addActionListener(new ActionListener() {
             @Override
@@ -75,6 +88,18 @@ public class UserInfo extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 dispose();
                 afficherReservationsDialog(SessionManager.getCurrentUser().getId());
+
+                // Revenir à la page userInfo
+                UserInfo userInfo = new UserInfo();
+                userInfo.setVisible(true);
+            }
+        });
+        btnOffres = new JButton("Souscrire à une offre");
+        btnOffres.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                afficherOffreDialog();
 
                 // Revenir à la page userInfo
                 UserInfo userInfo = new UserInfo();
@@ -150,6 +175,12 @@ public class UserInfo extends JFrame {
                 changeTelephoneDialog();
             }
         });
+        // Panneau pour init bdd graphique
+        btnInitDB = new JButton("Init BDD Graphique");
+        btnInitDB.addActionListener(e -> {
+            init_bdd_graphique.toggle();
+        });
+        btnInitDB.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -205,6 +236,7 @@ public class UserInfo extends JFrame {
 
             invoicesPanel.add(btnFacture, gbc);
             invoicesPanel.add(btnReservations, gbc);
+            invoicesPanel.add(btnOffres, gbc);
         } else if (SessionManager.userType().equals("Entreprise")) {
             JLabel labelNomEntreprise = new JLabel("Nom de l'entreprise : " + SessionManager.getCurrentEntreprise().getNom());
             JLabel labelNumSiretEntreprise = new JLabel("Numéro siret : " + SessionManager.getCurrentEntreprise().getNumSiret());
@@ -217,6 +249,7 @@ public class UserInfo extends JFrame {
 
             invoicesPanel.add(btnFacture, gbc);
             invoicesPanel.add(btnReservations, gbc);
+            invoicesPanel.add(btnOffres, gbc);
         } else if (SessionManager.userType().equals("Employe")) {
             JLabel labelNomEmploye = new JLabel("Nom : " + SessionManager.getCurrentEmploye().getNom());
             JLabel labelPrenomEmploye = new JLabel("Prénom : " + SessionManager.getCurrentEmploye().getPrenom());
@@ -232,6 +265,7 @@ public class UserInfo extends JFrame {
             employeePanel.add(btnSupprimerVoiture, gbc);
             employeePanel.add(btnSupprimerModele, gbc);
             employeePanel.add(btnConfirmerReservation, gbc);
+            employeePanel.add(btnInitDB, gbc);
         }
         mainPanel.add(tabbedPane);
 
@@ -377,6 +411,107 @@ public class UserInfo extends JFrame {
         // Configuration et affichage de la boîte de dialogue
         dialog.setSize(900, 400);
         dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+    }
+
+    public static void enregistrerAchat(int clientId, int offreId) throws SQLException {
+        String sql = "INSERT INTO ClientOffreAchat (id_client, id_offre) VALUES (?, ?)";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, clientId);
+            stmt.setInt(2, offreId);
+            stmt.executeUpdate();
+        }
+    }
+
+    private void afficherOffreDialog() {
+        JDialog dialog = new JDialog(this, "Offres de Réduction", true);
+        dialog.setLayout(new BorderLayout());
+        dialog.setSize(1200, 600);  // Augmente la taille de la fenêtre
+        dialog.setLocationRelativeTo(this);
+
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);  // Ajoute des marges autour des composants
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+
+        try {
+            List<OffreReduction> offres = OffreReductionController.getInstance().allOffresReduction();
+            for (OffreReduction offre : offres) {
+                JPanel offrePanel = new JPanel(new GridBagLayout());
+                GridBagConstraints innerGbc = new GridBagConstraints();
+                innerGbc.insets = new Insets(5, 5, 5, 5);
+                innerGbc.fill = GridBagConstraints.HORIZONTAL;
+                innerGbc.gridx = 0;
+                innerGbc.gridy = 0;
+
+                offrePanel.add(new JLabel("Nom: " + offre.getNom()), innerGbc);
+                innerGbc.gridx++;
+                offrePanel.add(new JLabel("Description: " + offre.getDescription()), innerGbc);
+                innerGbc.gridx++;
+                offrePanel.add(new JLabel("Pourcentage de Réduction: " + offre.getPourcentageReduction() + "%"), innerGbc);
+                innerGbc.gridx++;
+                offrePanel.add(new JLabel("Date de début: " + offre.getDateDebut()), innerGbc);
+                innerGbc.gridx++;
+                offrePanel.add(new JLabel("Date de fin: " + offre.getDateFin()), innerGbc);
+
+                innerGbc.gridx++;
+                JButton acheterButton = new JButton("Acheter pour " + (offre.getPourcentageReduction() * 10) + " €");
+                acheterButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        int clientId = SessionManager.getCurrentClient().getId();  // Assumes there is a method to get the client's ID
+                        int offreId = offre.getId();  // Assumes there is a method to get the offer's ID
+                        System.out.println("Client ID: " + clientId + ", Offre ID: " + offreId);  // Debugging output
+
+                        try {
+                            enregistrerAchat(clientId, offreId);
+                            dialog.dispose();
+                            // Rediriger vers la page de paiement
+                            PaymentPage paymentPage = new PaymentPage(null);
+                            paymentPage.setVisible(true);
+
+                            // Vérifier si le paiement a été effectué avec succès
+                            if (paymentPage.isPaymentSuccessful()) {
+                                JOptionPane.showMessageDialog(dialog, "Achat offre de réduction confirmée !");
+                                PaymentPageController.ajouterFactureOffre((offre.getPourcentageReduction() * 10));
+
+                                // Fermer la fenêtre actuelle de réservation
+                                dispose();
+                            } else {
+                                JOptionPane.showMessageDialog(dialog, "Le paiement a échoué.");
+                            }
+                        } catch (SQLException ex) {
+                            System.err.println("Erreur lors de l'enregistrement de l'achat: " + ex.getMessage());
+                            JOptionPane.showMessageDialog(dialog, "Erreur lors de l'achat de l'offre.");
+                        }
+                    }
+                });
+                offrePanel.add(acheterButton, innerGbc);
+
+                panel.add(offrePanel, gbc);
+                gbc.gridy++;
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la récupération des offres de réduction: " + e.getMessage());
+        }
+
+        dialog.add(new JScrollPane(panel), BorderLayout.CENTER);
+
+        JButton closeButton = new JButton("Fermer");
+        closeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dialog.dispose();
+            }
+        });
+
+        JPanel southPanel = new JPanel();
+        southPanel.add(closeButton);
+        dialog.add(southPanel, BorderLayout.SOUTH);
+
         dialog.setVisible(true);
     }
 

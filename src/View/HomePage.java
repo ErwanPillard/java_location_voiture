@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class HomePage extends JFrame {
-    private JButton btnLogin, btnCreateAccount, btnInitDB;
+    private JButton btnLogin, btnCreateAccount;
     JPanel searchPanel;
     JPanel carPanel; // Affichage des voitures
 
@@ -97,13 +97,6 @@ public class HomePage extends JFrame {
         btnCreateAccount.setBorderPainted(false);
         btnCreateAccount.setOpaque(true);
 
-        // Panneau pour init bdd graphique
-        btnInitDB = new JButton("Init BDD Graphique");
-        btnInitDB.addActionListener(e -> {
-            init_bdd_graphique.toggle();
-        });
-        btnInitDB.setAlignmentX(Component.CENTER_ALIGNMENT);
-
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));  // Configuration pour aligner verticalement
         titlePanel.add(appTitle);
@@ -117,7 +110,6 @@ public class HomePage extends JFrame {
         loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));  // Configuration pour aligner verticalement
         loginPanel.add(btnLogin);
         loginPanel.add(btnCreateAccount);
-        loginPanel.add(btnInitDB);
 
         searchPanel = createSearchPanel();
 
@@ -324,6 +316,7 @@ public class HomePage extends JFrame {
                 btnReserver.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        dispose();
                         String dateDebut = tfPickUpDate.getText();
                         String dateFin = tfDropOffDate.getText();
                         Reservation.toggle(dateDebut, dateFin, voiture);

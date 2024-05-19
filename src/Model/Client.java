@@ -8,6 +8,7 @@ import java.util.List;
 public class Client extends User {
     //private final boolean adhesion;
     private String telephone;
+    private String typeAdhesion;
     private int id;
 
 
@@ -20,8 +21,6 @@ public class Client extends User {
         super(email);
         this.telephone = telephone;
     }
-
-
 
     public Client(int id) { //Client non adhérant
         super(id);
@@ -49,7 +48,6 @@ public class Client extends User {
         return clientDAO.allEntreprises();
     }
 
-
     public static Client findByTelephone(String telephone) throws SQLException {
         ClientDAO clientDAO = new ClientDAOImpl();
         return clientDAO.findByTelephone(telephone);
@@ -75,10 +73,17 @@ public class Client extends User {
         //ClientDAOImpl.add();
     }
 
-
     public static boolean emailExists(String email) throws SQLException {
         ClientDAO clientDAO = new ClientDAOImpl();
         return clientDAO.emailExists(email);
+    }
+
+    public String getTypeAdhesion() {
+        return typeAdhesion;
+    }
+
+    public void setTypeAdhesion(String typeAdhesion) {
+        this.typeAdhesion = typeAdhesion;
     }
 }
 

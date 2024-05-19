@@ -5,25 +5,31 @@ import Model.TypeAdhesion;
 import Model.Voiture;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OffreReductionDAOImpl implements OffreReductionDAO{
-    public List<OffreReduction> all() throws SQLException{
-        ArrayList<OffreReduction> offreReductions = new ArrayList<>();
-
-        Connection c = DatabaseManager.getConnection();
-        PreparedStatement pstmt = c.prepareStatement("SELECT * FROM OffreReduction");
-
-        ResultSet rset = pstmt.executeQuery();
-        while (rset.next()) {
-            offreReductions.add(createOffreReduction(rset));
+    @Override
+    public List<OffreReduction> all() throws SQLException {
+        List<OffreReduction> offres = new ArrayList<>();
+        String sql = "SELECT * FROM OffreReduction";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String nom = rs.getString("nom");
+                String description = rs.getString("description");
+                LocalDate dateDebut = rs.getDate("dateDebut").toLocalDate();
+                LocalDate dateFin = rs.getDate("dateFin").toLocalDate();
+                float pourcentageReduction = rs.getFloat("pourcentageReduction");
+                String typeAdhesion = rs.getString("typeAdhesion");
+                OffreReduction offre = new OffreReduction(id, nom, description, dateDebut, dateFin, pourcentageReduction, typeAdhesion);
+                offres.add(offre);
+            }
         }
-
-        pstmt.close();
-        c.close();
-
-        return offreReductions;
+        return offres;
     }
 
     public void add(OffreReduction offreReduction) throws SQLException {

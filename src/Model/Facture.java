@@ -12,8 +12,9 @@ public class Facture {
     private String etat;
     private String voiture_immatriculation;
     private int id_client;
+    private String objet;
 
-    public Facture(int numFacture, LocalDateTime date, LocalDateTime dateDebutReservation, LocalDateTime dateFinReservation, float montant, String etat, String voiture_immatriculation, int id_client) {
+    public Facture(int numFacture, LocalDateTime date, LocalDateTime dateDebutReservation, LocalDateTime dateFinReservation, float montant, String etat, String voiture_immatriculation, int id_client, String objet) {
         this.numFacture = numFacture;
         this.dateEmission = date;
         this.dateDebutReservation = dateDebutReservation;
@@ -22,6 +23,7 @@ public class Facture {
         this.etat = etat;
         this.voiture_immatriculation = voiture_immatriculation;
         this.id_client = id_client;
+        this.objet = objet;
     }
 
     public int getNumFacture() {
@@ -34,6 +36,14 @@ public class Facture {
 
     public LocalDateTime getDate() {
         return dateEmission;
+    }
+
+    public String getObjet() {
+        return objet;
+    }
+
+    public void setObjet(String objet) {
+        this.objet = objet;
     }
 
     public LocalDateTime getDateDebutReservation() {

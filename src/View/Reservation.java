@@ -1,7 +1,9 @@
 package View;
 
+import Controller.OffreReductionController;
 import Controller.PaymentPageController;
 import Dao.DatabaseManager;
+import Model.OffreReduction;
 import Model.SessionManager;
 import Model.Voiture;
 import Controller.ReservationController;
@@ -22,6 +24,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import java.util.List;
 
 import static Model.SessionManager.updateTelephoneInDatabase;
 
@@ -103,19 +107,43 @@ public class Reservation extends JDialog {
         return prixJournalier;
     }
 
-    private int calculerMontant(LocalDate dateDebut, LocalDate dateFin, Voiture voiture) {
+    public float getReductionPourcentage(int clientId) {
+        String sql = "SELECT o.pourcentageReduction " +
+                "FROM ClientOffreAchat c " +
+                "JOIN OffreReduction o ON c.id_offre = o.id " +
+                "WHERE c.id_client = ? " +
+                "AND NOW() BETWEEN o.dateDebut AND o.dateFin";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, clientId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getFloat("pourcentageReduction");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;  // Retourne 0 si aucune réduction n'est trouvée
+    }
+
+    private float calculerMontant(LocalDate dateDebut, LocalDate dateFin, Voiture voiture) {
         if (dateDebut == null || dateFin == null || voiture == null) {
             return -1;  // Retourne -1 en cas de données invalides
         }
         long nbJour = ChronoUnit.DAYS.between(dateDebut, dateFin);  // Calcul du nombre de jours
 
-        // Obtenir le prix journalier à partir de l'ID du modèle
-        int prixJournalier = getPrixJournalier(voiture.getModele_id());
+        int clientId = SessionManager.getCurrentClient().getId();  // Assumes there is a method to get the client's ID
+        float reduction = getReductionPourcentage(clientId);
+
+        float prixJournalier = getPrixJournalier(voiture.getModele_id()) * (1-(1/reduction));
         if (prixJournalier == -1) {
             return -1;
         }
 
-        return (int) (nbJour * prixJournalier);  // Calcul du montant total
+        return (nbJour * prixJournalier);
     }
 
     private void initComponents() {
@@ -139,7 +167,14 @@ public class Reservation extends JDialog {
         txtVoitureNbKilometre.setEditable(false);
         txtVoitureCouleur.setEditable(false);
 
-        btnFermer.addActionListener(e -> dispose());
+        //btnFermer.addActionListener(e -> dispose());
+        btnFermer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new HomePage().setVisible(true);
+            }
+        });
 
         btnForfait.addActionListener(new ActionListener() {
             @Override
@@ -239,7 +274,7 @@ public class Reservation extends JDialog {
 
                 // Vérifier si le paiement a été effectué avec succès
                 if (paymentPage.isPaymentSuccessful()) {
-                    PaymentPageController.ajouterFacture(dateDebut, dateFin, voiture, montantFloat);
+                    PaymentPageController.ajouterFactureVoiture(dateDebut, dateFin, voiture, montantFloat);
                     ReservationController.confirmerReservation(dateDebut, dateFin, voiture, montantFloat);
                     JOptionPane.showMessageDialog(dialog, "Réservation confirmée avec succès !");
 
@@ -265,7 +300,13 @@ public class Reservation extends JDialog {
         btnConfirmer.setOpaque(true);
 
         JButton btnAnnuler = new JButton("Annuler la réservation");
-        btnAnnuler.addActionListener(e -> dialog.dispose());
+        btnAnnuler.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                new HomePage().setVisible(true);
+            }
+        });
         btnAnnuler.setBackground(new Color(0xFF0000)); // Couleur ROUGE
         btnAnnuler.setFont(new Font("Arial", Font.BOLD, 14)); // Police en gras
         btnAnnuler.setForeground(Color.WHITE);
@@ -345,5 +386,4 @@ public class Reservation extends JDialog {
         }
         return voiture;
     }
-
 }

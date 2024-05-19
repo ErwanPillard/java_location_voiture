@@ -1,18 +1,18 @@
 package Model;
+
 import Dao.OffreReductionDAO;
 import Dao.OffreReductionDAOImpl;
-import Dao.VoitureDAO;
-import Dao.VoitureDAOImpl;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
 public class OffreReduction {
+    private int id;
     private String nom;
     private String description;
-    private LocalDate dateDebut;
-    private LocalDate dateFin;
+    private static LocalDate dateDebut;
+    private static LocalDate dateFin;
     private float pourcentageReduction;
     private String typeAdhesion;
 
@@ -27,7 +27,22 @@ public class OffreReduction {
         this.typeAdhesion = typeAdhesion;
     }
 
+    public OffreReduction(int id, String nom, String description, LocalDate dateDebut, LocalDate dateFin,
+                          float pourcentageReduction, String typeAdhesion) {
+        this.id = id;
+        this.nom = nom;
+        this.description = description;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
+        this.pourcentageReduction = pourcentageReduction;
+        this.typeAdhesion = typeAdhesion;
+    }
+
     // Getters et Setters
+    public int getId() {
+        return id;
+    }
+
     public String getNom() {
         return nom;
     }
@@ -44,20 +59,20 @@ public class OffreReduction {
         this.description = description;
     }
 
-    public LocalDate getDateDebut() {
+    public static LocalDate getDateDebut() {
         return dateDebut;
     }
 
     public void setDateDebut(LocalDate dateDebut) {
-        this.dateDebut = dateDebut;
+        OffreReduction.dateDebut = dateDebut;
     }
 
-    public LocalDate getDateFin() {
+    public static LocalDate getDateFin() {
         return dateFin;
     }
 
     public void setDateFin(LocalDate dateFin) {
-        this.dateFin = dateFin;
+        OffreReduction.dateFin = dateFin;
     }
 
     public float getPourcentageReduction() {
@@ -72,10 +87,9 @@ public class OffreReduction {
         return typeAdhesion;
     }
 
-    public void setTypeAdhesion(String idTypeAdhesion) {
-        this.typeAdhesion = idTypeAdhesion;
+    public void setTypeAdhesion(String typeAdhesion) {
+        this.typeAdhesion = typeAdhesion;
     }
-
 
     public Object[] toArray() {
         return new Object[] {this.nom, this.description, this.dateDebut, this.dateFin, this.pourcentageReduction, this.typeAdhesion};
