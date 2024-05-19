@@ -17,6 +17,8 @@ import java.sql.ResultSet;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class UserInfoController {
     private final UserInfo userInfoView;
@@ -51,13 +53,12 @@ public class UserInfoController {
 
     public void showUserInvoices() {
         JFrame invoiceFrame = new JFrame("Factures Utilisateur");
-        invoiceFrame.setSize(600, 400);
+        invoiceFrame.setSize(700, 400);
         invoiceFrame.setLayout(new BorderLayout());
         invoiceFrame.setLocationRelativeTo(null);
 
         // Récupère les factures pour l'utilisateur actuel.
         List<Facture> userInvoices = getUserInvoices(SessionManager.getCurrentUser().getId());
-
 
         String[] columnNames = {"Numéro de facture", "Date d'emission", "Montant", "Etat"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
@@ -79,6 +80,16 @@ public class UserInfoController {
         JTable table = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(table);
         invoiceFrame.add(scrollPane, BorderLayout.CENTER);
+
+        // Ajoute un WindowListener pour ouvrir UserInfo à la fermeture
+        invoiceFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // Ouvre la fenêtre UserInfo
+                UserInfo userInfo = new UserInfo();
+                userInfo.setVisible(true);
+            }
+        });
 
         // Affiche la fenêtre des factures.
         invoiceFrame.setVisible(true);

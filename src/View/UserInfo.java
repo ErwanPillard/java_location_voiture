@@ -73,7 +73,12 @@ public class UserInfo extends JFrame {
         btnReservations.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                dispose();
                 afficherReservationsDialog(SessionManager.getCurrentUser().getId());
+
+                // Revenir à la page userInfo
+                UserInfo userInfo = new UserInfo();
+                userInfo.setVisible(true);
             }
         });
         btnInterfaceEmploye = new JButton("Afficher l'interface employée");
@@ -246,6 +251,8 @@ public class UserInfo extends JFrame {
                 ouvrirHomePage();
             }
         });
+
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     private void ouvrirHomePage() {
