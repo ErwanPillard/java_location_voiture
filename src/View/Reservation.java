@@ -1,5 +1,6 @@
 package View;
 
+import Controller.PaymentPageController;
 import Dao.DatabaseManager;
 import Model.SessionManager;
 import Model.Voiture;
@@ -9,6 +10,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -32,7 +36,8 @@ public class Reservation extends JDialog {
     private JTextField txtVoitureCouleur;
     private JButton btnFermer;
     private JButton btnForfait;
-    private JButton btnConfirmer = new JButton("Confirmer la réservation");;
+    private JButton btnConfirmer = new JButton("Confirmer la réservation");
+    ;
 
     // Paramètres ajoutés pour la réservation
     private Voiture voiture;
@@ -139,7 +144,12 @@ public class Reservation extends JDialog {
         btnForfait.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                confirmationReservation();
+                dispose();
+                try {
+                    confirmationReservation();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
         btnForfait.setBackground(new Color(0x377e21)); // Couleur Verte
@@ -181,7 +191,7 @@ public class Reservation extends JDialog {
         reservation.setVisible(true);
     }
 
-    private void confirmationReservation() {
+    private void confirmationReservation() throws SQLException {
         JDialog dialog = new JDialog(this, "Confirmation de réservation", true);
         dialog.setLayout(new GridLayout(2, 1, 10, 10));
 
@@ -201,22 +211,10 @@ public class Reservation extends JDialog {
         JLabel labelBirthDate = new JLabel("Date de naissance :");
 
         // Champs pour un particulier avec téléphone
-        JTextField dateDebutTextField = new JTextField();
-        JTextField dateFinTextField = new JTextField();
-        JTextField montantTextField = new JTextField();
-        JTextField voitureImmatTextField = new JTextField();
-        JTextField emailTextField = new JTextField();
-        JTextField telephoneTextField = new JTextField();
-        JTextField nomTextField = new JTextField();
-        JTextField numSiretTextField = new JTextField();
-        JTextField prenomTextField = new JTextField();
-        JTextField numeroPermisTextField = new JTextField();
-        JTextField birthDateTextField = new JTextField();
-
-        dateDebutTextField = txtDateDebutReservation;
-        dateFinTextField = txtDateFinReservation;
-        montantTextField = txtMontant;
-        voitureImmatTextField = txtVoitureImmatriculation;
+        JTextField dateDebutTextField = txtDateDebutReservation;
+        JTextField dateFinTextField = txtDateFinReservation;
+        JTextField montantTextField = txtMontant;
+        JTextField voitureImmatTextField = txtVoitureImmatriculation;
 
         panelInfo.add(labelDateDebut);
         panelInfo.add(dateDebutTextField);
@@ -227,15 +225,37 @@ public class Reservation extends JDialog {
         panelInfo.add(labelVoiture);
         panelInfo.add(voitureImmatTextField);
 
+        String dateDebut = txtDateDebutReservation.getText();
+        String dateFin = txtDateFinReservation.getText();
+        Voiture voiture = getVoitureByImmatriculation(txtVoitureImmatriculation.getText());
+        float montantFloat = Float.parseFloat(String.valueOf(calculerMontant(dateDebutLocalDate, dateFinLocalDate, voiture)));
+
         btnConfirmer.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                dispose();
                 // Rediriger vers la page de paiement
-                PaymentPage paymentPage = new PaymentPage();
+                PaymentPage paymentPage = new PaymentPage(null);
                 paymentPage.setVisible(true);
-                dialog.dispose();
-                Reservation.this.dispose(); // Fermer la fenêtre de réservation
+
+                // Vérifier si le paiement a été effectué avec succès
+                if (paymentPage.isPaymentSuccessful()) {
+                    PaymentPageController.ajouterFacture(dateDebut, dateFin, voiture, montantFloat);
+                    ReservationController.confirmerReservation(dateDebut, dateFin, voiture, montantFloat);
+                    JOptionPane.showMessageDialog(dialog, "Réservation confirmée avec succès !");
+
+                    // Revenir à la page d'accueil
+                    HomePage homePage = new HomePage();
+                    homePage.setVisible(true);
+
+                    // Fermer la fenêtre actuelle de réservation
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(dialog, "Le paiement a échoué.");
+                }
             }
         });
+
+
 
         btnConfirmer.setBackground(new Color(0x377e21)); // Couleur Verte
         btnConfirmer.setFont(new Font("Arial", Font.BOLD, 14)); // Police en gras
@@ -245,7 +265,7 @@ public class Reservation extends JDialog {
         btnConfirmer.setOpaque(true);
 
         JButton btnAnnuler = new JButton("Annuler la réservation");
-        btnAnnuler.addActionListener(e -> dispose());
+        btnAnnuler.addActionListener(e -> dialog.dispose());
         btnAnnuler.setBackground(new Color(0xFF0000)); // Couleur ROUGE
         btnAnnuler.setFont(new Font("Arial", Font.BOLD, 14)); // Police en gras
         btnAnnuler.setForeground(Color.WHITE);
@@ -256,81 +276,27 @@ public class Reservation extends JDialog {
         buttonPanel.add(btnAnnuler, BorderLayout.WEST);
         buttonPanel.add(btnConfirmer, BorderLayout.EAST);
 
-        emailTextField.setText(SessionManager.getCurrentUser().getEmail());
-        telephoneTextField.setText(SessionManager.getCurrentClient().getTelephone());
+        panelInfo.setLayout(new GridLayout(10, 2, 10, 10));
+        panelInfo.add(labelEmail);
+        panelInfo.add(new JTextField(SessionManager.getCurrentUser().getEmail()));
+        panelInfo.add(labelTelephone);
+        panelInfo.add(new JTextField(SessionManager.getCurrentClient().getTelephone()));
+
         if (SessionManager.userType.equals("Particulier")) {
-            panelInfo.setLayout(new GridLayout(0, 2, 10, 10));
-
-            nomTextField.setText(SessionManager.getCurrentParticulier().getNom());
-            prenomTextField.setText(SessionManager.getCurrentParticulier().getPrenom());
-            numeroPermisTextField.setText(SessionManager.getCurrentParticulier().getNumeroPermis());
-            birthDateTextField.setText(String.valueOf(SessionManager.getCurrentParticulier().getBirthDate()));
-            if (SessionManager.getCurrentClient().getTelephone() == null) {
-                panelInfo.setLayout(new GridLayout(9, 2, 10, 10));
-
-                panelInfo.add(labelNom);
-                panelInfo.add(nomTextField);
-                panelInfo.add(labelPrenom);
-                panelInfo.add(prenomTextField);
-                panelInfo.add(labelEmail);
-                panelInfo.add(emailTextField);
-            } else {
-                panelInfo.setLayout(new GridLayout(10, 2, 10, 10));
-
-                panelInfo.add(labelNom);
-                panelInfo.add(nomTextField);
-                panelInfo.add(labelPrenom);
-                panelInfo.add(prenomTextField);
-                panelInfo.add(labelEmail);
-                panelInfo.add(emailTextField);
-                panelInfo.add(labelTelephone);
-                panelInfo.add(telephoneTextField);
-            }
-            panelInfo.add(labelNumPermis);
-            panelInfo.add(numeroPermisTextField);
-            panelInfo.add(labelBirthDate);
-            panelInfo.add(birthDateTextField);
-        } else if (SessionManager.userType.equals("Entreprise")) {
-            nomTextField.setText(SessionManager.getCurrentEntreprise().getNom());
-            numSiretTextField.setText(SessionManager.getCurrentEntreprise().getNumSiret());
-
             panelInfo.add(labelNom);
-            panelInfo.add(nomTextField);
-            panelInfo.add(labelEmail);
-            panelInfo.add(emailTextField);
-            if (SessionManager.getCurrentClient().getTelephone() == null){
-                panelInfo.setLayout(new GridLayout(7, 2, 10, 10));
-            } else {
-                panelInfo.setLayout(new GridLayout(8, 2, 10, 10));
-                panelInfo.add(labelTelephone);
-                panelInfo.add(telephoneTextField);
-            }
+            panelInfo.add(new JTextField(SessionManager.getCurrentParticulier().getNom()));
+            panelInfo.add(labelPrenom);
+            panelInfo.add(new JTextField(SessionManager.getCurrentParticulier().getPrenom()));
+            panelInfo.add(labelNumPermis);
+            panelInfo.add(new JTextField(SessionManager.getCurrentParticulier().getNumeroPermis()));
+            panelInfo.add(labelBirthDate);
+            panelInfo.add(new JTextField(String.valueOf(SessionManager.getCurrentParticulier().getBirthDate())));
+        } else if (SessionManager.userType.equals("Entreprise")) {
+            panelInfo.add(labelNom);
+            panelInfo.add(new JTextField(SessionManager.getCurrentEntreprise().getNom()));
             panelInfo.add(labelNumSiret);
-            panelInfo.add(numSiretTextField);
+            panelInfo.add(new JTextField(SessionManager.getCurrentEntreprise().getNumSiret()));
         }
-        dateDebutTextField.setFont(new Font("Arial", Font.BOLD, 14)); // Police en gras
-        dateFinTextField.setFont(new Font("Arial", Font.BOLD, 14)); // Police en gras
-        montantTextField.setFont(new Font("Arial", Font.BOLD, 14)); // Police en gras
-        voitureImmatTextField.setFont(new Font("Arial", Font.BOLD, 14)); // Police en gras
-        emailTextField.setFont(new Font("Arial", Font.BOLD, 14)); // Police en gras
-        telephoneTextField.setFont(new Font("Arial", Font.BOLD, 14)); // Police en gras
-        nomTextField.setFont(new Font("Arial", Font.BOLD, 14)); // Police en gras
-        numSiretTextField.setFont(new Font("Arial", Font.BOLD, 14)); // Police en gras
-        prenomTextField.setFont(new Font("Arial", Font.BOLD, 14)); // Police en gras
-        numeroPermisTextField.setFont(new Font("Arial", Font.BOLD, 14)); // Police en gras
-        birthDateTextField.setFont(new Font("Arial", Font.BOLD, 14)); // Police en gras
-
-        dateDebutTextField.setEditable(false);
-        dateFinTextField.setEditable(false);
-        montantTextField.setEditable(false);
-        voitureImmatTextField.setEditable(false);
-        emailTextField.setEditable(false);
-        telephoneTextField.setEditable(false);
-        nomTextField.setEditable(false);
-        numSiretTextField.setEditable(false);
-        prenomTextField.setEditable(false);
-        numeroPermisTextField.setEditable(false);
-        birthDateTextField.setEditable(false);
 
         dialog.setSize(500, 600);
         dialog.add(panelInfo, BorderLayout.CENTER);
@@ -338,4 +304,46 @@ public class Reservation extends JDialog {
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
     }
+
+    public Voiture getVoitureByImmatriculation(String immatriculation) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Voiture voiture = null;
+
+        try {
+            conn = DatabaseManager.getConnection();
+            // Préparer la requête SQL pour récupérer toutes les colonnes de la voiture
+            pstmt = conn.prepareStatement("SELECT * FROM Voiture WHERE immatriculation = ?");
+            pstmt.setString(1, immatriculation);
+            // Exécuter la requête
+            rs = pstmt.executeQuery();
+            // Lire le résultat
+            if (rs.next()) {
+                // Conversion de Date en LocalDate
+                LocalDate dateMiseEnCirculation = rs.getDate("dateMiseEnCirculation").toLocalDate();
+
+                voiture = new Voiture(
+                        dateMiseEnCirculation,
+                        rs.getString("immatriculation"),
+                        rs.getString("couleur"),
+                        rs.getDouble("nbKilometre"),
+                        rs.getInt("modele_id")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            // Fermer les ressources
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return voiture;
+    }
+
 }

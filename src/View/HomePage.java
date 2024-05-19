@@ -233,6 +233,7 @@ public class HomePage extends JFrame {
                 btnReserver.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        dispose();
                         String dateDebut = tfPickUpDate.getText();
                         String dateFin = tfDropOffDate.getText();
                         Reservation.toggle(dateDebut, dateFin, voiture);

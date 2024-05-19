@@ -1,26 +1,28 @@
 package View;
 
+import Controller.PaymentPageController;
+
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Random;
 
-public class PaymentPage extends JFrame {
+public class PaymentPage extends JDialog {
     private JTextField cardNumberField;
     private JPasswordField cvvField;
     private JTextField expirationDateField;
     private JTextField cardHolderField;
     private JButton submitButton;
+    private boolean paymentSuccessful = false;
 
-    public PaymentPage() {
-        setTitle("Page de Paiement");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    public PaymentPage(JFrame parent) {
+        super(parent, "Page de Paiement", true);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(400, 300);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(parent);
         initComponents();
     }
 
@@ -112,41 +114,41 @@ public class PaymentPage extends JFrame {
 
     private void showLoadingScreen() {
         JDialog loadingDialog = new JDialog(this, "Traitement du paiement...", true);
-        JPanel panel= new JPanel(new BorderLayout());
+        JPanel panel = new JPanel(new BorderLayout());
         JLabel loadingLabel = new JLabel("Veuillez patienter...", SwingConstants.CENTER);
         JProgressBar progressBar = new JProgressBar();
         progressBar.setIndeterminate(true);
 
-
-        JLabel loadingIcon = new JLabel(new ImageIcon(new ImageIcon("loaddin.gif").getImage().getScaledInstance(30,30, Image.SCALE_DEFAULT)));
-        //panel.add(loadingIcon, BorderLayout.CENTER);
         panel.add(loadingLabel, BorderLayout.CENTER);
-
         panel.add(progressBar, BorderLayout.SOUTH);
 
         loadingDialog.add(panel);
-        //loadingDialog.add(loadingLabel);
         loadingDialog.setSize(300, 100);
         loadingDialog.setLocationRelativeTo(this);
         loadingDialog.setUndecorated(true);
 
-        // Show the loading dialog
         SwingUtilities.invokeLater(() -> loadingDialog.setVisible(true));
 
-        // Simulate a loading time between 3 and 4 seconds
         Random random = new Random();
-        int loadingTime = 3000 + random.nextInt(1000); // random time between 3000 and 4000 milliseconds
+        int loadingTime = 2000 + random.nextInt(1000);
 
         Timer timer = new Timer(loadingTime, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 loadingDialog.dispose();
-                JOptionPane.showMessageDialog(PaymentPage.this, "Paiement effectué avec succès !");
+                //JOptionPane.showMessageDialog(PaymentPage.this, "Paiement effectué avec succès !");
+                paymentSuccessful = true;
+                dispose();
             }
         });
         timer.setRepeats(false);
         timer.start();
     }
+
+    public boolean isPaymentSuccessful() {
+        return paymentSuccessful;
+    }
+
     private static class CardNumberFilter extends DocumentFilter {
         @Override
         public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
@@ -183,19 +185,16 @@ public class PaymentPage extends JFrame {
         }
 
         private void reformatText(FilterBypass fb, StringBuilder text) throws BadLocationException {
-            // Remove existing spaces
             for (int i = text.length() - 1; i >= 0; i--) {
                 if (text.charAt(i) == ' ') {
                     text.deleteCharAt(i);
                 }
             }
 
-            // Add spaces every 4 digits
             for (int i = 4; i < text.length(); i += 5) {
                 text.insert(i, ' ');
             }
 
-            // Replace the entire text with the new formatted text
             fb.replace(0, fb.getDocument().getLength(), text.toString(), null);
         }
     }
@@ -215,11 +214,5 @@ public class PaymentPage extends JFrame {
                 super.insertString(offset, str, attr);
             }
         }
-    }
-
-
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new PaymentPage().setVisible(true));
     }
 }
