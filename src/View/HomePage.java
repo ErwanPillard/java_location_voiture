@@ -120,7 +120,11 @@ public class HomePage extends JFrame {
         JScrollPane scrollPane = new JScrollPane(carPanel);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setPreferredSize(new Dimension(800, 600)); // Tu peux ajuster la taille selon tes besoins
+        scrollPane.setPreferredSize(new Dimension(800, 600)); // Ajuster la taille selon vos besoins
+
+        // Accélérer la vitesse de défilement
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.getHorizontalScrollBar().setUnitIncrement(16);
 
         // Le JPanel retourné devrait être le JScrollPane pour intégrer le défilement
         JPanel panelWithScroll = new JPanel(new BorderLayout());
@@ -134,7 +138,6 @@ public class HomePage extends JFrame {
 
         mainPanel.add(northPanel, BorderLayout.NORTH);
         mainPanel.add(centerPanel, BorderLayout.CENTER);
-
 
         // Configuration finale de la fenêtre
         getContentPane().add(mainPanel);
@@ -442,5 +445,4 @@ public class HomePage extends JFrame {
             return baos.toByteArray();
         }
     }
-
 }
