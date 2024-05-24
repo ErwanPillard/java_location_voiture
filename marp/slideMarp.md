@@ -9,7 +9,7 @@ class: lead
 
 
 
-![bg right](./logo2.jpg)
+![bg right](logo2.jpg)
 
 # Location de voiture
 
@@ -48,12 +48,12 @@ class: lead
 ## Diagramme de classes
 
 
-![w:1150 ](./diagrammeClasse.png)
+![w:1150 ](diagrammeClasse.png)
 
 ---
 
 ## Design de la maquette et interface graphique
-![be right](./javaLogo.avif)
+![be right](javaLogo.avif)
 
 ---
 ## StoryBoard
